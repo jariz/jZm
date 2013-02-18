@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ZombieLib
+namespace JariZ
 {
-    delegate void OnFrameHandler();
+    public delegate void OnFrameHandler();
 }

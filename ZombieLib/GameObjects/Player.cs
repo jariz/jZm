@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ZombieLib.GameObjects
+namespace JariZ.GameObjects
 {
-    class Player : RemoteObject
+    public class Player : RemoteObject
     {
-        public Player(RemoteMemory Mem, int PlayerAddr)
+        GEntity Parent;
+        public Player(RemoteMemory Mem, int PlayerAddr, GEntity ParentEntity)
         {
             this.Mem = Mem;
-            Position = PlayerAddr;
-            BaseOffset = PlayerAddr;
+            this.Parent = ParentEntity;
+            this.Position = PlayerAddr;
+            this.BaseOffset = PlayerAddr;
 
             a_ServerTime = aInt(); //0x0000
             Move(36); //0x0004
@@ -59,10 +61,14 @@ namespace ZombieLib.GameObjects
             Move(556); //0x55CC
 
             Weapons = new Weapons_(this);
+            World = new World_(this);
         }
 
 
         public Weapons_ Weapons;
+        public World_ World;
+
+
         public class Weapons_
         {
             Player Player;
@@ -99,7 +105,129 @@ namespace ZombieLib.GameObjects
                 }
             }
 
-            
+            public int LethalWeapon
+            {
+                get
+                {
+                    Player.Mem.Position = Player.a_LethalWeaponID;
+                    return Player.Mem.ReadInt32();
+                }
+                set
+                {
+                    Player.Mem.Position = Player.a_LethalWeaponID;
+                    Player.Mem.Write(value);
+                }
+            }
+
+            public int CurrentWeapon
+            {
+                get
+                {
+                    return Player.Parent.CurrentWeapon;
+                }
+                set
+                {
+                    Player.Parent.CurrentWeapon = value;
+                }
+            }
+
+            public int TacticalWeapon
+            {
+                get
+                {
+                    Player.Mem.Position = Player.a_TacticalWeaponID;
+                    return Player.Mem.ReadInt32();
+                }
+                set
+                {
+                    Player.Mem.Position = Player.a_TacticalWeaponID;
+                    Player.Mem.Write(value);
+                }
+            }
+
+            public int PrimaryAmmoClip
+            {
+                get
+                {
+                    Player.Mem.Position = Player.a_PrimaryAmmoClip;
+                    return Player.Mem.ReadInt32();
+                }
+                set
+                {
+                    Player.Mem.Position = Player.a_PrimaryAmmoClip;
+                    Player.Mem.Write(value);
+                }
+            }
+
+            public int SecondaryAmmoClip
+            {
+                get
+                {
+                    Player.Mem.Position = Player.a_SecondaryAmmoClip;
+                    return Player.Mem.ReadInt32();
+                }
+                set
+                {
+                    Player.Mem.Position = Player.a_SecondaryAmmoClip;
+                    Player.Mem.Write(value);
+                }
+            }
+
+            public int PrimaryAmmoStock
+            {
+                get
+                {
+                    Player.Mem.Position = Player.a_PrimaryAmmoStock;
+                    return Player.Mem.ReadInt32();
+                }
+                set
+                {
+                    Player.Mem.Position = Player.a_PrimaryAmmoStock;
+                    Player.Mem.Write(value);
+                }
+            }
+
+            public int SecondaryAmmoStock
+            {
+                get
+                {
+                    Player.Mem.Position = Player.a_SecondaryAmmoStock;
+                    return Player.Mem.ReadInt32();
+                }
+                set
+                {
+                    Player.Mem.Position = Player.a_SecondaryAmmoStock;
+                    Player.Mem.Write(value);
+                }
+            }
+
+            public int TacticalAmmo
+            {
+                get
+                {
+                    Player.Mem.Position = Player.a_TacticalAmmo;
+                    return Player.Mem.ReadInt32();
+                }
+                set
+                {
+                    Player.Mem.Position = Player.a_TacticalAmmo;
+                    Player.Mem.Write(value);
+                }
+            }
+
+            public int LethalAmmo
+            {
+                get
+                {
+                    Player.Mem.Position = Player.a_LethalAmmo;
+                    return Player.Mem.ReadInt32();
+                }
+                set
+                {
+                    Player.Mem.Position = Player.a_LethalAmmo;
+                    Player.Mem.Write(value);
+                }
+            }
         }
 
         public class World_
@@ -152,6 +280,20 @@ namespace ZombieLib.GameObjects
                 }
             }
 
+            public float[] ViewAngles
+            {
+                get
+                {
+                    Player.Mem.Position = Player.a_ViewAngles;
+                    return Player.Mem.ReadVec3();
+                }
+                set
+                {
+                    Player.Mem.Position = Player.a_ViewAngles;
+                    Player.Mem.Write(value);
+                }
+            }
+
             public float PlayerHeight
             {
                 get
@@ -159,6 +301,45 @@ namespace ZombieLib.GameObjects
                     Player.Mem.Position = Player.a_PlayerHeightFloat;
                     return Player.Mem.ReadFloat();
                 }
+                set
+                {
+                    Player.Mem.Position = Player.a_PlayerHeightFloat;
+                    Player.Mem.Write(value);
+                }
+            }
+
+            public int Gravity
+            {
+                get
+                {
+                    Player.Mem.Position = Player.a_Gravity;
+                    return Player.Mem.ReadInt32();
+                }
+                set
+                {
+                    Player.Mem.Position = Player.a_Gravity;
+                    Player.Mem.Write(value);
+                }
+            }
+        }
+
+        public int ClientNum
+        {
+            get
+            {
+                return Parent.ClientNum;
+            }
+        }
+
+        public int ModelIndex
+        {
+            get
+            {
+                return Parent.ModelIndex;
+            }
+            set
+            {
+                Parent.ModelIndex = value;
             }
         }
 
@@ -167,11 +348,39 @@ namespace ZombieLib.GameObjects
             get
             {
                 Mem.Position = a_Name;
-                return Mem.ReadString();
+                return Mem.ReadString().Replace("\0", "");
             }
             set
             {
                 Mem.Position = a_Name;
+                Mem.Write(value);
+            }
+        }
+
+        public int Money
+        {
+            get
+            {
+                Mem.Position = a_Money;
+                return Mem.ReadInt32();
+            }
+            set
+            {
+                Mem.Position = a_Money;
+                Mem.Write(value);
+            }
+        }
+
+        public int Health
+        {
+            get
+            {
+                Mem.Position = a_Health;
+                return Mem.ReadInt32();
+            }
+            set
+            {
+                Mem.Position = a_Health;
                 Mem.Write(value);
             }
         }

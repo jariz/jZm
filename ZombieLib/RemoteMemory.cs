@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.ComponentModel;
 
-namespace ZombieLib
+namespace JariZ
 {
     public class RemoteMemory : TextWriter
     {

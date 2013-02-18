@@ -48,9 +48,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ZombieLib\ZombieLib.csproj">
+    <ProjectReference Include="..\ZombieLib\ZombieAPI.csproj">
       <Project>{A189E7BA-EDD8-4DE0-9A08-34CE09305AE2}</Project>
-      <Name>ZombieLib</Name>
+      <Name>ZombieAPI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

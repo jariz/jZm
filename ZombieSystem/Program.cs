@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
-using ZombieLib;
-using ZombieLib.GameObjects;
+using JariZ;
+using JariZ.GameObjects;
 using System.Threading;
 using System.Windows.Forms;
 using System.Reflection;
@@ -44,7 +44,10 @@ namespace ZombieSystem
             Console.WindowWidth = Console.LargestWindowWidth - 35;
             Console.WindowHeight = Console.LargestWindowHeight - 40;
 
-            Zombies z = new Zombies(Process.GetProcessesByName("t6zm")[0]);
+            ZombieAPI z = new ZombieAPI(Process.GetProcessesByName("t6zm")[0]);
+
+            List<Player> p = z.GetPlayers();
+            
             Application.Run();
         }
 

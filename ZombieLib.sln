@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZombieLib", "ZombieLib\ZombieLib.csproj", "{A189E7BA-EDD8-4DE0-9A08-34CE09305AE2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZombieAPI", "ZombieLib\ZombieAPI.csproj", "{A189E7BA-EDD8-4DE0-9A08-34CE09305AE2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZombieSystem", "ZombieSystem\ZombieSystem.csproj", "{284B20C9-CB08-4AB3-9C6A-B1DFE7FD837F}"
 EndProject

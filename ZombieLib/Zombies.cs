@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.IO;
-using ZombieLib.GameObjects;
+using JariZ.GameObjects;
 using System.Threading;
 
-namespace ZombieLib
+namespace JariZ
 {
-    public class Zombies
+    public class ZombieAPI
     {
         public event OnFrameHandler OnFrame;
 
@@ -19,7 +19,7 @@ namespace ZombieLib
         List<GEntity> Players = new List<GEntity>();
         
 
-        public Zombies(Process Game)
+        public ZombieAPI(Process Game)
         {
             Memory = new RemoteMemory(Game);
 
@@ -32,12 +32,15 @@ namespace ZombieLib
             }
         }
 
-        public void GetPlayers()
+        public List<Player> GetPlayers()
         {
+            List<Player> p = new List<Player>();
             foreach (GEntity ent in Entities)
             {
-                
+                if (ent.Type == EntityType.Player)
+                    p.Add(ent.Player);
             }
+            return p;
         }
 
         void zFrame(object x)
