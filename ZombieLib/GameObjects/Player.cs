@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace JariZ.GameObjects
+namespace ZombieAPI.GameObjects
 {
     public class Player : RemoteObject
     {

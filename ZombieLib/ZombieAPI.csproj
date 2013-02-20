@@ -8,8 +8,8 @@
     <ProjectGuid>{A189E7BA-EDD8-4DE0-9A08-34CE09305AE2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ZombieLib</RootNamespace>
-    <AssemblyName>ZombieLib</AssemblyName>
+    <RootNamespace>ZombieAPI</RootNamespace>
+    <AssemblyName>ZombieAPI</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -43,8 +43,10 @@
     <Compile Include="Addresses.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="GameObjects\Player.cs" />
+    <Compile Include="jZmPlugin.cs" />
+    <Compile Include="PluginLoader.cs" />
     <Compile Include="RemoteObject.cs" />
-    <Compile Include="Zombies.cs" />
+    <Compile Include="ZombieAPI.cs" />
     <Compile Include="GameObjects\GEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteMemory.cs" />

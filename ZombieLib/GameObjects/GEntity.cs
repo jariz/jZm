@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace JariZ.GameObjects
+namespace ZombieAPI.GameObjects
 {
     public enum EntityType { Unknown = 0, Player = 1, Spectator = 5, Zombie = 16 };
     public class GEntity : RemoteObject
@@ -36,12 +36,7 @@ namespace JariZ.GameObjects
             Move(56); //0x0170
             a_Health = aInt(); //0x01A8
             Mem.Move(29320); //0x01AC
-
-            if (Type == EntityType.Player)
-                Player = new Player(Mem, a_playerAddr, this);
         }
-
-        public Player Player = null;
 
         int a_ClientNum;
         int a_eFlag;
@@ -54,6 +49,18 @@ namespace JariZ.GameObjects
         int a_teamAddr;
         public int a_ModelIndex;
         public int a_Health;
+
+        Player _player = null;
+        public Player Player
+        {
+            get
+            {
+                Mem.Position = a_newOrigin + 4; 
+                a_playerAddr = Mem.ReadInt32();
+                _player = new Player(Mem, a_playerAddr, this);
+                return _player;
+            }
+        }
 
         public int ClientNum
         {
