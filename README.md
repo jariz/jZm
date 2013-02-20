@@ -1,6 +1,8 @@
 jZm
 =========
 
+![warning](http://i.imgur.com/lvSUiLs.png)  _This project is still under development and this article might be incomplete and/or inaccurate_
+
 ##What is jZm?  
 jZm is a plugin architecture that allows developers to enhance certain aspects in the 'COD: Black Ops II Zombies' game.  
   
