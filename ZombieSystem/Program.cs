@@ -55,7 +55,7 @@ namespace ZombieSystem
             {
                 TaskDialog diag = new TaskDialog();
                 diag.Caption = "Woops!";
-                diag.InstructionText = "I found more games than 2 running games";
+                diag.InstructionText = "I found more than 2 running games!";
                 diag.Icon = TaskDialogStandardIcon.Warning;
                 diag.Text = "jZm has found more than just one game.\r\nWhat would you like to do?";
                 foreach (Process game in games)

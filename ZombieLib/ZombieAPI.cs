@@ -15,9 +15,15 @@ namespace ZombieAPI
         public event WriteHandler OnWrite;
 
         RemoteMemory Memory;
-        List<GEntity> Entities = new List<GEntity>();
-        List<GEntity> Zombies = new List<GEntity>();
-        List<GEntity> Players = new List<GEntity>();
+        List<GEntity> _entities = new List<GEntity>();
+
+        public GEntity[] Entities
+        {
+            get
+            {
+                return _entities.ToArray();
+            }
+        }
 
         PluginLoader pluginLoader;
         public jZmPlugin[] Plugins;
@@ -47,9 +53,9 @@ namespace ZombieAPI
 
             WriteLine("Reading entities....");
             int x = 0;
-            while (x != 256)
+            while (x != 1024)
             {
-                Entities.Add(new GEntity(Memory, Addresses.EntityBase + (0x01AC * x)));
+                _entities.Add(new GEntity(Memory, Addresses.GEntity + (Addresses.GEntity_Size * x)));
                 x++;
             }
 
@@ -68,7 +74,7 @@ namespace ZombieAPI
         public List<Player> GetPlayers()
         {
             List<Player> p = new List<Player>();
-            foreach (GEntity ent in Entities)
+            foreach (GEntity ent in _entities)
             {
                 if (ent.Type == EntityType.Player)
                     if(ent.Player == null)

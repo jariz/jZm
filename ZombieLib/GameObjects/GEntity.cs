@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ZombieAPI.GameObjects
 {
-    public enum EntityType { Unknown = 0, Player = 1, Spectator = 5, Zombie = 16 };
+    public enum EntityType { Unknown = 0, Player = 1, Spectator = 5, Zombie = 16, Barrier = 20, Script_Model = 6, NotSureYet = 18 };
     public class GEntity : RemoteObject
     {
 
