@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace ZombieAPI.GameObjects
 {
     public class Player : RemoteObject
     {
         GEntity Parent;
-        public Player(RemoteMemory Mem, int PlayerAddr, GEntity ParentEntity)
+        public Player(Process Game, int PlayerAddr, GEntity ParentEntity)
         {
-            this.Mem = Mem;
+            this.Mem = new RemoteMemory(Game);
             this.Parent = ParentEntity;
             this.Position = PlayerAddr;
             this.BaseOffset = PlayerAddr;
@@ -64,6 +66,23 @@ namespace ZombieAPI.GameObjects
             World = new World_(this);
         }
 
+        public void iPrintBoldLn(string x)
+        {
+
+        }
+
+        public Team Team
+        {
+            get
+            {
+                return Parent.Team.Team;
+            }
+            set
+            {
+                Parent.Team.Team = value;
+            }
+        }
+
 
         public Weapons_ Weapons;
         public World_ World;
@@ -77,71 +96,89 @@ namespace ZombieAPI.GameObjects
                 Player = owner;
             }
 
-            public int PrimaryWeapon
+            string id2name(int id)
+            {
+                try
+                {
+                    return Player.Parent.Parent.Weapons[id];
+                }
+                catch
+                {
+                    Player.Parent.Parent.WriteLine("WARNING: Unknown weaponID found!");
+                    return "jzm_unknown_weapon";
+                }
+            }
+
+            int name2id(string name)
+            {
+                return Player.Parent.Parent.Weapons.FirstOrDefault(x => x.Value == name).Key;
+            }
+
+            public string PrimaryWeapon
             {
                 get
                 {
                     Player.Mem.Position = Player.a_PrimaryWeaponID;
-                    return Player.Mem.ReadInt32();
+                    return id2name(Player.Mem.ReadInt32());
                 }
                 set
                 {
                     Player.Mem.Position = Player.a_PrimaryWeaponID;
-                    Player.Mem.Write(value);
+                    Player.Mem.Write(name2id(value));
                 }
             }
 
-            public int SecondaryWeapon
+            public string SecondaryWeapon
             {
                 get
                 {
                     Player.Mem.Position = Player.a_SecondaryWeaponID;
-                    return Player.Mem.ReadInt32();
+                    return id2name(Player.Mem.ReadInt32());
                 }
                 set
                 {
                     Player.Mem.Position = Player.a_SecondaryWeaponID;
-                    Player.Mem.Write(value);
+                    Player.Mem.Write(name2id(value));
                 }
             }
 
-            public int LethalWeapon
+            public string LethalWeapon
             {
                 get
                 {
                     Player.Mem.Position = Player.a_LethalWeaponID;
-                    return Player.Mem.ReadInt32();
+                    return id2name(Player.Mem.ReadInt32());
                 }
                 set
                 {
                     Player.Mem.Position = Player.a_LethalWeaponID;
-                    Player.Mem.Write(value);
+                    Player.Mem.Write(name2id(value));
                 }
             }
 
-            public int CurrentWeapon
+            public string CurrentWeapon
             {
                 get
                 {
-                    return Player.Parent.CurrentWeapon;
+                    return id2name(Player.Parent.CurrentWeapon);
                 }
                 set
                 {
-                    Player.Parent.CurrentWeapon = value;
+                    Player.Parent.CurrentWeapon = name2id(value);
                 }
             }
 
-            public int TacticalWeapon
+            public string TacticalWeapon
             {
                 get
                 {
                     Player.Mem.Position = Player.a_TacticalWeaponID;
-                    return Player.Mem.ReadInt32();
+                    return id2name(Player.Mem.ReadInt32());
                 }
                 set
                 {
                     Player.Mem.Position = Player.a_TacticalWeaponID;
-                    Player.Mem.Write(value);
+                    Player.Mem.Write(name2id(value));
                 }
             }
 
@@ -323,6 +360,18 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        public Stances Stance
+        {
+            get
+            {
+                return (Stances)Parent.Stance;
+            }
+            set
+            {
+                Parent.Stance = value;
+            }
+        }
+
         public int ClientNum
         {
             get
@@ -382,6 +431,79 @@ namespace ZombieAPI.GameObjects
             {
                 Mem.Position = a_Health;
                 Mem.Write(value);
+            }
+        }
+
+        public void Kick(int ClientNum, string Message)
+        {
+            ServerCommand(Message, 53, ClientNum);
+        }
+
+
+        [DllImport("kernel32.dll", EntryPoint = "WriteProcessMemory")]
+        static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, uint nSize, [Out] int lpNumberOfBytesWritten);
+
+        [DllImport("kernel32.dll", EntryPoint = "OpenProcess")]
+        static extern IntPtr OpenProcess(uint dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+
+        [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
+        static extern IntPtr VirtualAllocEx(IntPtr hProcess, IntPtr lpAddress, uint dwSize, uint flAllocationType, uint flProtect);
+
+        [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
+        static extern bool VirtualFreeEx(IntPtr hProcess, IntPtr lpAddress, UIntPtr dwSize, uint dwFreeType);
+
+        [DllImport("kernel32")]
+        static extern IntPtr CreateRemoteThread(IntPtr hProcess, IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, out IntPtr lpThreadId);
+
+        private IntPtr _SV_GameSendServerCommandAddress = IntPtr.Zero;
+        private IntPtr commandAddress = IntPtr.Zero;
+        private byte[] commandBytes;
+        private byte[] callBytes;
+        private const uint MEM_COMMIT = 0x1000;
+        private const uint MEM_RESERVE = 0x2000;
+        private const uint PAGE_EXECUTE_READWRITE = 0x40;
+
+        void ServerCommand(string Parameter, int CMDType, int ClientNum)
+        {
+            callBytes = BitConverter.GetBytes(Addresses.ServerCommand);
+
+            if (_SV_GameSendServerCommandAddress == IntPtr.Zero)
+            {
+                // Allocate memory for the stub.
+                _SV_GameSendServerCommandAddress = VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)Stubs.WrapperToSV_GameSendServerCommand.Length, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+
+                // Allocate memory for the command.
+
+                commandBytes = Encoding.ASCII.GetBytes(String.Format(Convert.ToChar(CMDType)+" \"{0}\"", Parameter));
+                commandAddress = VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)commandBytes.Length, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+                
+                // Write the command into the allocated memory.
+                int bytesWritten = 0;
+                WriteProcessMemory(Mem.ProcessHandle, commandAddress, commandBytes, (uint)commandBytes.Length, bytesWritten);
+
+                // Fix the stub with the parameter address.
+                Array.Copy(BitConverter.GetBytes(commandAddress.ToInt32()), 0, Stubs.WrapperToSV_GameSendServerCommand, 9, 4);
+
+                // Fix the stub with the call address.
+                Array.Copy(callBytes, 0, Stubs.WrapperToSV_GameSendServerCommand, 16, 4);
+
+                // Fix the stub with clientnum
+                Array.Copy(BitConverter.GetBytes(ClientNum), 0, Stubs.WrapperToSV_GameSendServerCommand, 26, 4);
+
+                // Write the patched stub.
+                WriteProcessMemory(Mem.ProcessHandle, _SV_GameSendServerCommandAddress, Stubs.WrapperToSV_GameSendServerCommand, (uint)Stubs.WrapperToSV_GameSendServerCommand.Length, bytesWritten);
+
+                // Create a new thread.
+                IntPtr bytesout;
+                CreateRemoteThread(Mem.ProcessHandle, IntPtr.Zero, 0, _SV_GameSendServerCommandAddress, IntPtr.Zero, 0, out bytesout);
+
+                if (_SV_GameSendServerCommandAddress != IntPtr.Zero && commandAddress != IntPtr.Zero)
+                {
+                    VirtualFreeEx(Mem.ProcessHandle, _SV_GameSendServerCommandAddress, (UIntPtr)Stubs.WrapperToSV_GameSendServerCommand.Length, 0x8000);
+                    VirtualFreeEx(Mem.ProcessHandle, commandAddress, (UIntPtr)commandBytes.Length, 0x8000);
+                }
+
+                _SV_GameSendServerCommandAddress = IntPtr.Zero;
             }
         }
 

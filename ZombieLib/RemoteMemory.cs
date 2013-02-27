@@ -12,6 +12,22 @@ namespace ZombieAPI
     public class RemoteMemory : TextWriter
     {
         #region Public vars
+        public Process Process
+        {
+            get
+            {
+                return _process;
+            }
+        }
+
+        public IntPtr ProcessHandle
+        {
+            get
+            {
+                return _phandle;
+            }
+        }
+
         public int Position
         {
             get
@@ -45,6 +61,7 @@ namespace ZombieAPI
         #endregion
 
         #region Private vars
+        Process _process;
         bool _debug = false;
         int _position;
         int _pid = -1;
@@ -206,6 +223,7 @@ namespace ZombieAPI
         #region Public functions
         public RemoteMemory(Process proc)
         {
+            _process = proc;
             _phandle = proc.Handle;
             _pid = proc.Id;
             _encoding = Encoding.Default;

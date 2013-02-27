@@ -7,4 +7,6 @@ namespace ZombieAPI
 {
     public delegate void OnFrameHandler();
     public delegate void WriteHandler(string msg);
+    public delegate void OnCrashHandler(Exception exep);
+    public delegate void OnPluginCrashHandler(Exception exep, string pname);
 }

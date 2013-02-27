@@ -41,15 +41,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Addresses.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="Events.cs" />
+    <Compile Include="GameDataReader.cs" />
     <Compile Include="GameObjects\Player.cs" />
+    <Compile Include="GameObjects\TeamInfo.cs" />
     <Compile Include="jZmPlugin.cs" />
     <Compile Include="PluginLoader.cs" />
     <Compile Include="RemoteObject.cs" />
-    <Compile Include="ZombieAPI.cs" />
+    <Compile Include="API.cs" />
     <Compile Include="GameObjects\GEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteMemory.cs" />
+    <Compile Include="Stubs.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

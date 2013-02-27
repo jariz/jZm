@@ -161,6 +161,39 @@ namespace ZombieSystem
             Environment.Exit(-1);
         }
 
+        public static void PluginExc(Exception z, string name)
+        {
+            TaskDialog diag = new TaskDialog();
+            diag.InstructionText = "'"+name+"' has thrown a exception.";
+            diag.Text = "One of your plugins has thrown an unhandled exception.\nThis means that one of your plugin may be unstable.";
+            diag.Caption = "WTF?";
+            diag.Icon = TaskDialogStandardIcon.Error;
+            diag.DetailsExpandedText = z.ToString();
+            TaskDialogCommandLink linkz = new TaskDialogCommandLink("r", "Restart jZm");
+            linkz.ShowElevationIcon = true;
+            linkz.Click += delegate(object sender, EventArgs argz)
+            {
+                diag.Close();
+                Application.Restart();
+            };
+            diag.Controls.Add(linkz);
+            linkz = new TaskDialogCommandLink("r", "Exit jZm");
+            linkz.Click += delegate(object sender, EventArgs argz)
+            {
+                diag.Close();
+                Environment.Exit(-1);
+            };
+            diag.Controls.Add(linkz);
+
+            linkz = new TaskDialogCommandLink("r", "Ignore error", "Warning: Plugin might throw more errors, You'll probably be better off contacting the owner and/or removing the plugin.");
+            linkz.Click += delegate(object sender, EventArgs argz)
+            {
+                diag.Close();
+            };
+            diag.Controls.Add(linkz);
+            diag.Show();
+        }
+
 
     }
 }

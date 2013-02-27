@@ -17,12 +17,29 @@ namespace ZombieSystem
 
             Application.EnableVisualStyles();
             Program.API.OnWrite += new ZombieAPI.WriteHandler(API_OnWrite);
+            Program.API.OnCrash += new ZombieAPI.OnCrashHandler(API_OnCrash);
+            Program.API.OnPluginCrash += new ZombieAPI.OnPluginCrashHandler(API_OnPluginCrash);
 
             boxshow(box_console);
         }
 
+        void API_OnPluginCrash(Exception exep, string pname)
+        {
+            Program.PluginExc(exep, pname);
+        }
+
+        void API_OnCrash(Exception exep)
+        {
+            Program.Crash(exep);
+        }
+
         void API_OnWrite(string msg)
         {
+            if (InvokeRequired)
+            {
+                Invoke(new ZombieAPI.WriteHandler(API_OnWrite), msg);
+                return;
+            }
             console.Text += msg;
         }
 

@@ -17,5 +17,9 @@ namespace ZombieAPI
         public static int Entity_Size = 0x380; 
         public static int CG = 0x10B5280;
         public static int CGS = 0x10B525C;
+        public static int WeaponDef = 0x02C0DA4C;
+        public static int ServerCommand = 0x403A70;
+
+        public static int GameData = 0x0118B5AD;
     }
 }

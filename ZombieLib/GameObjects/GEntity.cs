@@ -2,21 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 namespace ZombieAPI.GameObjects
 {
-    public enum EntityType { Unknown = 0, Player = 1, Spectator = 5, Zombie = 16, Barrier = 20, Script_Model = 6, NotSureYet = 18 };
     public class GEntity : RemoteObject
     {
 
-        public GEntity(RemoteMemory Mem, int EntityAddr)
+        public GEntity(Process Game, int EntityAddr, ZombieAPI Parent)
         {
-            this.Mem = Mem;
+            this.Mem = new RemoteMemory(Game);
             Position = EntityAddr;
             BaseOffset = EntityAddr;
+            _parent = Parent;
 
             a_ClientNum = aInt(); //0x0000
-            a_eFlag = aInt(); //0x0004
+            a_Stance = aInt(); //0x0004
             Move(16); //0x0008
             a_Origin = aVec(3); //0x0018
             Move(24); //0x0024
@@ -28,9 +29,9 @@ namespace ZombieAPI.GameObjects
             Move(66); //0x00DA
             a_newOrigin = aVec(3); //0x0011C
             Move(44); //0x0128
-            Mem.Position = Position; a_playerAddr = Mem.ReadInt32(); Move(4); //0x154
+            a_playerAddr = aInt(); //0x154
             Move(4); //0x0158
-            Mem.Position = Position;  a_teamAddr = Mem.ReadInt32(); Move(4); //0x015C
+            a_teamAddr = aInt(); //0x015C
             Move(12); //0x0160
             a_ModelIndex = aInt(); //0x016C
             Move(56); //0x0170
@@ -39,7 +40,7 @@ namespace ZombieAPI.GameObjects
         }
 
         int a_ClientNum;
-        int a_eFlag;
+        int a_Stance;
         int a_Origin;
         int a_Angles;
         int a_CurrentWeapon;
@@ -51,14 +52,35 @@ namespace ZombieAPI.GameObjects
         public int a_Health;
 
         Player _player = null;
+        TeamInfo _team = null;
+        ZombieAPI _parent = null;
+
+        public ZombieAPI Parent
+        {
+            get
+            {
+                return _parent;
+            }
+        }
         public Player Player
         {
             get
             {
-                Mem.Position = a_newOrigin + 4; 
+                Mem.Position = BaseOffset + 0x154;
                 a_playerAddr = Mem.ReadInt32();
-                _player = new Player(Mem, a_playerAddr, this);
+                _player = new Player(Mem.Process, a_playerAddr, this);
                 return _player;
+            }
+        }
+
+        public TeamInfo Team
+        {
+            get
+            {
+                Mem.Position = BaseOffset + 0x15c;
+                a_teamAddr = Mem.ReadInt32();
+                _team = new TeamInfo(Mem.Process, a_teamAddr, this);
+                return _team;
             }
         }
 
@@ -71,12 +93,17 @@ namespace ZombieAPI.GameObjects
             }
         }
 
-        int eFlag
+        public Stances Stance
         {
             get
             {
-                Mem.Position = a_eFlag;
-                return Mem.ReadInt32();
+                Mem.Position = a_Stance;
+                return (Stances)Mem.ReadInt32();
+            }
+            set
+            {
+                Mem.Position = a_Stance;
+                Mem.Write((int)value);
             }
         }
 

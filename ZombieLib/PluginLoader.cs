@@ -20,8 +20,6 @@ namespace ZombieAPI
 
         public jZmPlugin[] Load()
         {
-            // 'fix' current dir
-
             List<jZmPlugin> jzmp = new List<jZmPlugin>();
 
             try
@@ -29,15 +27,19 @@ namespace ZombieAPI
                 if (!Directory.Exists(ExecutablePath + "\\plugins")) Directory.CreateDirectory(ExecutablePath + "\\plugins");
                 foreach (string plug in Directory.GetFiles(ExecutablePath + "\\plugins", "*.dll"))
                 {
-                    Assembly aplugin = Assembly.LoadFile(plug);
-                    foreach (Type type in aplugin.GetTypes())
+                    try
                     {
-                        jZmPlugin plugin = (jZmPlugin)Activator.CreateInstance(type);
-                        jzmp.Add(plugin);
+                        Assembly aplugin = Assembly.LoadFile(plug);
+                        foreach (Type type in aplugin.GetTypes())
+                        {
+                            jZmPlugin plugin = (jZmPlugin)Activator.CreateInstance(type);
+                            jzmp.Add(plugin);
+                        }
+                    }
+                    catch
+                    {
                     }
                 }
-
-                Environment.CurrentDirectory = ExecutablePath;
             }
             catch
             {

@@ -1,0 +1,448 @@
+#pragma once
+
+class serverStatic_t;
+class level_locals_t;
+class client_s;
+class gentity_s;
+class EntityData_t;
+class gclient_s;
+class DObj_s;
+
+#define MAX_GENTITIES 1024
+#define MAX_GCLIENTS 18
+
+#define IsColorMarker(a) (a == '^')
+#define IsColorChar(a) (((a >= '0') && (a <= '9')) || (a == 'F'))
+
+enum errorParm_t
+{
+	ERR_FATAL,
+	ERR_DROP,
+	ERR_SERVERDISCONNECT,
+	ERR_DISCONNECT,
+	ERR_SCRIPT,
+	ERR_SCRIPT_DROP,
+	ERR_LOCALIZATION,
+	ERR_MAPLOADERRORSUMMARY,
+};
+
+enum svscmd_type
+{
+	SV_CMD_CAN_IGNORE,
+	SV_CMD_RELIABLE,
+};
+
+enum team_t
+{
+	TEAM_FREE,
+	TEAM_ALLIES,
+	TEAM_AXIS,
+	TEAM_THREE,
+	TEAM_FOUR,
+	TEAM_FIVE,
+	TEAM_SIX,
+	TEAM_SEVEN,
+	TEAM_EIGHT,
+	TEAM_SPECTATOR,
+};
+
+enum entityType_t
+{
+	ET_GENERAL,
+	ET_PLAYER,
+	ET_PLAYER_CORPSE,
+	ET_ITEM,
+	ET_MISSILE,
+	ET_INVISIBLE,
+	ET_SCRIPTMOVER,
+	ET_SOUND_BLEND,
+	ET_FX,
+	ET_LOOP_FX,
+	ET_PRIMARY_LIGHT,
+	ET_TURRET,
+	ET_HELICOPTER,
+	ET_PLANE,
+	ET_VEHICLE,
+	ET_VEHICLE_CORPSE,
+	ET_ACTOR,
+	ET_ACTOR_SPAWNER,
+	ET_ACTOR_CORPSE,
+	ET_STREAMER_HINT,
+	ET_ZBARRIER,
+};
+
+enum hitLocation_t
+{
+	HITLOC_NONE = 0x0,
+	HITLOC_HELMET = 0x1,
+	HITLOC_HEAD = 0x2,
+	HITLOC_NECK = 0x3,
+	HITLOC_TORSO_UPR = 0x4,
+	HITLOC_TORSO_LWR = 0x5,
+	HITLOC_R_ARM_UPR = 0x6,
+	HITLOC_L_ARM_UPR = 0x7,
+	HITLOC_R_ARM_LWR = 0x8,
+	HITLOC_L_ARM_LWR = 0x9,
+	HITLOC_R_HAND = 0xA,
+	HITLOC_L_HAND = 0xB,
+	HITLOC_R_LEG_UPR = 0xC,
+	HITLOC_L_LEG_UPR = 0xD,
+	HITLOC_R_LEG_LWR = 0xE,
+	HITLOC_L_LEG_LWR = 0xF,
+	HITLOC_R_FOOT = 0x10,
+	HITLOC_L_FOOT = 0x11,
+	HITLOC_GUN = 0x12,
+	HITLOC_NUM = 0x13,
+};
+
+#pragma pack(push, 1)
+
+class serverStatic_t
+{
+public:
+char _0x0000[8];
+	__int32 initialized; //0x0008 
+	__int32 time; //0x000C 
+char _0x0010[12];
+	client_s* clients; //0x001C 
+char _0x0020[5280];
+};//Size=0x14C0
+
+class level_locals_t
+{
+public:
+	gclient_s* clients; //0x0000 
+	gentity_s* gentities; //0x0004 
+char _0x0008[4];
+	__int32 num_entities; //0x000C 
+	gentity_s* firstFreeEnt; //0x0010 
+	gentity_s* lastFreeEnt; //0x0014 
+char _0x0018[36];
+	__int32 N00506077; //0x003C 
+char _0x0040[8];
+	__int32 maxclients; //0x0048 
+char _0x004C[1864];
+	__int32 framenum; //0x0794 
+	__int32 time; //0x0798 
+	__int32 previousTime; //0x079C 
+	__int32 frametime; //0x07A0 
+char _0x07A4[2724];
+	__int32 currentEntityThink; //0x1248 
+char _0x124C[2676];
+};//Size=0x0CC0
+
+class client_s
+{
+public:
+	__int32 state; //0x0000 
+	__int32 sendAsActive; //0x0004 
+char _0x0008[1752];
+	Vector3 origin; //0x06E0 
+char _0x06EC[68];
+	char userinfo[1024]; //0x0730 
+	char lastClientCommandString[1024]; //0x0B30 
+char _0x0F30[18012];
+	gentity_s* gentity; //0x558C 
+	char name[16]; //0x5590 
+char _0x55A0[32];
+	__int64 xuid; //0x55C0 
+	char _pad[297784]; //0x55C8 
+
+};//Size=0x4E100
+
+class gentity_s
+{
+public:
+	__int32 number; //0x0000 
+	__int32 flags; //0x0004 
+	__int32 drawRenderFlags; //0x0008 
+char _0x000C[84];
+	__int32 weapon; //0x0060 
+char _0x0064[22];
+	BYTE headiconteam; //0x007A 
+char _0x007B[93];
+	WORD eType; //0x00D8 
+char _0x00DA[8];
+	WORD enemymodel; //0x00E2 
+char _0x00E4[16];
+	BYTE headicon; //0x00F4 
+char _0x00F5[1];
+	BYTE hintString; //0x00F6 
+char _0x00F7[4];
+	BYTE valid; //0x00FB 
+char _0x00FC[28];
+	__int32 contents; //0x0118 
+char _0x011C[24];
+	Vector3 origin; //0x0134 
+	Vector3 angles; //0x0140 
+char _0x014C[8];
+	gclient_s* client; //0x0154 
+char _0x0158[4];
+	EntityData_t* EntityData; //0x015C 
+	__int32 isTurret; //0x0160 
+char _0x0164[8];
+	WORD model; //0x016C 
+char _0x016E[1];
+	BYTE takedamage; //0x016F 
+char _0x0170[6];
+	WORD classname; //0x0176 
+	WORD target; //0x0178 
+	WORD targetname; //0x017A 
+	WORD script_noteworthy; //0x017C 
+char _0x017E[6];
+	__int32 spawnflags; //0x0184 
+char _0x0188[32];
+	__int32 health; //0x01A8 
+char _0x01AC[4];
+	__int32 dmg; //0x01B0 
+char _0x01B4[116];
+	__int32 count; //0x0228 
+	__int32 team; //0x022C 
+char _0x0230[13];
+	BYTE requireLookAt; //0x023D 
+char _0x023E[2];
+	__int32 index; //0x0240 
+char _0x0244[204];
+	__int32 birthtime; //0x0310 
+char _0x0314[8];
+};//Size=0x031C
+
+class EntityData_t
+{
+public:
+	gentity_s* gentity; //0x0000 
+	__int32 iTeam; //0x0004 
+};//Size=0x0008
+
+class gclient_s
+{
+public:
+	__int32 commandTime; //0x0000 
+	__int32 pm_type; //0x0004 
+	__int32 bobCycle; //0x0008 
+	__int32 pm_flags; //0x000C 
+	__int32 weapFlags; //0x0010 
+	__int32 otherFlags; //0x0014 
+char _0x0018[16];
+	Vector3 origin; //0x0028 
+	Vector3 velocity; //0x0034 
+	Vector3 oldVelocity; //0x0040 
+char _0x004C[16];
+	__int32 foliageSoundTime; //0x005C 
+	__int32 grenadeTimeLeft; //0x0060 
+char _0x0064[40];
+	__int32 gravity; //0x008C 
+	float leanf; //0x0090 
+	__int32 speed; //0x0094 
+	Vector3 delta_angles; //0x0098 
+	__int32 groundEntityNum; //0x00A4 
+char _0x00A8[24];
+	__int32 jumpTime; //0x00C0 
+	float jumpOriginZ; //0x00C4 
+char _0x00C8[28];
+	__int32 damageTimer; //0x00E4 
+	__int32 damageDuration; //0x00E8 
+char _0x00EC[12];
+	__int32 movementDir; //0x00F8 
+char _0x00FC[188];
+	__int32 weapon; //0x01B8 
+char _0x01BC[8];
+	__int32 stowedWeapon; //0x01C4 
+char _0x01C8[8];
+	__int32 weaponstate; //0x01D0 
+char _0x01D4[12];
+	float fWeaponPosFrac; //0x01E0 
+char _0x01E4[4];
+	__int32 spreadOverride; //0x01E8 
+	__int32 spreadOverrideState; //0x01EC 
+char _0x01F0[4];
+	__int32 viewmodelIndex; //0x01F4 
+	Vector2 viewangles; //0x01F8 
+char _0x0200[4];
+	__int32 viewHeightTarget; //0x0204 
+	float viewHeightCurrent; //0x0208 
+	__int32 viewHeightLerpTime; //0x020C 
+	__int32 viewHeightLerpTarget; //0x0210 
+	__int32 viewHeightLerpDown; //0x0214 
+	Vector2 viewAngleClampBase; //0x0218 
+	Vector2 viewAngleClampRange; //0x0220 
+	__int32 damageCount; //0x0228 
+char _0x022C[12];
+	__int32 health; //0x0238 
+char _0x023C[4];
+	__int32 maxhealth2; //0x0240 
+char _0x0244[32];
+	__int32 primaryWeapon; //0x0264 
+char _0x0268[24];
+	__int32 lethalWeapon; //0x0280 
+char _0x0284[24];
+	__int32 secondaryWeapon; //0x029C 
+char _0x02A0[24];
+	__int32 tacticalWeapon; //0x02B8 
+char _0x02BC[308];
+	__int32 primaryStock; //0x03F0 
+char _0x03F4[4];
+	__int32 secondaryStock; //0x03F8 
+char _0x03FC[48];
+	__int32 primaryClip; //0x042C 
+	__int32 lethalCount; //0x0430 
+	__int32 secondaryClip; //0x0434 
+	__int32 tacticalCount; //0x0438 
+char _0x043C[40];
+	float proneDirection; //0x0464 
+	float proneDirectionPitch; //0x0468 
+	float proneTorsoPitch; //0x046C 
+char _0x0470[4];
+	__int32 viewlocked_entNum; //0x0474 
+char _0x0478[28];
+	__int32 cursorHint; //0x0494 
+	__int32 cursorHintString; //0x0498 
+	__int32 cursorHintEntIndex; //0x049C 
+char _0x04A0[172];
+	__int32 perks; //0x054C 
+char _0x0550[56];
+	float crosshairSpreadAdd; //0x0588 
+char _0x058C[5692];
+	__int32 alive; //0x1BC8 
+char _0x1BCC[14404];
+	__int32 sessionstate; //0x5410 
+	__int32 spectatorclient; //0x5414 
+	__int32 killcamentity; //0x5418 
+	__int32 killcamtargetentity; //0x541C 
+	__int32 archivetime; //0x5420 
+	__int32 pers; //0x5424 
+char _0x5428[164];
+	__int32 maxhealth; //0x54CC 
+char _0x54D0[16];
+	float moveSpeedScaleMultiplier; //0x54E0 
+char _0x54E4[12];
+	__int32 inSecondChance; //0x54F0 
+	__int32 sessionteam; //0x54F4 
+	__int32 ffateam; //0x54F8 
+char _0x54FC[56];
+	char name[16]; //0x5534 
+char _0x5544[20];
+	__int32 rank; //0x5558 
+	__int32 prestige; //0x555C 
+char _0x5560[16];
+	__int64 xuid; //0x5570 
+char _0x5578[72];
+	__int32 status_icon; //0x55C0 
+	__int32 headshots; //0x55C4 
+	__int32 score; //0x55C8 
+	__int32 kills; //0x55CC 
+	__int32 assists; //0x55D0 
+	__int32 deaths; //0x55D4 
+	__int32 N0288B4C3; //0x55D8 
+char _0x55DC[4];
+	__int32 iScoreboardKills; //0x55E0 
+	__int32 iScoreboardDowns; //0x55E4 
+	__int32 iScoreboardRevives; //0x55E8 
+	__int32 iScoreboardHeadshots; //0x55EC 
+	__int32 downs; //0x55F0 
+	__int32 revies; //0x55F4 
+char _0x55F8[8];
+	__int32 scorestreak; //0x5600 
+char _0x5604[12];
+	__int32 psoffsettime; //0x5610 
+char _0x5614[24];
+	__int32 defends; //0x562C 
+	__int32 plants; //0x5630 
+	__int32 defuses; //0x5634 
+	__int32 returns; //0x5638 
+	__int32 captures; //0x563C 
+	__int32 destructions; //0x5640 
+char _0x5644[4];
+	__int32 survived; //0x5648 
+	__int32 stabs; //0x564C 
+	__int32 tomahawks; //0x5650 
+	__int32 humiliated; //0x5654 
+	__int32 x2score; //0x5658 
+	__int32 totalheadshots; //0x565C 
+char _0x5660[8];
+	__int32 agrkills; //0x5668 
+	__int32 hacks; //0x566C 
+	__int32 pointstowin; //0x5670 
+	__int32 killsconfirmed; //0x5674 
+	__int32 killsdenied; //0x5678 
+char _0x567C[4];
+	__int32 currentspectatingclient; //0x5680 
+	__int32 clippingmode; //0x5684 
+char _0x5688[336];
+	__int32 hasspyplane; //0x57D8 
+	__int32 hassatellite; //0x57DC 
+char _0x57E0[8];
+	__int32 disallowvehicleusage; //0x57E8 
+char _0x57EC[12];
+};//Size=0x57F8
+
+class DObj_s
+{
+public:
+};//Size=0x0000
+
+union DvarValue
+{
+	bool enabled;
+	int integer;
+	unsigned int unsignedInt;
+	float value;
+	float vector[4];
+	const char *string;
+};
+
+class dvar_s
+{
+public:
+	char *name; //0x0000 
+	char *description; //0x0004 
+char _0x0008[4];
+	__int32 flags; //0x000C 
+	__int32 type; //0x0010 
+char _0x0014[4];
+	DvarValue current; //0x0018 
+char _0x001C[36];
+};//Size=0x0040
+
+struct field_t
+{
+	int cursor;
+	int scroll;
+	int drawWidth;
+	int widthInPixels;
+	float charHeight;
+	int fixedSize;
+	char buffer[256];
+};
+
+#pragma pack(pop)
+
+#define VA_BUFFER_COUNT	4
+#define VA_BUFFER_SIZE	32768
+
+static char g_vaBuffer[VA_BUFFER_COUNT][VA_BUFFER_SIZE];
+static int g_vaNextBufferIndex = 0;
+
+extern serverStatic_t *svs;
+extern level_locals_t *level;
+
+typedef void (__cdecl * Com_Error_t)(errorParm_t code, const char *fmt, ...);
+extern Com_Error_t Com_Error;
+
+typedef void (__cdecl * Cbuf_AddText_t)(int localClientNum, const char *text);
+extern Cbuf_AddText_t Cbuf_AddText;
+
+typedef void (__cdecl * SV_GameSendServerCommand_t)(int clientNum, svscmd_type type, const char *text);
+extern SV_GameSendServerCommand_t SV_GameSendServerCommand;
+
+typedef void (__cdecl * SV_SetConfigstring_t)(int index, const char *val);
+extern SV_SetConfigstring_t SV_SetConfigstring;
+
+typedef void (__cdecl * Field_Clear_t)(field_t *);
+extern Field_Clear_t Field_Clear;
+
+typedef char * (__cdecl * BG_GetWeaponName_t)(unsigned int weaponIndex, char *buffer, int bufSize);
+extern BG_GetWeaponName_t BG_GetWeaponName;
+
+void I_CleanStr(char *string);
+const char *va(const char *fmt, ...);
