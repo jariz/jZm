@@ -16,6 +16,9 @@ namespace ZombieSystem
             InitializeComponent();
 
             Application.EnableVisualStyles();
+
+            console.Text = ZombieAPI.ZombieAPI.Header;
+
             Program.API.OnWrite += new ZombieAPI.WriteHandler(API_OnWrite);
             Program.API.OnCrash += new ZombieAPI.OnCrashHandler(API_OnCrash);
             Program.API.OnPluginCrash += new ZombieAPI.OnPluginCrashHandler(API_OnPluginCrash);
@@ -23,9 +26,9 @@ namespace ZombieSystem
             boxshow(box_console);
         }
 
-        void API_OnPluginCrash(Exception exep, string pname)
+        void API_OnPluginCrash(Exception exep, ZombieAPI.jZmPlugin plug)
         {
-            Program.PluginExc(exep, pname);
+            Program.PluginExc(exep, plug);
         }
 
         void API_OnCrash(Exception exep)
@@ -81,6 +84,7 @@ namespace ZombieSystem
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            label1.Hide();
             ZombieAPI.jZmPlugin plug = Program.API.Plugins[listBox1.SelectedIndex];
             plug_name.Text = plug.Name;
             plug_author.Text = "By " + plug.Author;

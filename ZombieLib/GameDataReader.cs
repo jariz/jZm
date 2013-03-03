@@ -31,5 +31,18 @@ namespace ZombieAPI
 
             return final.ToArray();
         }
+
+        public static Dictionary<int, string> GetWeapons(string[] GameData)
+        {
+            Dictionary<int, string> w_eapons = new Dictionary<int, string>();
+            int o;
+            foreach (string wep_on in GameData.Where(wep => wep.Length > 3 && Int32.TryParse(wep.Substring(0, 2), out o) && (wep.Contains("_zm") || wep.Contains("_mp") || wep.Contains("zombie_"))).ToArray())
+            {
+                string[] wep = wep_on.Split(' ');
+                w_eapons.Add(Convert.ToInt32(wep[0]), wep[1]);
+            }
+            w_eapons.Add(0, "");
+            return w_eapons;
+        }
     }
 }

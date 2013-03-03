@@ -26,6 +26,12 @@ namespace ZombieAPI
             return imove(4);
         }
 
+        protected int aLong()
+        {
+            Position += 8;
+            return imove(8);
+        }
+
         protected int aVec(int type)
         {
             Position += 4 * type;
@@ -48,6 +54,19 @@ namespace ZombieAPI
         {
             Offset = Position - BaseOffset;
             return Position - z;
+        }
+
+        object _state = null;
+        public object State
+        {
+            get
+            {
+                return _state;
+            }
+            set
+            {
+                _state = value;
+            }
         }
     }
 }

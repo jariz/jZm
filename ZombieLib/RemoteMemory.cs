@@ -73,6 +73,20 @@ namespace ZombieAPI
         private const uint MEM_COMMIT = 0x1000;
         private const uint MEM_RESERVE = 0x2000;
         private const uint PAGE_EXECUTE_READWRITE = 0x40;
+        public enum Protection
+        {
+            PAGE_NOACCESS = 0x01,
+            PAGE_READONLY = 0x02,
+            PAGE_READWRITE = 0x04,
+            PAGE_WRITECOPY = 0x08,
+            PAGE_EXECUTE = 0x10,
+            PAGE_EXECUTE_READ = 0x20,
+            PAGE_EXECUTE_READWRITE = 0x40,
+            PAGE_EXECUTE_WRITECOPY = 0x80,
+            PAGE_GUARD = 0x100,
+            PAGE_NOCACHE = 0x200,
+            PAGE_WRITECOMBINE = 0x400
+        }
         #endregion
 
         #region Imports
@@ -224,7 +238,6 @@ namespace ZombieAPI
         public RemoteMemory(Process proc)
         {
             _process = proc;
-            _phandle = proc.Handle;
             _pid = proc.Id;
             _encoding = Encoding.Default;
             _phandle = OpenProcess(0x001F0FFF /*all*/, false, _pid);
@@ -245,6 +258,11 @@ namespace ZombieAPI
         }
 
         public override void Write(bool value)
+        {
+            BitConverter.GetBytes(value);
+        }
+
+        public void Write(short value)
         {
             BitConverter.GetBytes(value);
         }
@@ -393,6 +411,14 @@ namespace ZombieAPI
         {
             return BitConverter.ToInt32(ReadInternal(4), 0);
         }
+        public uint ReadUInt32()
+        {
+            return BitConverter.ToUInt32(ReadInternal(4), 0);
+        }
+        public long ReadInt64()
+        {
+            return BitConverter.ToInt64(ReadInternal(8), 0);
+        }
         public string ReadString(int length)
         {
             return _encoding.GetString(ReadInternal(length));
@@ -420,6 +446,18 @@ namespace ZombieAPI
         public string ReadString()
         {
             return _encoding.GetString(ReadInternal(16));
+        }
+        public string ReadStringSmart()
+        {
+            StringBuilder res = new StringBuilder();
+            while (true)
+            {
+                if (res.Length > 100) return "";
+                string part = _encoding.GetString(ReadInternal(1));
+                if (part == "\0")
+                    return res.ToString();
+                else res.Append(part);
+            }
         }
         #endregion
         #region Misc
@@ -469,7 +507,8 @@ namespace ZombieAPI
         void WriteInternal(byte[] bytes)
         {
             int bytesW = 0;
-            VirtualAllocEx(_phandle, IntPtr.Zero, 4, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+            uint oldprotect;
+            VirtualProtectEx(_phandle, (IntPtr)_position, (UIntPtr)bytes.Length, (uint)Protection.PAGE_EXECUTE_READWRITE, out oldprotect);
             WriteProcessMemory(_phandle, (IntPtr)_position, bytes, (uint)bytes.Length, bytesW);
             if (_debug)
             {

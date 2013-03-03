@@ -30,10 +30,15 @@ namespace ZombieAPI
                     try
                     {
                         Assembly aplugin = Assembly.LoadFile(plug);
-                        foreach (Type type in aplugin.GetTypes())
+                        Type[] rrwe = aplugin.GetTypes();
+                        foreach (Type type in rrwe)
                         {
-                            jZmPlugin plugin = (jZmPlugin)Activator.CreateInstance(type);
-                            jzmp.Add(plugin);
+                            
+                            if (type.Name == "Plugin")
+                            {
+                                jZmPlugin plugin = (jZmPlugin)Activator.CreateInstance(type);
+                                jzmp.Add(plugin);
+                            }
                         }
                     }
                     catch

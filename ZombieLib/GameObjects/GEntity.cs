@@ -149,12 +149,12 @@ namespace ZombieAPI.GameObjects
             }
         }
 
-        float[] newOrigin
+        public float[] newOrigin
         {
             get
             {
                 Mem.Position = a_newOrigin;
-                return Mem.ReadVec2();
+                return Mem.ReadVec3();
             }
             set
             {
@@ -198,6 +198,7 @@ namespace ZombieAPI.GameObjects
                 Mem.Position = a_entityType;
                 return (EntityType)Mem.ReadInt16();
             }
+            //readable because changing a entity's type crashes the game
         }
     }
 }

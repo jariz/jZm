@@ -14,6 +14,13 @@ namespace ZombieAPI
         Running = 0x20002,
         IronSights = 0x80002
     }
+
+    public enum Perks
+    {
+        ReducedSpread = 0x10, 
+        FasterKnife = 0x80000
+    }
+
     public enum EntityType
     {
         ET_GENERAL,
@@ -51,5 +58,30 @@ namespace ZombieAPI
         TEAM_SEVEN,
         TEAM_EIGHT,
         TEAM_SPECTATOR
+    }
+
+    public enum DVarType
+    {
+        Integer = 6,
+		String = 8,
+		Boolean = 1,
+		Float = 2,
+		UnsignedInteger = 9,
+        Vector = 4
+    }
+
+    public enum DVarFlag
+    {
+        DVAR_FLAG_NONE = 0x0,                  //no flags
+        DVAR_FLAG_SAVED = 0x1,                      //saves in config_mp.cfg for clients
+        DVAR_FLAG_LATCHED = 0x2,                  //no changing apart from initial value (although it might apply on a map reload)
+        DVAR_FLAG_CHEAT = 0x4,                  //cheat
+        DVAR_FLAG_REPLICATED = 0x8,                  //on change, this is sent to all clients (if you are host)
+        DVAR_FLAG_USERCREATED = 0x100,                //a 'set' type command created it
+        DVAR_FLAG_USERINFO = 0x200,                //userinfo?
+        DVAR_FLAG_SERVERINFO = 0x400,                //in the getstatus oob
+        DVAR_FLAG_WRITEPROTECTED = 0x800,                //write protected
+        DVAR_FLAG_READONLY = 0x2000,               //read only (same as 0x800?)
+        DVAR_FLAG_NONEXISTENT = 0    //no such dvar
     }
 }

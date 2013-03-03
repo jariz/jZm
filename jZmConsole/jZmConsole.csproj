@@ -2,18 +2,20 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A189E7BA-EDD8-4DE0-9A08-34CE09305AE2}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{3A56E6D0-95E2-428B-8B93-D8802DEC3472}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ZombieAPI</RootNamespace>
-    <AssemblyName>ZombieAPI</AssemblyName>
+    <RootNamespace>jZmConsole</RootNamespace>
+    <AssemblyName>jZmConsole</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,7 +24,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,6 +36,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,24 +44,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Addresses.cs" />
-    <Compile Include="Enums.cs" />
-    <Compile Include="Events.cs" />
-    <Compile Include="GameDataReader.cs" />
-    <Compile Include="GameObjects\DVar.cs" />
-    <Compile Include="GameObjects\Player.cs" />
-    <Compile Include="GameObjects\TeamInfo.cs" />
-    <Compile Include="jZmPlugin.cs" />
-    <Compile Include="ModWarning.cs" />
-    <Compile Include="PatternRecognition.cs" />
-    <Compile Include="PluginLoader.cs" />
-    <Compile Include="RemoteObject.cs" />
-    <Compile Include="API.cs" />
-    <Compile Include="GameObjects\GEntity.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RemoteMemory.cs" />
-    <Compile Include="Stubs.cs" />
-    <Compile Include="SVCMDTester.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ZombieLib\ZombieAPI.csproj">
+      <Project>{A189E7BA-EDD8-4DE0-9A08-34CE09305AE2}</Project>
+      <Name>ZombieAPI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

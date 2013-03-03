@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+# Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZombieAPI", "ZombieLib\ZombieAPI.csproj", "{A189E7BA-EDD8-4DE0-9A08-34CE09305AE2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "jZm", "ZombieSystem\jZm.csproj", "{284B20C9-CB08-4AB3-9C6A-B1DFE7FD837F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "jZmConsole", "jZmConsole\jZmConsole.csproj", "{3A56E6D0-95E2-428B-8B93-D8802DEC3472}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,16 @@ Global
 		{284B20C9-CB08-4AB3-9C6A-B1DFE7FD837F}.Release|Mixed Platforms.Build.0 = Release|x86
 		{284B20C9-CB08-4AB3-9C6A-B1DFE7FD837F}.Release|x86.ActiveCfg = Release|x86
 		{284B20C9-CB08-4AB3-9C6A-B1DFE7FD837F}.Release|x86.Build.0 = Release|x86
+		{3A56E6D0-95E2-428B-8B93-D8802DEC3472}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{3A56E6D0-95E2-428B-8B93-D8802DEC3472}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{3A56E6D0-95E2-428B-8B93-D8802DEC3472}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{3A56E6D0-95E2-428B-8B93-D8802DEC3472}.Debug|x86.ActiveCfg = Debug|x86
+		{3A56E6D0-95E2-428B-8B93-D8802DEC3472}.Debug|x86.Build.0 = Debug|x86
+		{3A56E6D0-95E2-428B-8B93-D8802DEC3472}.Release|Any CPU.ActiveCfg = Release|x86
+		{3A56E6D0-95E2-428B-8B93-D8802DEC3472}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{3A56E6D0-95E2-428B-8B93-D8802DEC3472}.Release|Mixed Platforms.Build.0 = Release|x86
+		{3A56E6D0-95E2-428B-8B93-D8802DEC3472}.Release|x86.ActiveCfg = Release|x86
+		{3A56E6D0-95E2-428B-8B93-D8802DEC3472}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

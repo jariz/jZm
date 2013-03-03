@@ -124,7 +124,7 @@ namespace ZombieSystem
 
             try
             {
-                API.Init(gameProcess);
+                API.Bootstrap(gameProcess);
             }
             catch (Exception z)
             {
@@ -161,10 +161,10 @@ namespace ZombieSystem
             Environment.Exit(-1);
         }
 
-        public static void PluginExc(Exception z, string name)
+        public static void PluginExc(Exception z,   jZmPlugin plug)
         {
             TaskDialog diag = new TaskDialog();
-            diag.InstructionText = "'"+name+"' has thrown a exception.";
+            diag.InstructionText = "'" + plug.Name + "' by '" + plug.Author + "' has thrown a exception.";
             diag.Text = "One of your plugins has thrown an unhandled exception.\nThis means that one of your plugin may be unstable.";
             diag.Caption = "WTF?";
             diag.Icon = TaskDialogStandardIcon.Error;

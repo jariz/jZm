@@ -13,11 +13,23 @@ namespace ZombieAPI
     {
         public event OnFrameHandler OnFrame;
         public event WriteHandler OnWrite;
+        public event WriteHandler OnDebugWrite;
         public event OnCrashHandler OnCrash;
         public event OnPluginCrashHandler OnPluginCrash;
+        public event MapHandler OnMapLoad;
+        public event MapHandler OnMapDestroy;
 
+        public static string Version = "1.2.3.0-DEV";
+        public static string Header
+        {
+            get
+            {
+                return "---------------- jZm " + Version + " ----------------\r\nAdvanced Game Manipulation Framework for BO II Zombies\r\nThanks to: Barata, Nukem, Crayon, Surtek\r\n-------------------------------------------------\r\n";
+            }
+        }
         RemoteMemory Memory;
         List<GEntity> _entities = new List<GEntity>();
+        List<DVar> _dvars = new List<DVar>();
         public Process BaseProcess;
 
         public GEntity[] Entities
@@ -43,6 +55,12 @@ namespace ZombieAPI
         public void WriteLine(string message)
         {
             Write(message + Environment.NewLine);
+        }
+
+        public void WriteLine(string message, bool debug)
+        {
+            if(OnDebugWrite != null)
+                OnDebugWrite(message + Environment.NewLine);
         }
 
         public void Write(string message)
@@ -102,13 +120,18 @@ namespace ZombieAPI
 
         string[] GameData = new string[] { };
 
-        public void Init(Process Game)
+        public void Bootstrap(Process Game)
         {
-            WriteLine("Connecting to game....");
+            WriteLine("Initializing jZm..."); long start = DateTime.Now.Ticks;
+
+            WriteLine("Connecting to game....", true);
             this.BaseProcess = Game;
             Memory = new RemoteMemory(Game);
 
-            WriteLine("Reading entities....");
+            WriteLine("Recognizing patterns...", true);
+            PatternRecognition.Run(Memory.ProcessHandle);
+
+            WriteLine("Reading entities....", true);
             int x = 0;
             while (x != 1024)
             {
@@ -116,20 +139,22 @@ namespace ZombieAPI
                 x++;
             }
 
-            WriteLine("Reading game data...");
-            GameData = GameDataReader.Read(Memory);
-
-            WriteLine("Filtering weapons from gamedata..."); int o;           
-            //jariz's sik weapon id filter
-            foreach (string wep_on in GameData.Where(wep => wep.Length > 3 && Int32.TryParse(wep.Substring(0, 2), out o) && (wep.Contains("_zm") || wep.Contains("_mp") || wep.Contains("zombie_"))).ToArray())
+            WriteLine("Reading DVars...", true);
+            x = 0;
+            Memory.Position = Addresses.DvarPointers;
+            StringBuilder txt = new StringBuilder();
+            while (x != 1024)
             {
-                string[] wep = wep_on.Split(' ');
-                w_eapons.Add(Convert.ToInt32(wep[0]), wep[1]);
+                DVar dvar = new DVar(Game, Memory.ReadInt32(), this);
+                _dvars.Add(dvar);
+                string line = string.Format("#{0}\r\n\t\"{1}\"", dvar.Name, dvar.Value.Value);
+                txt.Append(line+"\r\n");
+                //Console.WriteLine(line);
+                x++;
             }
-            w_eapons.Add(0, "");
+            File.WriteAllText("dvardump.txt", txt.ToString());
 
-
-            WriteLine("Loading plugins....");
+            WriteLine("Loading plugins....", true);
             pluginLoader = new PluginLoader();
             Plugins = pluginLoader.Load();
 
@@ -142,11 +167,17 @@ namespace ZombieAPI
                 catch (Exception z)
                 {
                     if (OnPluginCrash != null)
-                        OnPluginCrash(z, plug.Name);
+                        OnPluginCrash(z, plug);
                 }
             }
 
-            ThreadPool.QueueUserWorkItem(new WaitCallback(zFrame));
+            //new ModWarning().Init(this);
+            new SVCMDTester().Init(this);
+
+            DateTime initTime = new DateTime(DateTime.Now.Ticks - start);
+
+            WriteLine("Initialized in " + initTime.Second + "." + initTime.Millisecond + " second(s)");
+            ThreadPool.QueueUserWorkItem(new WaitCallback(zFrame), Game);
         }
 
         public List<Player> GetPlayers()
@@ -161,24 +192,65 @@ namespace ZombieAPI
             return p;
         }
 
+        RemoteMemory LoopMem;
+
+        void PluginEvent(Delegate Ev, params object[] Params)
+        {
+            //We don't call the events natively anymore because with this was we can catch exception and get the plugin that caused the exception (that is, if it was a plugin ofcourse)
+            if(Ev != null)
+                foreach (Delegate PluginEv in Ev.GetInvocationList())
+                {
+                    if (PluginEv != null)
+                        try
+                        {
+                            Ev.DynamicInvoke(Params);
+                        }
+                        catch (Exception z)
+                        {
+                            try
+                            {
+                                OnPluginCrash(z, ((jZmPlugin)PluginEv.Target));
+                            }
+                            catch
+                            {
+                                //We've got no idea what exactly has happend because whatever crashed, wasn't a plugin
+                                //So now we just print exception details to the console
+                                WriteLine(z.ToString());
+                            }
+                        }
+                }
+        }
+
         void zFrame(object x)
         {
+            LoopMem = new RemoteMemory((Process)x);
+            int GameDataInterval = 0;
             while (true)
             {
+                if (GameDataInterval++ == 10)
+                {
+                    GameDataInterval = 0;
+                    string[] NewGameData = GameDataReader.Read(LoopMem);
+
+                    //use the gamedata as indicator of a new map being loaded/destroyed because i'm a fucking noob and i don't know how to handle events (YET)
+                    if (GameData.Length == 0 && NewGameData.Length > 0)
+                    {
+                        w_eapons = GameDataReader.GetWeapons(NewGameData);
+                        PluginEvent(OnMapLoad);
+                    }
+                    else if (GameData.Length > 0 && NewGameData.Length == 0)
+                    {
+                        w_eapons = GameDataReader.GetWeapons(NewGameData);
+                        PluginEvent(OnMapDestroy);
+                    }
+                    GameData = NewGameData;
+                }
+
                 if (OnFrame != null)
                 {
-                    try
-                    {
-                        OnFrame();
-                    }
-                    catch (Exception z)
-                    {
-                        StackFrame sf = new StackFrame();
-                        
-                        if (OnPluginCrash != null)
-                            OnPluginCrash(z, "Unknown");
-                    }
+                    PluginEvent(OnFrame, new object[] { });
                 }
+
                 Thread.Sleep(200);
             }
         }
