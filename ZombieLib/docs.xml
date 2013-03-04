@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ZombieAPI</name>
+    </assembly>
+    <members>
+        <member name="F:ZombieAPI.RemoteMemory.ProcessAccess.CreateThread">
+            <summary>
+            Required to create a thread.
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteMemory.ProcessAccess.SetSessionId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteMemory.ProcessAccess.VmOperation">
+            <summary>
+            Required to perform an operation on the address space of a process 
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteMemory.ProcessAccess.VmRead">
+            <summary>
+            Required to read memory in a process using ReadProcessMemory.
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteMemory.ProcessAccess.VmWrite">
+            <summary>
+            Required to write to memory in a process using WriteProcessMemory.
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteMemory.ProcessAccess.DupHandle">
+            <summary>
+            Required to duplicate a handle using DuplicateHandle.
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteMemory.ProcessAccess.CreateProcess">
+            <summary>
+            Required to create a process.
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteMemory.ProcessAccess.SetQuota">
+            <summary>
+            Required to set memory limits using SetProcessWorkingSetSize.
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteMemory.ProcessAccess.SetInformation">
+            <summary>
+            Required to set certain information about a process, such as its priority class (see SetPriorityClass).
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteMemory.ProcessAccess.QueryInformation">
+            <summary>
+            Required to retrieve certain information about a process, such as its token, exit code, and priority class (see OpenProcessToken).
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteMemory.ProcessAccess.SuspendResume">
+            <summary>
+            Required to suspend or resume a process.
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteMemory.ProcessAccess.QueryLimitedInformation">
+            <summary>
+            Required to retrieve certain information about a process (see GetExitCodeProcess, GetPriorityClass, IsProcessInJob, QueryFullProcessImageName). 
+            A handle that has the PROCESS_QUERY_INFORMATION access right is automatically granted PROCESS_QUERY_LIMITED_INFORMATION.
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteMemory.ProcessAccess.Synchronize">
+            <summary>
+            Required to wait for the process to terminate using the wait functions.
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteMemory.ProcessAccess.Delete">
+            <summary>
+            Required to delete the object.
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteMemory.ProcessAccess.ReadControl">
+            <summary>
+            Required to read information in the security descriptor for the object, not including the information in the SACL. 
+            To read or write the SACL, you must request the ACCESS_SYSTEM_SECURITY access right. For more information, see SACL Access Right.
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteMemory.ProcessAccess.WriteDac">
+            <summary>
+            Required to modify the DACL in the security descriptor for the object.
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteMemory.ProcessAccess.WriteOwner">
+            <summary>
+            Required to change the owner in the security descriptor for the object.
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteMemory.ProcessAccess.AllAccess">
+            <summary>
+            All possible access rights for a process object.
+            </summary>
+        </member>
+    </members>
+</doc>

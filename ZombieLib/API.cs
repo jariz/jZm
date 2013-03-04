@@ -172,7 +172,7 @@ namespace ZombieAPI
             }
 
             //new ModWarning().Init(this);
-            new SVCMDTester().Init(this);
+            //new SVCMDTester().Init(this);
 
             DateTime initTime = new DateTime(DateTime.Now.Ticks - start);
 

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ZombieAPI.GameObjects;
 
 namespace ZombieSystem
 {
@@ -22,8 +23,26 @@ namespace ZombieSystem
             Program.API.OnWrite += new ZombieAPI.WriteHandler(API_OnWrite);
             Program.API.OnCrash += new ZombieAPI.OnCrashHandler(API_OnCrash);
             Program.API.OnPluginCrash += new ZombieAPI.OnPluginCrashHandler(API_OnPluginCrash);
+            Program.API.OnFrame += new ZombieAPI.OnFrameHandler(API_OnFrame);
 
             boxshow(box_console);
+        }
+
+        void API_OnFrame()
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new ZombieAPI.OnFrameHandler(API_OnFrame));
+                return;
+            }
+            if (box_players.Visible)
+            {
+                dataGridView1.Rows.Clear();
+                foreach (Player player in Program.API.GetPlayers())
+                {
+                    dataGridView1.Rows.Add(new object[] { player.ClientNum, player.Name, player.Stats.Kills, player.Stats.Deaths, player.Stats.Headshots, player.Stats.Downs, player.Stats.Revives });
+                }
+            }
         }
 
         void API_OnPluginCrash(Exception exep, ZombieAPI.jZmPlugin plug)
@@ -67,6 +86,9 @@ namespace ZombieSystem
                     case 1:
                         boxshow(box_plugins);
                         plugin_init();
+                        break;
+                    case 2:
+                        boxshow(box_players);
                         break;
                 }
         }
