@@ -18,3 +18,11 @@ Have a look at the [create your own plugin guide](https://github.com/jariz/jZm/w
 
 ##I just want to install some plugins, where can I get them?
 Check out [itsmods.com](http://itsmods.com)!
+
+##Credits
+  
+- JariZ http://jariz.pro - Lead developer
+- Barata - Developer
+- Nukem - Help, Research
+- Surtek - Testing
+- Crayon - Shoutout
