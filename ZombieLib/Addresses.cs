@@ -5,6 +5,12 @@ using System.Text;
 
 namespace ZombieAPI
 {
+    /// <summary>
+    /// Class that contains all offsets to the game's data and functions.
+    /// </summary>
+    /// <remarks>
+    /// PatternRecognition will look for the right offsets for each address, so the actual addresses may vary.
+    /// </remarks>
     class Addresses
     {
 

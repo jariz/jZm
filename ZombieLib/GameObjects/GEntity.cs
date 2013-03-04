@@ -6,9 +6,23 @@ using System.Diagnostics;
 
 namespace ZombieAPI.GameObjects
 {
+    /// <summary>
+    /// A entity used in the game.
+    /// </summary>
+    /// <remarks>
+    /// Entities are pretty much all things that aren't part of the map.
+    /// </remarks>
     public class GEntity : RemoteObject
     {
-
+        /// <summary>
+        /// Initialize a new GEntity based on the offset.
+        /// </summary>
+        /// <remarks>
+        /// DO NOT CALL FROM PLUGIN. Use <see cref="ZombieAPI.Entities"/> to get all entities.
+        /// </remarks>
+        /// <param name="Game">The game process</param>
+        /// <param name="EntityAddr">The offset of the entity</param>
+        /// <param name="Parent">ZombieAPI that initializes this class</param>
         public GEntity(Process Game, int EntityAddr, ZombieAPI Parent)
         {
             this.Mem = new RemoteMemory(Game);
@@ -55,6 +69,9 @@ namespace ZombieAPI.GameObjects
         TeamInfo _team = null;
         ZombieAPI _parent = null;
 
+        /// <summary>
+        /// The ZombieAPI that created this class.
+        /// </summary>
         public ZombieAPI Parent
         {
             get
@@ -62,6 +79,10 @@ namespace ZombieAPI.GameObjects
                 return _parent;
             }
         }
+
+        /// <summary>
+        /// If the entity is a player, this will return the <see cref="Player"/> object.
+        /// </summary>
         public Player Player
         {
             get
@@ -73,6 +94,12 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// TeamInfo object containing the Entity's team.
+        /// </summary>
+        /// <remarks>
+        /// Pretty much only the Players actually use this.
+        /// </remarks>
         public TeamInfo Team
         {
             get
@@ -84,6 +111,9 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// The entity's index, ranging from 0 to 1024
+        /// </summary>
         public int ClientNum
         {
             get
@@ -93,6 +123,12 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// In what stance is this entity?
+        /// </summary>
+        /// <remarks>
+        /// May return other numbers than defined in the Stances enum on entities that aren't players (for example zombies etc)
+        /// </remarks>
         public Stances Stance
         {
             get
@@ -107,6 +143,9 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// The location on the map of this Entity
+        /// </summary>
         public float[] Origin
         {
             get
@@ -121,6 +160,12 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// The angles of this entity.
+        /// </summary>
+        /// <remarks>
+        /// Returns a Vec2 with 2 values both ranging from 0 to 360. Can both also be negative.
+        /// </remarks>
         public float[] Angles
         {
             get
@@ -135,6 +180,12 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// Current weapon being used.
+        /// </summary>
+        /// <remarks>
+        /// Only used by players.
+        /// </remarks>
         public int CurrentWeapon
         {
             get
@@ -149,6 +200,9 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// Not sure what this is, If you've got any idea, contact me. D:
+        /// </summary>
         public float[] newOrigin
         {
             get
@@ -163,6 +217,12 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// The model index.
+        /// </summary>
+        /// <remarks>
+        /// Perhaps in a later build it'll be possible to get the model name. Currently I have no clue what it refers to.
+        /// </remarks>
         public int ModelIndex
         {
             get
@@ -177,6 +237,9 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// The entity's health.
+        /// </summary>
         public int Health
         {
             get
@@ -191,6 +254,9 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// The entity type, ranges from player to barrier.
+        /// </summary>
         public EntityType Type
         {
             get

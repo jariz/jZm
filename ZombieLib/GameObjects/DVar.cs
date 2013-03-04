@@ -6,10 +6,22 @@ using System.Diagnostics;
 
 namespace ZombieAPI.GameObjects
 {
-    class DVar : RemoteObject
+    /// <summary>
+    /// The DVar class represents a DVar in the game.
+    /// </summary>
+    /// <remarks>
+    /// DVars are 'settings' used by the game engine.
+    /// Every DVar has a name and a value.
+    /// </remarks>
+    public class DVar : RemoteObject
     {
         ZombieAPI _parent;
-
+        /// <summary>
+        /// Initializes a new DVar object
+        /// </summary>
+        /// <param name="Game"></param>
+        /// <param name="DvarAddr"></param>
+        /// <param name="Parent"></param>
         public DVar(Process Game, int DvarAddr, ZombieAPI Parent)
         {
             this.Mem = new RemoteMemory(Game);
@@ -45,6 +57,9 @@ namespace ZombieAPI.GameObjects
             Value = new DVarValue(this);
         }
 
+        /// <summary>
+        /// The DVar name referenced by the game engine
+        /// </summary>
         public string Name
         {
             get
@@ -53,6 +68,9 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// The description, Very often empty.
+        /// </summary>
         public string Desc
         {
             get
@@ -61,6 +79,10 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// The type of DVar you'll use the get it's value.
+        /// Can be an Integer, Bool, String, Float, Vector, UnsignedInteger.
+        /// </summary>
         public DVarType Type
         {
             get
@@ -71,6 +93,12 @@ namespace ZombieAPI.GameObjects
         }
 
         public DVarValue Value;
+        /// <summary>
+        /// A dynamic class that allows you to get the DVar's value in several formats
+        /// </summary>
+        /// <remarks>
+        /// It is recommended, however, to just get the right corresponding value according to the DVar Type.
+        /// </remarks>
         public class DVarValue
         {
             DVar dvar;
@@ -79,6 +107,9 @@ namespace ZombieAPI.GameObjects
                 dvar = d;
             }
 
+            /// <summary>
+            /// Will return a string/bool/float/etc depending on the DVar's type
+            /// </summary>
             public object Value
             {
                 get

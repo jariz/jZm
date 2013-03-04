@@ -6,15 +6,13 @@ using System.Runtime.InteropServices;
 
 namespace ZombieAPI
 {
+    /// <summary>
+    /// PatternRecognition is a class that dynamically searches for addresses so when the offsets change,
+    /// We don't need the hardcoded addresses anymore.
+    /// Completely made by Barata, Edited slightly by JariZ
+    /// </summary>
     public class PatternRecognition
     {
-
-        /*
-         * PatternRecognition is a class that dynamically searches for addresses so when the offsets change,
-         * We don't need the hardcoded addresses anymore.
-         * Completely made by Barata, Edited slightly by JariZ
-        */
-
         public static void Run(IntPtr ProcessHandle)
         {
             PHandle = ProcessHandle;
@@ -53,7 +51,7 @@ namespace ZombieAPI
         [DllImport("kernel32.dll", SetLastError = true)]
         static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, [Out] byte[] lpBuffer, IntPtr dwSize, out IntPtr lpNumberOfBytesRead);
 
-        public static int FindPattern(IntPtr pHandle, int startAddress, int endAddress, string pattern, string mask)
+        static int FindPattern(IntPtr pHandle, int startAddress, int endAddress, string pattern, string mask)
         {
             var buffer = new byte[endAddress - startAddress];
             IntPtr bytesRead;
@@ -77,7 +75,7 @@ namespace ZombieAPI
             return -1;
         }
 
-        public static int Fix(int address, int offset, int correct)
+        static int Fix(int address, int offset, int correct)
         {
             var buffer = new byte[4];
             IntPtr bytesRead;
@@ -95,7 +93,6 @@ namespace ZombieAPI
         static int CGS_t;
         static int WepDef_t;
         static int cBuf_AddText;
-        static int BG_GetWeaponDef;
         static int SV_GameSendServerCommand;
 
 

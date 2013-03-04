@@ -9,6 +9,10 @@ using System.ComponentModel;
 
 namespace ZombieAPI
 {
+    /// <summary>
+    /// RemoteMemory is the core of jZm, it handles all memory reading/writing to the game.
+    /// RemoteMemory is derived from TextWriter
+    /// </summary>
     public class RemoteMemory : TextWriter
     {
         #region Public vars

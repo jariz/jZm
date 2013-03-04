@@ -7,9 +7,24 @@ using System.Runtime.InteropServices;
 
 namespace ZombieAPI.GameObjects
 {
+    /// <summary>
+    /// Object that represents a player
+    /// </summary>
+    /// <seealso cref="Player.Weapons_"/>
+    /// <seealso cref="Player.World_"/>
+    /// <seealso cref="Player.Stats_"/>
     public class Player : RemoteObject
     {
         GEntity Parent;
+        /// <summary>
+        /// Initialize a new Player based on the offset.
+        /// </summary>
+        /// <remarks>
+        /// DO NOT CALL FROM PLUGIN. Use <see cref="ZombieAPI.GetPlayers"/> to get all players.
+        /// </remarks>
+        /// <param name="Game">The game process</param>
+        /// <param name="PlayerAddr">The offset of the entity</param>
+        /// <param name="ParentEntity">The entity that has created this Player</param>
         public Player(Process Game, int PlayerAddr, GEntity ParentEntity)
         {
             this.Mem = new RemoteMemory(Game);
@@ -83,6 +98,9 @@ namespace ZombieAPI.GameObjects
             Stats = new Stats_(this);
         }
 
+        /// <summary>
+        /// The team this player is in.
+        /// </summary>
         public Team Team
         {
             get
@@ -95,11 +113,19 @@ namespace ZombieAPI.GameObjects
             }
         }
 
-
+        /// <summary>
+        /// A 'category' containing settings of the player's equipment, weapons, and ammo
+        /// </summary>
         public Weapons_ Weapons;
+
+        /// <summary>
+        /// A 'category' containing all world settings
+        /// </summary>
         public World_ World;
 
-
+        /// <summary>
+        /// A 'category' containing settings of the player's equipment, weapons, and ammo
+        /// </summary>
         public class Weapons_
         {
             Player Player;
@@ -126,6 +152,13 @@ namespace ZombieAPI.GameObjects
                 return Player.Parent.Parent.Weapons.FirstOrDefault(x => x.Value == name).Key;
             }
 
+            /// <summary>
+            /// The player's primary weapon's (the player's first weapon slot) name.
+            /// </summary>
+            /// <remarks>
+            /// To get a clear view of what weapons are being used (and to be sure this won't throw an exception), Use <see cref="ZombieAPI.Weapons"/>
+            /// </remarks>
+            /// <exception cref="System.ArgumentException">Thrown when an invalid weapon is specified</exception>
             public string PrimaryWeapon
             {
                 get
@@ -140,6 +173,13 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The player's secondary weapon's (the player's second weapon slot) name.
+            /// </summary>
+            /// <remarks>
+            /// To get a clear view of what weapons are being used (and to be sure this won't throw an exception), Use <see cref="ZombieAPI.Weapons"/>
+            /// </remarks>
+            /// <exception cref="System.ArgumentException">Thrown when an invalid weapon is specified</exception>
             public string SecondaryWeapon
             {
                 get
@@ -154,6 +194,13 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The player's lethal weapon's name. (smoke grenades etc)
+            /// </summary>
+            /// <remarks>
+            /// To get a clear view of what weapons are being used (and to be sure this won't throw an exception), Use <see cref="ZombieAPI.Weapons"/>
+            /// </remarks>
+            /// <exception cref="System.ArgumentException">Thrown when an invalid weapon is specified</exception>
             public string LethalWeapon
             {
                 get
@@ -168,6 +215,13 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The current weapon the player is using right now.
+            /// </summary>
+            /// <remarks>
+            /// To get a clear view of what weapons are being used (and to be sure this won't throw an exception), Use <see cref="ZombieAPI.Weapons"/>
+            /// </remarks>
+            /// <exception cref="System.ArgumentException">Thrown when an invalid weapon is specified</exception>
             public string CurrentWeapon
             {
                 get
@@ -180,6 +234,13 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The player's tactical weapon (grenades etc)
+            /// </summary>
+            /// <remarks>
+            /// To get a clear view of what weapons are being used (and to be sure this won't throw an exception), Use <see cref="ZombieAPI.Weapons"/>
+            /// </remarks>
+            /// <exception cref="System.ArgumentException">Thrown when an invalid weapon is specified</exception>
             public string TacticalWeapon
             {
                 get
@@ -194,6 +255,9 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The amount of bullets currently in the primary weapon's clip
+            /// </summary>
             public int PrimaryAmmoClip
             {
                 get
@@ -208,6 +272,9 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The amount of bullets currently in the secondary weapon's clip
+            /// </summary>
             public int SecondaryAmmoClip
             {
                 get
@@ -222,6 +289,9 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The amount of bullets currently in the primary weapon's stock
+            /// </summary>
             public int PrimaryAmmoStock
             {
                 get
@@ -236,6 +306,9 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The amount of bullets currently in the primary weapon's clip
+            /// </summary>
             public int SecondaryAmmoStock
             {
                 get
@@ -250,6 +323,9 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The amount of tactical weapons currently in the tactical weapon slot.
+            /// </summary>
             public int TacticalAmmo
             {
                 get
@@ -264,6 +340,9 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The amount of lethal weapons currently in the lethal weapon slot.
+            /// </summary>
             public int LethalAmmo
             {
                 get
@@ -279,6 +358,9 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// A 'category' containing all world settings
+        /// </summary>
         public class World_
         {
             Player Player;
@@ -287,6 +369,9 @@ namespace ZombieAPI.GameObjects
                 Player = owner;
             }
 
+            /// <summary>
+            /// If true, the player won't be able to move or look around.
+            /// </summary>
             public bool Freeze
             {
                 get
@@ -301,20 +386,9 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
-            public int RemoveMe_CLIPPING_debug
-            {
-                get
-                {
-                    Player.Mem.Position = Player.a_ClippingMode;
-                    return Player.Mem.ReadInt32();
-                }
-                set
-                {
-                    Player.Mem.Position = Player.a_ClippingMode;
-                    Player.Mem.Write(value);
-                }
-            }
-
+            /// <summary>
+            /// The player's speed. Default is 190
+            /// </summary>
             public int Speed
             {
                 get
@@ -329,6 +403,9 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The player's velocity (Vec3)
+            /// </summary>
             public float[] Velocity
             {
                 get
@@ -343,6 +420,9 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The location of the player in the world (Vec3)
+            /// </summary>
             public float[] Origin
             {
                 get
@@ -357,6 +437,9 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The angle of the player's camera (Vec3)
+            /// </summary>
             public float[] ViewAngles
             {
                 get
@@ -371,6 +454,9 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The player's camera height from the ground
+            /// </summary>
             public float PlayerHeight
             {
                 get
@@ -385,6 +471,10 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The player's gravity
+            /// Default is 800
+            /// </summary>
             public int Gravity
             {
                 get
@@ -400,7 +490,14 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// A 'category' containing stuff like the player's kills, rank, etc
+        /// </summary>
         public Stats_ Stats;
+
+        /// <summary>
+        /// A 'category' containing stuff like the player's kills, rank, etc
+        /// </summary>
         public class Stats_
         {
             RemoteMemory Mem;
@@ -411,6 +508,12 @@ namespace ZombieAPI.GameObjects
                 Player = a;
             }
 
+            /// <summary>
+            /// The player's rank
+            /// </summary>
+            /// <remarks>
+            /// You're able to write to this value, but I won't recommend it.
+            /// </remarks>
             public int Rank
             {
                 get
@@ -425,6 +528,12 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The player's prestige
+            /// </summary>
+            /// <remarks>
+            /// You're able to write to this value, but I won't recommend it.
+            /// </remarks>
             public int Prestige
             {
                 get
@@ -439,6 +548,9 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The amount of times the player's been death
+            /// </summary>
             public int Deaths
             {
                 get
@@ -453,6 +565,9 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The amount of kills the player has made
+            /// </summary>
             public int Kills
             {
                 get
@@ -467,6 +582,9 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The amount of Assists the player has
+            /// </summary>
             public int Assists
             {
                 get
@@ -481,6 +599,9 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The amount of headshots the player has
+            /// </summary>
             public int Headshots
             {
                 get
@@ -495,6 +616,9 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The amount of times the player has been revived
+            /// </summary>
             public int Downs
             {
                 get
@@ -509,6 +633,9 @@ namespace ZombieAPI.GameObjects
                 }
             }
 
+            /// <summary>
+            /// The amount of Revives
+            /// </summary>
             public int Revives
             {
                 get
@@ -524,6 +651,9 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// Self-explainatory, Returns true if the player is alive, false if he/she is dead.
+        /// </summary>
         public bool isAlive
         {
             get
@@ -538,6 +668,9 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// Contains the player's stance, examples are Running, Standing, Aiming down sights, etc
+        /// </summary>
         public Stances Stance
         {
             get
@@ -550,6 +683,9 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// The entity's index, ranging from 0 to 1024
+        /// </summary>
         public int ClientNum
         {
             get
@@ -558,6 +694,12 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// The model index.
+        /// </summary>
+        /// <remarks>
+        /// Perhaps in a later build it'll be possible to get the model name. Currently I have no clue what it refers to.
+        /// </remarks>
         public int ModelIndex
         {
             get
@@ -570,12 +712,18 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// The player's username.
+        /// </summary>
+        /// <remarks>
+        /// DO NOT use names if you're gonna 'hardcode' players into your plugin. People will be able to change their name and spoof these players. Instead, use <see cref="Player.XUID"/> for a unique non-spoofable identification number.
+        /// </remarks>
         public string Name
         {
             get
             {
                 Mem.Position = a_Name;
-                return Mem.ReadString().Replace("\0", "");
+                return Mem.ReadStringSmart();
             }
             set
             {
@@ -584,6 +732,13 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// The player's unique identification number.
+        /// </summary>
+        /// <remarks>
+        /// If you want to hardcode players into your plugin, This'll be the way. DO NOT use names if you're gonna hardcode players.
+        /// </remarks>
+        /// <seealso cref="Player.Name"/>
         public string XUID
         {
             get
@@ -593,6 +748,9 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// The player's score.
+        /// </summary>
         public int Money
         {
             get
@@ -607,6 +765,10 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// The player's health, ranging from 0 to 190 (by default unless Player.MaxHealth is changed)
+        /// </summary>
+        /// <seealso cref="Player.MaxHealth"/>
         public int Health
         {
             get
@@ -621,6 +783,12 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// The player's maximum health.
+        /// </summary>
+        /// <remarks>
+        /// Note that the game automatically 'heals' the player to amount of health as well.
+        /// </remarks>
         public int MaxHealth
         {
             get
@@ -635,50 +803,94 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// Remove player from game, showing a message.
+        /// </summary>
+        /// <param name="Message">The message in the dialog box to show to the player. You can use ^1color ^2codes</param>
         public void Kick(string Message)
         {
             ServerCommand(Message, 53, ClientNum);
         }
 
+        /// <summary>
+        /// Shows a message in the top-middle of the player's screen
+        /// </summary>
+        /// <param name="Message">The message to show. You can use ^1color ^2codes</param>
         public void iPrintBoldLn(string Message)
         {
             ServerCommand(Message, 60, ClientNum);
         }
 
+        /// <summary>
+        /// Send a chat message to this player. Only the player can see this message.
+        /// </summary>
+        /// <remarks>
+        /// The message will show up in the player's normal chat, alongside with the other player's chat.
+        /// </remarks>
+        /// <param name="Message">The message to show. You can use ^1color ^2codes</param>
+        /// <param name="Raw">If false, remove 'Server: ' from the start of the message.</param>
         public void Tell(string Message, bool Raw)
         {
             if (!Raw) Message = "^7Server: " + Message;
             ServerCommand(Message, 43, ClientNum);
         }
 
+        /// <summary>
+        /// Send message to player's killfeed. (bottom-left box)
+        /// </summary>
+        /// <param name="Message">The message to show. You can use ^1color ^2codes</param>
         public void iPrintLn(string Message)
         {
             ServerCommand(Message, 59, ClientNum);
         }
 
-        public void MovePlayerCamera(string args)
+        void MovePlayerCamera(string args)
         {
             ServerCommand(args, 88, ClientNum);
         }
 
+        /// <summary>
+        /// Show a short electrocute effect on the player's HUD.
+        /// </summary>
+        /// <remarks>
+        /// Doesn't damage the player.
+        /// </remarks>
         public void Electrocute()
         {
             ServerCommand("1", 89, ClientNum);
         }
 
+        /// <summary>
+        /// Custom server command. Will be removed in the near future. Not recommended to use.
+        /// </summary>
+        [Obsolete("Use the assigned functions to call this function")]
         public void CustomSVCMD(int x, string param)
         {
             ServerCommand(param, x, ClientNum);
         }
 
+        /// <summary>
+        /// Show a short fire effect on the player's HUD.
+        /// </summary>
+        /// <remarks>
+        /// Doesn't damage the player.
+        /// </remarks>
         public void Ignite()
         {
             ServerCommand("1", 87, ClientNum);
         }
 
-        public void SetClientDVar(string dvar)
+        /// <summary>
+        /// Set a client-side dvar. Dvars are game engine settings.
+        /// </summary>
+        /// <remarks>
+        /// To get server-side dvars, Use ZombieAPI.GetDVar()
+        /// </remarks>
+        /// <param name="DVar"></param>
+        /// <seealso cref="ZombieAPI.GetDVar"/>
+        public void SetClientDVar(string DVar)
         {
-            ClientCommand(dvar, ClientNum);
+            ClientCommand(DVar, ClientNum);
         }
 
         [DllImport("kernel32.dll", EntryPoint = "WriteProcessMemory")]
@@ -705,6 +917,9 @@ namespace ZombieAPI.GameObjects
         private const uint MEM_RESERVE = 0x2000;
         private const uint PAGE_EXECUTE_READWRITE = 0x40;
 
+        /// <summary>
+        /// Send a client command to the designated client.
+        /// </summary>
         void ClientCommand(string CMD, int ClientNum)
         {
 			if (_cBuf_addTextFuncAddress == IntPtr.Zero)
@@ -723,7 +938,8 @@ namespace ZombieAPI.GameObjects
                 // Fix the stub with the parameter address.
                 Array.Copy(BitConverter.GetBytes(commandAddress.ToInt32()), 0, Stubs.WrapperTocBuf_AddText, 9, 4);
 
-                
+                // Fix the stub with clientnum
+                Array.Copy(new byte[] { (byte)ClientNum }, 0, Stubs.WrapperTocBuf_AddText, 26, 1);
 
                 // Write the patched stub.
                 WriteProcessMemory(Mem.ProcessHandle, _cBuf_addTextFuncAddress, Stubs.WrapperTocBuf_AddText, (uint)Stubs.WrapperTocBuf_AddText.Length, bytesWritten);
@@ -742,6 +958,9 @@ namespace ZombieAPI.GameObjects
             }
         }
 
+        /// <summary>
+        /// Send a servercommand to the client (or server? i don't actually know how it works)
+        /// </summary>
         void ServerCommand(string Parameter, int CMDType, int ClientNum)
         {
             callBytes = BitConverter.GetBytes(Addresses.SV_GameSendServerCommand);
@@ -814,7 +1033,6 @@ namespace ZombieAPI.GameObjects
         int a_Prestige;
         int a_XUID;
         int a_Headshots;
-        int a_Score;
         int a_Kills;
         int a_Assists;
         int a_Deaths;
