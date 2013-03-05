@@ -37,6 +37,20 @@ namespace ZombieAPI
     }
 
     /// <summary>
+    /// COD color codes helper
+    /// </summary>
+    public enum ColorCodes
+    {
+        Red = 1,
+        Green = 2,
+        Yellow = 3,
+        Blue = 4,
+        Cyan = 5,
+        Pink = 6,
+        White = 7
+    }
+
+    /// <summary>
     /// The user perks
     /// </summary>
     /// <remarks>
