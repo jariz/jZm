@@ -35,9 +35,45 @@
     <HelpTitle>jZm</HelpTitle>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <DocumentationSources>
-      <DocumentationSource sourceFile="ZombieLib\ZombieAPI.csproj" xmlns="" />
-    </DocumentationSources>
+      <DocumentationSource sourceFile="ZombieLib\docs.xml" />
+<DocumentationSource sourceFile="ZombieLib\ZombieAPI.csproj" /></DocumentationSources>
     <FooterText>Project maintained by &amp;lt%3ba href=&amp;quot%3bhttp://jariz.pro&amp;quot%3b&amp;gt%3bJariZ&amp;lt%3b/a&amp;gt%3b</FooterText>
+    <HeaderText>Advanced Game Manipulation Framework for BO II Zombies</HeaderText>
+    <MissingTags>AutoDocumentCtors, AutoDocumentDispose</MissingTags>
+    <FeedbackEMailAddress>halp%40jariz.pro</FeedbackEMailAddress>
+    <VisibleItems>InheritedMembers, InheritedFrameworkMembers</VisibleItems>
+    <ProjectSummary>&amp;lt%3bh1&amp;gt%3bThe jZm ZombieAPI documentation&amp;lt%3b/h1&amp;gt%3b
+&amp;lt%3bp&amp;gt%3bWelcome to the jZm docs. Here are some quick links to get you going. You can of course also use the sidebar to navigate around&amp;lt%3b/p&amp;gt%3b
+&amp;lt%3bul&amp;gt%3b
+&amp;lt%3bli&amp;gt%3b&amp;lt%3ba href=&amp;quot%3bhttps://github.com/jariz/jZm/wiki/CrashCoursePluginCreation&amp;quot%3b&amp;gt%3bHow to create a plugin%3f&amp;lt%3b/a&amp;gt%3b&amp;lt%3b/li&amp;gt%3b
+&amp;lt%3bli&amp;gt%3b&amp;lt%3ba href=&amp;quot%3bhttps://github.com/jariz/jZm/wiki/SamplePlugin&amp;quot%3b&amp;gt%3bHow does a plugin look like%3f&amp;lt%3b/a&amp;gt%3b&amp;lt%3b/li&amp;gt%3b
+&amp;lt%3bli&amp;gt%3b&amp;lt%3ba href=&amp;quot%3bAllMembers_T_ZombieAPI_jZmPlugin.htm&amp;quot%3b&amp;gt%3bThe jZmPlugin interface&amp;lt%3b/a&amp;gt%3b&amp;lt%3b/li&amp;gt%3b
+&amp;lt%3bli&amp;gt%3b&amp;lt%3ba href=&amp;quot%3bAllMembers_T_ZombieAPI_ZombieAPI.htm&amp;quot%3b&amp;gt%3bThe ZombieAPI class&amp;lt%3b/a&amp;gt%3b&amp;lt%3b/li&amp;gt%3b
+&amp;lt%3bli&amp;gt%3b&amp;lt%3ba href=&amp;quot%3bAllMembers_T_ZombieAPI_GameObjects_Player.htm&amp;quot%3b&amp;gt%3bThe Player game object&amp;lt%3b/a&amp;gt%3b&amp;lt%3b/li&amp;gt%3b
+&amp;lt%3b/ul&amp;gt%3b
+&amp;lt%3bp&amp;gt%3b&amp;gt%3b&amp;lt%3bstrong&amp;gt%3bHappy coding!&amp;lt%3b/strong&amp;gt%3b&amp;lt%3b/p&amp;gt%3b&amp;lt%3bp&amp;gt%3b-JariZ&amp;lt%3b/p&amp;gt%3b</ProjectSummary>
+    <NamespaceSummaries>
+      <NamespaceSummaryItem name="(global)" isDocumented="True" />
+<NamespaceSummaryItem name="ZombieAPI" isDocumented="True">&lt;h1&gt;The jZm ZombieAPI documentation&lt;/h1&gt;
+&lt;p&gt;Welcome to the jZm docs. Here are some quick links to get you going. You can of course also use the sidebar to navigate around&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/jariz/jZm/wiki/CrashCoursePluginCreation"&gt;How to create a plugin?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/jariz/jZm/wiki/SamplePlugin"&gt;How does a plugin look like?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="AllMembers_T_ZombieAPI_jZmPlugin.htm"&gt;The jZmPlugin interface&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="AllMembers_T_ZombieAPI_ZombieAPI.htm"&gt;The ZombieAPI class&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="AllMembers_T_ZombieAPI_GameObjects_Player.htm"&gt;The Player game object&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&gt;&lt;strong&gt;Happy coding!&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;-JariZ&lt;/p&gt;</NamespaceSummaryItem>
+<NamespaceSummaryItem name="ZombieAPI.GameObjects" isDocumented="True">&lt;h1&gt;The jZm ZombieAPI documentation&lt;/h1&gt;
+&lt;p&gt;Welcome to the jZm docs. Here are some quick links to get you going. You can of course also use the sidebar to navigate around&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/jariz/jZm/wiki/CrashCoursePluginCreation"&gt;How to create a plugin?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/jariz/jZm/wiki/SamplePlugin"&gt;How does a plugin look like?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="AllMembers_T_ZombieAPI_jZmPlugin.htm"&gt;The jZmPlugin interface&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="AllMembers_T_ZombieAPI_ZombieAPI.htm"&gt;The ZombieAPI class&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="AllMembers_T_ZombieAPI_GameObjects_Player.htm"&gt;The Player game object&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&gt;&lt;strong&gt;Happy coding!&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;-JariZ&lt;/p&gt;</NamespaceSummaryItem></NamespaceSummaries>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in
        order for Visual Studio to perform the build.  The others are optional

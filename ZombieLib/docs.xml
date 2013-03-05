@@ -332,6 +332,11 @@
             Send a servercommand to the client (or server? i don't actually know how it works)
             </summary>
         </member>
+        <member name="P:ZombieAPI.GameObjects.Player.Perks">
+            <summary>
+            Returns the player's perks
+            </summary>
+        </member>
         <member name="P:ZombieAPI.GameObjects.Player.Team">
             <summary>
             The team this player is in.
@@ -941,6 +946,11 @@
         <member name="F:ZombieAPI.Stances.IronSights">
             <summary>
             User is aiming down sights
+            </summary>
+        </member>
+        <member name="T:ZombieAPI.ColorCodes">
+            <summary>
+            COD color codes helper
             </summary>
         </member>
         <member name="T:ZombieAPI.Perks">

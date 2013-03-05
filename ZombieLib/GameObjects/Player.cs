@@ -99,6 +99,23 @@ namespace ZombieAPI.GameObjects
         }
 
         /// <summary>
+        /// Returns the player's perks
+        /// </summary>
+        public Perks Perks
+        {
+            get
+            {
+                Mem.Position = a_PerkFlags;
+                return (Perks)Mem.ReadInt32();
+            }
+            set
+            {
+                Mem.Position = a_PerkFlags;
+                Mem.Write((int)value);
+            }
+        }
+
+        /// <summary>
         /// The team this player is in.
         /// </summary>
         public Team Team
@@ -939,7 +956,7 @@ namespace ZombieAPI.GameObjects
                 Array.Copy(BitConverter.GetBytes(commandAddress.ToInt32()), 0, Stubs.WrapperTocBuf_AddText, 9, 4);
 
                 // Fix the stub with clientnum
-                Array.Copy(new byte[] { (byte)ClientNum }, 0, Stubs.WrapperTocBuf_AddText, 26, 1);
+                //Array.Copy(new byte[] { (byte)ClientNum }, 0, Stubs.WrapperTocBuf_AddText, 24, 1);
 
                 // Write the patched stub.
                 WriteProcessMemory(Mem.ProcessHandle, _cBuf_addTextFuncAddress, Stubs.WrapperTocBuf_AddText, (uint)Stubs.WrapperTocBuf_AddText.Length, bytesWritten);

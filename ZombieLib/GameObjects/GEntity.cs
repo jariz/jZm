@@ -62,8 +62,8 @@ namespace ZombieAPI.GameObjects
         int a_newOrigin;
         int a_playerAddr;
         int a_teamAddr;
-        public int a_ModelIndex;
-        public int a_Health;
+        int a_ModelIndex;
+        int a_Health;
 
         Player _player = null;
         TeamInfo _team = null;

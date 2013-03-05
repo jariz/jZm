@@ -269,18 +269,23 @@ namespace ZombieAPI
             WriteLine("Reading DVars...", true);
             x = 0;
             Memory.Position = Addresses.DvarPointers;
-            StringBuilder txt = new StringBuilder();
             while (x != 1024)
             {
                 DVar dvar = new DVar(Game, Memory.ReadInt32(), this);
                 _dvars.Add(dvar);
-                string line = string.Format("#{0}\r\n\t\"{1}\"", dvar.Name, dvar.Value.Value);
-                txt.Append(line+"\r\n");
-                //Console.WriteLine(line);
                 x++;
             }
-            File.WriteAllText("dvardump.txt", txt.ToString());
 
+            initPlugins();
+
+            DateTime initTime = new DateTime(DateTime.Now.Ticks - start);
+
+            WriteLine("Initialized in " + initTime.Second + "." + initTime.Millisecond + " second(s)");
+            ThreadPool.QueueUserWorkItem(new WaitCallback(zFrame), Game);
+        }
+
+        void initPlugins()
+        {
             WriteLine("Loading plugins....", true);
             pluginLoader = new PluginLoader();
             Plugins = pluginLoader.Load();
@@ -297,14 +302,6 @@ namespace ZombieAPI
                         OnPluginCrash(z, plug);
                 }
             }
-
-            //new ModWarning().Init(this);
-            //new SVCMDTester().Init(this);
-
-            DateTime initTime = new DateTime(DateTime.Now.Ticks - start);
-
-            WriteLine("Initialized in " + initTime.Second + "." + initTime.Millisecond + " second(s)");
-            ThreadPool.QueueUserWorkItem(new WaitCallback(zFrame), Game);
         }
 
         /// <summary>
@@ -314,7 +311,7 @@ namespace ZombieAPI
         /// One of the most important functions in jZm
         /// </remarks>
         /// <returns>Clients on the server</returns>
-        public List<Player> GetPlayers()
+        public Player[] GetPlayers()
         {
             List<Player> p = new List<Player>();
             foreach (GEntity ent in _entities)
@@ -323,7 +320,7 @@ namespace ZombieAPI
                     if(ent.Player != null)
                      p.Add(ent.Player);
             }
-            return p;
+            return p.ToArray();
         }
 
         RemoteMemory LoopMem;
