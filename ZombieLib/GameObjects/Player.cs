@@ -73,7 +73,12 @@ namespace ZombieAPI.GameObjects
             a_Name2 = aString(); //0x54AC
             Move(16); //0x54BC
             a_MaxHealth = aInt(); //0x54CC
-            Move(100); //0x54D0
+            //Move(100); //0x54D0
+            Move(16); //0x054D0
+            a_SpeedScale = aInt(); //0x54E0 
+            Move(12); //0x54E4
+            a_inSecondChance = aInt(); //0x54F0 
+            Move(64); //0x54F4 
             a_Name = aString(); //0x5534
             Move(20); //0x5544
             a_Rank = aInt(); //0x5558 
@@ -89,7 +94,10 @@ namespace ZombieAPI.GameObjects
             Move(24); //0x55D8 
             a_Downs = aInt(); //0x55F0 
             a_Revives = aInt(); //0x55F4 
-            Move(140); //0x55F8
+            //Move(140); //0x55F8
+            Move(96); //0x55F8
+            a_x2Score = aInt(); //0x5658
+            Move(40); //0x565C 
             a_ClippingMode = aInt(); //0x5684
             Move(368); //0x5688
 
@@ -97,6 +105,8 @@ namespace ZombieAPI.GameObjects
             World = new World_(this);
             Stats = new Stats_(this);
         }
+
+        
 
         /// <summary>
         /// Returns the player's perks
@@ -112,6 +122,24 @@ namespace ZombieAPI.GameObjects
             {
                 Mem.Position = a_PerkFlags;
                 Mem.Write((int)value);
+            }
+        }
+
+        /// <summary>
+        /// Does the player have double points?
+        /// TODO: Make this a bool
+        /// </summary>
+        public int X2Score
+        {
+            get
+            {
+                Mem.Position = a_x2Score;
+                return Mem.ReadInt32();
+            }
+            set
+            {
+                Mem.Position = a_x2Score;
+                Mem.Write(value);
             }
         }
 
@@ -421,6 +449,23 @@ namespace ZombieAPI.GameObjects
             }
 
             /// <summary>
+            /// The multiplier of the Speed amount
+            /// </summary>
+            public int SpeedScale
+            {
+                get
+                {
+                    Player.Mem.Position = Player.a_SpeedScale;
+                    return Player.Mem.ReadInt32();
+                }
+                set
+                {
+                    Player.Mem.Position = Player.a_SpeedScale;
+                    Player.Mem.Write(value);
+                }
+            }
+
+            /// <summary>
             /// The player's velocity (Vec3)
             /// </summary>
             public float[] Velocity
@@ -682,6 +727,24 @@ namespace ZombieAPI.GameObjects
             {
                 Mem.Position = a_Alive;
                 Mem.Write(value ? 5 : 0);
+            }
+        }
+
+        /// <summary>
+        /// Is player in second chance (aka down)
+        /// TODO: Change this to a bool
+        /// </summary>
+        public int inSecondChance
+        {
+            get
+            {
+                Mem.Position = a_inSecondChance;
+                return Mem.ReadInt32();
+            }
+            set
+            {
+                Mem.Position = a_inSecondChance;
+                Mem.Write(value);
             }
         }
 
@@ -1045,6 +1108,8 @@ namespace ZombieAPI.GameObjects
         int a_Alive;
         int a_Name2;
         int a_MaxHealth;
+        int a_SpeedScale;
+        int a_inSecondChance;
         int a_Name;
         int a_Rank;
         int a_Prestige;
@@ -1056,6 +1121,7 @@ namespace ZombieAPI.GameObjects
         int a_Downs;
         int a_Revives;
         int a_Money;
+        int a_x2Score;
         int a_ClippingMode;
     }
 }

@@ -100,10 +100,18 @@ namespace ZombieAPI
 
         Dictionary<int, string> w_eapons = new Dictionary<int, string>();
         PluginLoader pluginLoader;
+        jZmPlugin[] plugin;
+
         /// <summary>
         /// All currently loaded plugins. Mostly used internally.
         /// </summary>
-        public jZmPlugin[] Plugins;
+        public jZmPlugin[] Plugins
+        {
+            get
+            {
+                return plugin;
+            }
+        }
 
         /// <summary>
         /// Write a line to the jZm console.
@@ -176,6 +184,25 @@ namespace ZombieAPI
                     return dvar;
             }
             return null;
+        }
+
+        /// <summary>
+        /// All the DVars that the game currently has.
+        /// </summary>
+        /// <remarks>
+        /// DVars are the game's "settings".
+        /// </remarks>
+        public DVar[] DVars
+        {
+            get
+            {
+                List<DVar> res = new List<DVar>();
+                foreach (DVar dvar in _dvars)
+                {
+                    if (dvar.Name != string.Empty) res.Add(dvar);
+                }
+                return res.ToArray();
+            }
         }
 
         /// <summary>
@@ -278,6 +305,8 @@ namespace ZombieAPI
 
             initPlugins();
 
+            new TestingPlugin().Init(this);
+
             DateTime initTime = new DateTime(DateTime.Now.Ticks - start);
 
             WriteLine("Initialized in " + initTime.Second + "." + initTime.Millisecond + " second(s)");
@@ -288,7 +317,7 @@ namespace ZombieAPI
         {
             WriteLine("Loading plugins....", true);
             pluginLoader = new PluginLoader();
-            Plugins = pluginLoader.Load();
+            plugin = pluginLoader.Load();
 
             foreach (jZmPlugin plug in Plugins)
             {
@@ -352,12 +381,22 @@ namespace ZombieAPI
                 }
         }
 
+        List<Portal> _portals = new List<Portal>();
+        public List<Portal> Portals
+        {
+            get
+            {
+                return _portals;
+            }
+        }
+
         void zFrame(object x)
         {
             LoopMem = new RemoteMemory((Process)x);
             int GameDataInterval = 0;
             while (true)
             {
+                #region GameData gathering / Map events
                 if (GameDataInterval++ == 10)
                 {
                     GameDataInterval = 0;
@@ -376,6 +415,33 @@ namespace ZombieAPI
                     }
                     GameData = NewGameData;
                 }
+                #endregion
+                #region Portal Manager
+                if(Portals.Count > 0)
+                    foreach (Player player in GetPlayers())
+                    {
+                        foreach (Portal portal in Portals)
+                        {
+                            float[] orig = player.World.Origin;
+                            if (
+                                orig[0] < portal.X + portal.Radius &&
+                                orig[0] > portal.X - portal.Radius &&
+
+                                orig[1] < portal.Y + portal.Radius &&
+                                orig[1] > portal.Y - portal.Radius
+                            )
+                            {
+                                WriteLine(string.Format("Portal @ {0}, {1} ({2}) triggered by {3}", portal.X, portal.Y, portal.Radius, player.Name), true);
+
+                                if(portal.Teleport)
+                                    player.World.Origin = portal.Destination;
+
+                                portal.trigger(portal, player);
+                            }
+                        }
+                    }
+                #endregion
+
 
                 if (OnFrame != null)
                 {

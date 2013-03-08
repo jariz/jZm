@@ -33,4 +33,11 @@ namespace ZombieAPI
     /// Handles map events
     /// </summary>
     public delegate void MapHandler();
+
+    /// <summary>
+    /// Handles portal events
+    /// </summary>
+    /// <param name="portal">The portal that triggered this event</param>
+    /// <param name="player">The player that triggered this event</param>
+    public delegate void PortalHandler(Portal portal, GameObjects.Player player);
 }

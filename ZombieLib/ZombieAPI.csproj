@@ -53,6 +53,7 @@
     <Compile Include="ModWarning.cs" />
     <Compile Include="PatternRecognition.cs" />
     <Compile Include="PluginLoader.cs" />
+    <Compile Include="Portal.cs" />
     <Compile Include="RemoteObject.cs" />
     <Compile Include="API.cs" />
     <Compile Include="GameObjects\GEntity.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="RemoteMemory.cs" />
     <Compile Include="Stubs.cs" />
     <Compile Include="SVCMDTester.cs" />
+    <Compile Include="TestingPlugin.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

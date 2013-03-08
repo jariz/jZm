@@ -78,5 +78,31 @@ namespace jZmConsole
             Console.ReadLine();
             Environment.Exit(-1);
         }
+        static bool anim = false;
+        static int animc = -1;
+        static void Anim()
+        {
+            anim = true;
+            while (anim)
+            {
+                Thread.Sleep(100);
+                Console.Write("\b");
+                switch (animc)
+                {
+                    case 4:
+                    case 0:
+                        Console.Write("\\");
+                        break;
+                    case 3:
+                    case 1:
+                        Console.Write("|");
+                        break;
+                    case 2:
+                        Console.Write("/");
+                        break;
+                }
+            }
+            
+        }
     }
 }

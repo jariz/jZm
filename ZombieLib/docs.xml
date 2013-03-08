@@ -131,6 +131,13 @@
             Handles map events
             </summary>
         </member>
+        <member name="T:ZombieAPI.PortalHandler">
+            <summary>
+            Handles portal events
+            </summary>
+            <param name="portal">The portal that triggered this event</param>
+            <param name="player">The player that triggered this event</param>
+        </member>
         <member name="T:ZombieAPI.RemoteObject">
             <summary>
             Represents a game object in the memory
@@ -337,6 +344,12 @@
             Returns the player's perks
             </summary>
         </member>
+        <member name="P:ZombieAPI.GameObjects.Player.X2Score">
+            <summary>
+            Does the player have double points?
+            TODO: Make this a bool
+            </summary>
+        </member>
         <member name="P:ZombieAPI.GameObjects.Player.Team">
             <summary>
             The team this player is in.
@@ -345,6 +358,12 @@
         <member name="P:ZombieAPI.GameObjects.Player.isAlive">
             <summary>
             Self-explainatory, Returns true if the player is alive, false if he/she is dead.
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.GameObjects.Player.inSecondChance">
+            <summary>
+            Is player in second chance (aka down)
+            TODO: Change this to a bool
             </summary>
         </member>
         <member name="P:ZombieAPI.GameObjects.Player.Stance">
@@ -494,6 +513,11 @@
         <member name="P:ZombieAPI.GameObjects.Player.World_.Speed">
             <summary>
             The player's speed. Default is 190
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.GameObjects.Player.World_.SpeedScale">
+            <summary>
+            The multiplier of the Speed amount
             </summary>
         </member>
         <member name="P:ZombieAPI.GameObjects.Player.World_.Velocity">
@@ -755,11 +779,6 @@
             jZm version, format: x.x.x-BUILD
             </summary>
         </member>
-        <member name="F:ZombieAPI.ZombieAPI.Plugins">
-            <summary>
-            All currently loaded plugins. Mostly used internally.
-            </summary>
-        </member>
         <member name="M:ZombieAPI.ZombieAPI.WriteLine(System.String)">
             <summary>
             Write a line to the jZm console.
@@ -913,6 +932,19 @@
             The key is the WeaponID, The value is the weapon name
             </remarks>
         </member>
+        <member name="P:ZombieAPI.ZombieAPI.Plugins">
+            <summary>
+            All currently loaded plugins. Mostly used internally.
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.ZombieAPI.DVars">
+            <summary>
+            All the DVars that the game currently has.
+            </summary>
+            <remarks>
+            DVars are the game's "settings".
+            </remarks>
+        </member>
         <member name="T:ZombieAPI.Stances">
             <summary>
             The different positions a user can stand in
@@ -1027,6 +1059,67 @@
             This enum was stolen from some other project. 
             I think it's NTA's...?
             </summary>
+        </member>
+        <member name="T:ZombieAPI.Portal">
+            <summary>
+            The Portal utilty class enables you to easily teleport players to a certain location when they step into a certain area
+            </summary>
+            <example>
+            Portal p = new Portal(10f, 20f, 50f);
+            p.PortalTriggered += new PortalHandler(p_PortalTriggered);
+            API.Portals.Add(p);
+            </example>
+        </member>
+        <member name="M:ZombieAPI.Portal.#ctor(System.Single,System.Single,System.Single)">
+            <summary>
+            The Portal utilty class enables you to easily teleport players to a certain location when they step into a certain area
+            </summary>
+            <param name="X">The X coordinate that'll be used as location of the portal</param>
+            <param name="Y">The Y coordinate that'll be used as location of the portal</param>
+            <param name="Radius">The radius (area) the player needs to get in to be teleported</param>
+        </member>
+        <member name="M:ZombieAPI.Portal.#ctor(System.Single,System.Single,System.Single,System.Boolean,System.Single[])">
+            <summary>
+            The Portal utilty class enables you to easily teleport players to a certain location when they step into a certain area
+            </summary>
+            <param name="X">The X coordinate that'll be used as location of the portal</param>
+            <param name="Y">The Y coordinate that'll be used as location of the portal</param>
+            <param name="Radius">The radius (area) the player needs to get in to be teleported</param>
+            <param name="Teleport">Will the player get teleported to <see cref="P:ZombieAPI.Portal.Destination"/> once triggered?</param>
+            <param name="Destination">A Vec3 (float array with 3 values) that specifies where players will be teleported into.</param>
+        </member>
+        <member name="E:ZombieAPI.Portal.PortalTriggered">
+            <summary>
+            Gets triggered whenever a player steps into this portal
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.Portal.Radius">
+            <summary>
+            The radius (area) the player needs to get in to be teleported
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.Portal.X">
+            <summary>
+            The X coordinate that'll be used as location of the portal
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.Portal.Y">
+            <summary>
+            The Y coordinate that'll be used as location of the portal
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.Portal.Teleport">
+            <summary>
+            Will the player get teleported to <see cref="P:ZombieAPI.Portal.Destination"/> once triggered?
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.Portal.Destination">
+            <summary>
+            A Vec3 (float array with 3 values) that specifies where players will be teleported into.
+            </summary>
+            <remarks>
+            Will only be used if <see cref="P:ZombieAPI.Portal.Teleport"/> is true
+            </remarks>
         </member>
     </members>
 </doc>
