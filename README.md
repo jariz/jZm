@@ -25,5 +25,6 @@ Check out [itsmods.com](http://itsmods.com)!
 - Barata - Developer
 - zxz0o0 - Help, Research
 - Nukem - Help, Research
+- Master131 - Help, Research
 - Surtek - Testing
 - Crayon - Shoutout
