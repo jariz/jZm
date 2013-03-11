@@ -40,4 +40,11 @@ namespace ZombieAPI
     /// <param name="portal">The portal that triggered this event</param>
     /// <param name="player">The player that triggered this event</param>
     public delegate void PortalHandler(Portal portal, GameObjects.Player player);
+
+    /// <summary>
+    /// Handles chat events
+    /// </summary>
+    /// <param name="Player">The player that send the chat message</param>
+    /// <param name="Message">The message that the player send</param>
+    public delegate void ChatHandler(GameObjects.Player Player, string Message);
 }

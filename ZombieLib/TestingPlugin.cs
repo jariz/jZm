@@ -37,18 +37,12 @@ namespace ZombieAPI
         {
             this.API = API;
 
-            Portal p = new Portal(-6865.08154f, 5076.141f, 50f);
-            p.PortalTriggered += new PortalHandler(p_PortalTriggered);
-            API.Portals.Add(p);
+            API.OnChat += new ChatHandler(API_OnChat);
         }
 
-        void p_PortalTriggered(Portal portal, Player player)
+        void API_OnChat(Player Player, string Message)
         {
-            float[] bus = API.GetBus().Origin;
-            bus[2] += 200;
-            player.World.Origin = bus;
-            player.Ignite();
+            API.WriteLine(Player.Name + ": " + Message);
         }
-
     }
 }

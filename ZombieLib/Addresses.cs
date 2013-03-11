@@ -24,8 +24,8 @@ namespace ZombieAPI
         public static int SV_GameSendServerCommand;
         public static int cBuf_AddText;
         public static int G_OnSay;
-
         public static int GameData = 0x0118B5AD;
         public static int DvarPointers = 0x298B330;
+        public static int Level = 0x22B6580;
     }
 }

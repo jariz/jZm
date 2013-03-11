@@ -46,9 +46,13 @@ namespace ZombieAPI
         /// Call whenever the gamedata gets removed. Basically whenever the user returns to the main menu.
         /// </summary>
         public event MapHandler OnMapDestroy;
+        /// <summary>
+        /// Calls when a player sends a chat message
+        /// </summary>
+        public event ChatHandler OnChat;
 
         /// <summary>
-        /// jZm version, format: x.x.x-BUILD
+        /// jZm version, format: x.x.x.x-BUILD
         /// </summary>
         public static string Version = "1.2.3.0-DEV";
 
@@ -303,6 +307,9 @@ namespace ZombieAPI
                 x++;
             }
 
+            WriteLine("Injecting hooks...", true);
+            HookManager.Init(Game, this);
+
             initPlugins();
 
             new TestingPlugin().Init(this);
@@ -354,6 +361,12 @@ namespace ZombieAPI
 
         RemoteMemory LoopMem;
 
+        //I'm so terribly sorry to do be doing this way, but there's no other way to invoke a event outside of it's class
+        internal void TriggerChat(Player player, string message)
+        {
+            PluginEvent(OnChat, player, message);
+        }
+
         internal void PluginEvent(Delegate Ev, params object[] Params)
         {
             //We don't call the events natively anymore because with this was we can catch exception and get the plugin that caused the exception (that is, if it was a plugin ofcourse)
@@ -382,6 +395,9 @@ namespace ZombieAPI
         }
 
         List<Portal> _portals = new List<Portal>();
+        /// <summary>
+        /// The Portals currently monitored by jZm
+        /// </summary>
         public List<Portal> Portals
         {
             get
@@ -441,7 +457,7 @@ namespace ZombieAPI
                         }
                     }
                 #endregion
-
+                HookManager.Frame();
 
                 if (OnFrame != null)
                 {

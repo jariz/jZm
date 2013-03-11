@@ -47,6 +47,7 @@
     <Compile Include="Events.cs" />
     <Compile Include="GameDataReader.cs" />
     <Compile Include="GameObjects\DVar.cs" />
+    <Compile Include="GameObjects\Level.cs" />
     <Compile Include="GameObjects\Player.cs" />
     <Compile Include="GameObjects\TeamInfo.cs" />
     <Compile Include="Hook.cs" />

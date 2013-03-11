@@ -14,5 +14,9 @@ namespace ZombieAPI
         public virtual void Unhook()
         {
         }
+
+        public virtual void HookFrame(ZombieAPI API)
+        {
+        }
     }
 }

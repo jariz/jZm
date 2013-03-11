@@ -15,9 +15,11 @@ namespace ZombieAPI.Hooks
         private byte[] chatBytes = new byte[128];
         private byte[] gentityBytes = new byte[4];
         private IntPtr ProcessHandle;
+        private System.Diagnostics.Process BaseP;
 
         public override void SetHook(System.Diagnostics.Process BaseProcess)
         {
+            BaseP = BaseProcess;
             ProcessHandle = I.OpenProcess(0x001F0FFF /*all*/, false, BaseProcess.Id);
             if (ProcessHandle == IntPtr.Zero) throw new Win32Exception(Marshal.GetLastWin32Error());
 
@@ -67,12 +69,39 @@ namespace ZombieAPI.Hooks
             I.WriteProcessMemory(ProcessHandle, (IntPtr)0x004BF5D3, hkBytes, (uint)hkBytes.Length, out bytesWritten);
         }
 
-        public void HookFrame(ZombieAPI API)
+        public override void HookFrame(ZombieAPI API)
         {
-            
+            IntPtr bytesout;
+
+            UIntPtr bytesWritten;
+
+            byte[] ptrChat = new byte[4];
+
+            byte[] btnull = new byte[]
+            {
+                0x00,
+            };
+
+            I.ReadProcessMemory(ProcessHandle, chatAddress, ptrChat, 4, out bytesout);
+
+            if (ptrChat[0] != 0x00 && ptrChat[2] != 0x00)
+            {
+                I.ReadProcessMemory(ProcessHandle, (IntPtr)BitConverter.ToInt32(ptrChat, 0), chatBytes, 128, out bytesout);
+
+                if (chatBytes[0] != 0x00)
+                {
+                    string FinalChat = System.Text.Encoding.ASCII.GetString(chatBytes);
+
+                    GameObjects.Player player = ReadG_SayClient(API);
+
+                    I.WriteProcessMemory(ProcessHandle, (IntPtr)BitConverter.ToInt32(ptrChat, 0), btnull, (uint)btnull.Length, out bytesWritten);
+
+                    API.TriggerChat(player, FinalChat);
+                }
+            }
         }
 
-        private GameObjects.Player ReadG_SayClient()
+        private GameObjects.Player ReadG_SayClient(ZombieAPI api)
         {
             IntPtr bytesout;
 
@@ -86,11 +115,10 @@ namespace ZombieAPI.Hooks
 
                 if (gentityBytes != null)
                 {
-                    int ClientNum = BitConverter.ToInt32(gentityBytes, 0);
-
-                    richTextBox1.Text = richTextBox1.Text + "[Client]: " + ClientNum.ToString() + Environment.NewLine;
+                    return api.Entities[BitConverter.ToInt32(gentityBytes, 0)].Player;
                 }
             }
+            return null;
         }
 
         public override void Unhook()
