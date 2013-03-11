@@ -354,7 +354,7 @@ namespace ZombieAPI
 
         RemoteMemory LoopMem;
 
-        void PluginEvent(Delegate Ev, params object[] Params)
+        internal void PluginEvent(Delegate Ev, params object[] Params)
         {
             //We don't call the events natively anymore because with this was we can catch exception and get the plugin that caused the exception (that is, if it was a plugin ofcourse)
             if(Ev != null)

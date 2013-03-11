@@ -49,6 +49,10 @@
     <Compile Include="GameObjects\DVar.cs" />
     <Compile Include="GameObjects\Player.cs" />
     <Compile Include="GameObjects\TeamInfo.cs" />
+    <Compile Include="Hook.cs" />
+    <Compile Include="HookManager.cs" />
+    <Compile Include="Hooks\ChatHook.cs" />
+    <Compile Include="I.cs" />
     <Compile Include="jZmPlugin.cs" />
     <Compile Include="ModWarning.cs" />
     <Compile Include="PatternRecognition.cs" />
@@ -63,6 +67,7 @@
     <Compile Include="SVCMDTester.cs" />
     <Compile Include="TestingPlugin.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ZombieAPI
 {
-    class Stubs
+    internal class Stubs
     {
         public static byte[] WrapperTocBuf_AddText = new byte[]
         {
@@ -38,6 +38,14 @@ namespace ZombieAPI
 	        0x8B, 0xE5, // mov esp, ebp
 	        0x5D, // pop ebp
 	        0xC3 // retn
+        };
+
+        public static byte[] G_Say_Stub = new byte[]
+        {
+           0x8B, 0xB4, 0x24, 0xF4, 0x00, 0x00, 0x00,//MOV ESI,DWORD PTR SS:[ESP+F4]
+           0x89, 0x34, 0x25, 0x00, 0x00, 0x00, 0x00, // MOV [00000000],ESI
+           0x89, 0x3C, 0x25, 0x00, 0x00, 0x00, 0x00, // MOV [00000000],EDI
+           0xE9, 0x00, 0x00, 0x00, 0x00, //jmp back
         };
     }
 }

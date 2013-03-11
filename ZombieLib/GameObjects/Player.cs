@@ -973,21 +973,6 @@ namespace ZombieAPI.GameObjects
             ClientCommand(DVar, ClientNum);
         }
 
-        [DllImport("kernel32.dll", EntryPoint = "WriteProcessMemory")]
-        static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, uint nSize, [Out] int lpNumberOfBytesWritten);
-
-        [DllImport("kernel32.dll", EntryPoint = "OpenProcess")]
-        static extern IntPtr OpenProcess(uint dwDesiredAccess, bool bInheritHandle, int dwProcessId);
-
-        [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
-        static extern IntPtr VirtualAllocEx(IntPtr hProcess, IntPtr lpAddress, uint dwSize, uint flAllocationType, uint flProtect);
-
-        [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
-        static extern bool VirtualFreeEx(IntPtr hProcess, IntPtr lpAddress, UIntPtr dwSize, uint dwFreeType);
-
-        [DllImport("kernel32")]
-        static extern IntPtr CreateRemoteThread(IntPtr hProcess, IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, out IntPtr lpThreadId);
-
         private IntPtr _SV_GameSendServerCommandAddress = IntPtr.Zero;
 		private  IntPtr _cBuf_addTextFuncAddress = IntPtr.Zero;
         private IntPtr commandAddress = IntPtr.Zero;
@@ -1005,15 +990,15 @@ namespace ZombieAPI.GameObjects
 			if (_cBuf_addTextFuncAddress == IntPtr.Zero)
             {
                 // Allocate memory for the stub.
-                _cBuf_addTextFuncAddress = VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)Stubs.WrapperTocBuf_AddText.Length, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+                _cBuf_addTextFuncAddress = I.VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)Stubs.WrapperTocBuf_AddText.Length, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
 
                 // Allocate memory for the command.
                 commandBytes = Encoding.ASCII.GetBytes(CMD+"\0");
-                commandAddress = VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)commandBytes.Length, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+                commandAddress = I.VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)commandBytes.Length, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
 
                 // Write the command into the allocated memory.
                 int bytesWritten = 0;
-                WriteProcessMemory(Mem.ProcessHandle, commandAddress, commandBytes, (uint)commandBytes.Length, bytesWritten);
+                I.WriteProcessMemory(Mem.ProcessHandle, commandAddress, commandBytes, (uint)commandBytes.Length, bytesWritten);
 
                 // Fix the stub with the parameter address.
                 Array.Copy(BitConverter.GetBytes(commandAddress.ToInt32()), 0, Stubs.WrapperTocBuf_AddText, 9, 4);
@@ -1022,16 +1007,16 @@ namespace ZombieAPI.GameObjects
                 //Array.Copy(new byte[] { (byte)ClientNum }, 0, Stubs.WrapperTocBuf_AddText, 24, 1);
 
                 // Write the patched stub.
-                WriteProcessMemory(Mem.ProcessHandle, _cBuf_addTextFuncAddress, Stubs.WrapperTocBuf_AddText, (uint)Stubs.WrapperTocBuf_AddText.Length, bytesWritten);
+                I.WriteProcessMemory(Mem.ProcessHandle, _cBuf_addTextFuncAddress, Stubs.WrapperTocBuf_AddText, (uint)Stubs.WrapperTocBuf_AddText.Length, bytesWritten);
 
                 // Create a new thread.
                 IntPtr bytesout;
-                CreateRemoteThread(Mem.ProcessHandle, IntPtr.Zero, 0, _cBuf_addTextFuncAddress, IntPtr.Zero, 0, out bytesout);
+                I.CreateRemoteThread(Mem.ProcessHandle, IntPtr.Zero, 0, _cBuf_addTextFuncAddress, IntPtr.Zero, 0, out bytesout);
 
                 if (_cBuf_addTextFuncAddress != IntPtr.Zero && commandAddress != IntPtr.Zero)
                 {
-                    VirtualFreeEx(Mem.ProcessHandle, _cBuf_addTextFuncAddress, (UIntPtr)Stubs.WrapperTocBuf_AddText.Length, 0x8000);
-                    VirtualFreeEx(Mem.ProcessHandle, commandAddress, (UIntPtr)commandBytes.Length, 0x8000);
+                    I.VirtualFreeEx(Mem.ProcessHandle, _cBuf_addTextFuncAddress, (UIntPtr)Stubs.WrapperTocBuf_AddText.Length, 0x8000);
+                    I.VirtualFreeEx(Mem.ProcessHandle, commandAddress, (UIntPtr)commandBytes.Length, 0x8000);
                 }
 
                 _cBuf_addTextFuncAddress = IntPtr.Zero;
@@ -1048,15 +1033,15 @@ namespace ZombieAPI.GameObjects
             if (_SV_GameSendServerCommandAddress == IntPtr.Zero)
             {
                 // Allocate memory for the stub.
-                _SV_GameSendServerCommandAddress = VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)Stubs.WrapperToSV_GameSendServerCommand.Length, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+                _SV_GameSendServerCommandAddress = I.VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)Stubs.WrapperToSV_GameSendServerCommand.Length, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
 
                 // Allocate memory for the command.
                 commandBytes = Encoding.ASCII.GetBytes(String.Format("{0} \"{1}\"", Convert.ToChar(CMDType), Parameter));
-                commandAddress = VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)commandBytes.Length, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+                commandAddress = I.VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)commandBytes.Length, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
                 
                 // Write the command into the allocated memory.
                 int bytesWritten = 0;
-                WriteProcessMemory(Mem.ProcessHandle, commandAddress, commandBytes, (uint)commandBytes.Length, bytesWritten);
+                I.WriteProcessMemory(Mem.ProcessHandle, commandAddress, commandBytes, (uint)commandBytes.Length, bytesWritten);
 
                 // Fix the stub with the parameter address.
                 Array.Copy(BitConverter.GetBytes(commandAddress.ToInt32()), 0, Stubs.WrapperToSV_GameSendServerCommand, 9, 4);
@@ -1068,16 +1053,16 @@ namespace ZombieAPI.GameObjects
                 Array.Copy(new byte[] { (byte)ClientNum }, 0, Stubs.WrapperToSV_GameSendServerCommand, 26, 1);
 
                 // Write the patched stub.
-                WriteProcessMemory(Mem.ProcessHandle, _SV_GameSendServerCommandAddress, Stubs.WrapperToSV_GameSendServerCommand, (uint)Stubs.WrapperToSV_GameSendServerCommand.Length, bytesWritten);
+                I.WriteProcessMemory(Mem.ProcessHandle, _SV_GameSendServerCommandAddress, Stubs.WrapperToSV_GameSendServerCommand, (uint)Stubs.WrapperToSV_GameSendServerCommand.Length, bytesWritten);
 
                 // Create a new thread.
                 IntPtr bytesout;
-                CreateRemoteThread(Mem.ProcessHandle, IntPtr.Zero, 0, _SV_GameSendServerCommandAddress, IntPtr.Zero, 0, out bytesout);
+                I.CreateRemoteThread(Mem.ProcessHandle, IntPtr.Zero, 0, _SV_GameSendServerCommandAddress, IntPtr.Zero, 0, out bytesout);
 
                 if (_SV_GameSendServerCommandAddress != IntPtr.Zero && commandAddress != IntPtr.Zero)
                 {
-                    VirtualFreeEx(Mem.ProcessHandle, _SV_GameSendServerCommandAddress, (UIntPtr)Stubs.WrapperToSV_GameSendServerCommand.Length, 0x8000);
-                    VirtualFreeEx(Mem.ProcessHandle, commandAddress, (UIntPtr)commandBytes.Length, 0x8000);
+                    I.VirtualFreeEx(Mem.ProcessHandle, _SV_GameSendServerCommandAddress, (UIntPtr)Stubs.WrapperToSV_GameSendServerCommand.Length, 0x8000);
+                    I.VirtualFreeEx(Mem.ProcessHandle, commandAddress, (UIntPtr)commandBytes.Length, 0x8000);
                 }
 
                 _SV_GameSendServerCommandAddress = IntPtr.Zero;
