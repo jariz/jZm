@@ -71,6 +71,18 @@ namespace ZombieAPI
         List<DVar> _dvars = new List<DVar>();
         public Process BaseProcess;
 
+        Level _level;
+        /// <summary>
+        /// The current level information
+        /// </summary>
+        public Level Level
+        {
+            get
+            {
+                return _level;
+            }
+        }
+
         /// <summary>
         /// All Entities in the game.
         /// </summary>
@@ -290,6 +302,7 @@ namespace ZombieAPI
             PatternRecognition.Run(Memory.ProcessHandle);
 
             WriteLine("Reading entities....", true);
+            _level = new GameObjects.Level(Game, Addresses.Level, this);
             int x = 0;
             while (x != 1024)
             {
@@ -311,8 +324,6 @@ namespace ZombieAPI
             HookManager.Init(Game, this);
 
             initPlugins();
-
-            new TestingPlugin().Init(this);
 
             DateTime initTime = new DateTime(DateTime.Now.Ticks - start);
 
@@ -350,8 +361,11 @@ namespace ZombieAPI
         public Player[] GetPlayers()
         {
             List<Player> p = new List<Player>();
+            int x = 0;
             foreach (GEntity ent in _entities)
             {
+                x++;
+                if (x > Level.MaxClients) break;
                 if (ent.Type == EntityType.ET_PLAYER)
                     if(ent.Player != null)
                      p.Add(ent.Player);

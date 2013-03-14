@@ -129,7 +129,7 @@ namespace ZombieAPI.GameObjects
         /// Does the player have double points?
         /// TODO: Make this a bool
         /// </summary>
-        public int X2Score
+        int X2Score
         {
             get
             {

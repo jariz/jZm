@@ -36,7 +36,6 @@ namespace ZombieAPI
         public void Init(ZombieAPI API)
         {
             this.API = API;
-
             API.OnChat += new ChatHandler(API_OnChat);
         }
 

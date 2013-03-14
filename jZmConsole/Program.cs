@@ -16,6 +16,8 @@ namespace jZmConsole
         static ZombieAPI.ZombieAPI API;
         static void Main(string[] args)
         {
+            Console.Clear();
+            Console.Title = "jZm";
             string gameName;
             if (args.Length > 0)
                 gameName = args[0];
@@ -30,17 +32,25 @@ namespace jZmConsole
             API.OnPluginCrash += new OnPluginCrashHandler(API_OnPluginCrash);
             API.OnCrash += new OnCrashHandler(Crash);
             API.OnDebugWrite += new WriteHandler(API_OnDebugWrite);
+            API.OnFrame += new OnFrameHandler(API_OnFrame);
 
             Process[] games = Process.GetProcessesByName(gameName);
 
             if (games.Length == 0)
-                Crash(new jZmException("Game process '" + gameName + "' not found, try again"));
+                Anim(gameName);
             if (games.Length > 1)
                 Crash(new jZmException("More than 1 game process found. Use the GUI if you want to use multiple games."));
 
             API.Bootstrap(games[0]);
 
             Application.Run();
+        }
+
+        static int frame = 0;
+        static void API_OnFrame()
+        {
+            frame++;
+            Console.Title = string.Format("jZm | Entities: {0} DVars: {1} Weapons: {2} Max Clients: {3} | Game frame: {4} jZm frame: {5}", API.Level.NumEntities, API.DVars.Length, API.Weapons.Count, API.Level.MaxClients, API.Level.FrameNum, frame);
         }
 
         static void API_OnDebugWrite(string msg)
@@ -80,27 +90,35 @@ namespace jZmConsole
         }
         static bool anim = false;
         static int animc = -1;
-        static void Anim()
+        static void Anim(string name)
         {
             anim = true;
+            Console.Write("Waiting for game .....  ");
             while (anim)
             {
-                Thread.Sleep(100);
-                Console.Write("\b");
+                if (animc == 5) animc = -1;
+                animc++;
+                Thread.Sleep(50);
                 switch (animc)
                 {
-                    case 4:
                     case 0:
-                        Console.Write("\\");
+                        Console.Write("\b\\");
                         break;
-                    case 3:
                     case 1:
-                        Console.Write("|");
+                        Console.Write("\b|");
                         break;
                     case 2:
-                        Console.Write("/");
+                        Console.Write("\b/");
                         break;
+                    case 3:
+                        if (Process.GetProcessesByName(name).Length > 0)
+                            Main(new string[] { });
+                        Console.Write("\b-");
+                        break;
+
                 }
+
+                
             }
             
         }

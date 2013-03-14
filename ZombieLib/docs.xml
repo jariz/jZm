@@ -102,49 +102,6 @@
             All possible access rights for a process object.
             </summary>
         </member>
-        <member name="T:ZombieAPI.OnFrameHandler">
-            <summary>
-            Handles frame events
-            </summary>
-        </member>
-        <member name="T:ZombieAPI.WriteHandler">
-            <summary>
-            Handles write events
-            </summary>
-            <param name="msg">The message to write</param>
-        </member>
-        <member name="T:ZombieAPI.OnCrashHandler">
-            <summary>
-            Handles exception events
-            </summary>
-            <param name="exep">The exception</param>
-        </member>
-        <member name="T:ZombieAPI.OnPluginCrashHandler">
-            <summary>
-            Handles plugin exception events
-            </summary>
-            <param name="exep">The exception</param>
-            <param name="plugin">The plugin that threw the exception</param>
-        </member>
-        <member name="T:ZombieAPI.MapHandler">
-            <summary>
-            Handles map events
-            </summary>
-        </member>
-        <member name="T:ZombieAPI.PortalHandler">
-            <summary>
-            Handles portal events
-            </summary>
-            <param name="portal">The portal that triggered this event</param>
-            <param name="player">The player that triggered this event</param>
-        </member>
-        <member name="T:ZombieAPI.ChatHandler">
-            <summary>
-            Handles chat events
-            </summary>
-            <param name="Player">The player that send the chat message</param>
-            <param name="Message">The message that the player send</param>
-        </member>
         <member name="T:ZombieAPI.RemoteObject">
             <summary>
             Represents a game object in the memory
@@ -206,6 +163,49 @@
             <summary>
             Just a object that you can asso
             </summary>
+        </member>
+        <member name="T:ZombieAPI.OnFrameHandler">
+            <summary>
+            Handles frame events
+            </summary>
+        </member>
+        <member name="T:ZombieAPI.WriteHandler">
+            <summary>
+            Handles write events
+            </summary>
+            <param name="msg">The message to write</param>
+        </member>
+        <member name="T:ZombieAPI.OnCrashHandler">
+            <summary>
+            Handles exception events
+            </summary>
+            <param name="exep">The exception</param>
+        </member>
+        <member name="T:ZombieAPI.OnPluginCrashHandler">
+            <summary>
+            Handles plugin exception events
+            </summary>
+            <param name="exep">The exception</param>
+            <param name="plugin">The plugin that threw the exception</param>
+        </member>
+        <member name="T:ZombieAPI.MapHandler">
+            <summary>
+            Handles map events
+            </summary>
+        </member>
+        <member name="T:ZombieAPI.PortalHandler">
+            <summary>
+            Handles portal events
+            </summary>
+            <param name="portal">The portal that triggered this event</param>
+            <param name="player">The player that triggered this event</param>
+        </member>
+        <member name="T:ZombieAPI.ChatHandler">
+            <summary>
+            Handles chat events
+            </summary>
+            <param name="Player">The player that send the chat message</param>
+            <param name="Message">The message that the player send</param>
         </member>
         <member name="T:ZombieAPI.PatternRecognition">
             <summary>
