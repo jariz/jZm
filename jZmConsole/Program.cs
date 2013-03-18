@@ -43,12 +43,24 @@ namespace jZmConsole
 
             API.Bootstrap(games[0]);
 
-            Application.Run();
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\r\nPress enter to exit jZm\r\n");
+
+            //Application.Run();
+            Console.ReadLine();
+            API.Shutdown(true);
         }
 
         static int frame = 0;
         static void API_OnFrame()
         {
+            if (API.BaseProcess.HasExited)
+            {
+                API.Shutdown(false);
+                Main(new string[] { });
+                return;
+            }
+
             frame++;
             Console.Title = string.Format("jZm | Entities: {0} DVars: {1} Weapons: {2} Max Clients: {3} | Game frame: {4} jZm frame: {5}", API.Level.NumEntities, API.DVars.Length, API.Weapons.Count, API.Level.MaxClients, API.Level.FrameNum, frame);
         }

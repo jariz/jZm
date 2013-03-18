@@ -10,7 +10,7 @@ namespace ZombieAPI
 {
     class PluginLoader
     {
-        string ExecutablePath
+        public string ExecutableDir
         {
             get
             {
@@ -18,14 +18,22 @@ namespace ZombieAPI
             }
         }
 
-        public jZmPlugin[] Load()
+        public string ExecutablePath
+        {
+            get
+            {
+                return Assembly.GetExecutingAssembly().Location;
+            }
+        }
+
+        public jZmPlugin[] Load(ZombieAPI API)
         {
             List<jZmPlugin> jzmp = new List<jZmPlugin>();
 
             try
             {
-                if (!Directory.Exists(ExecutablePath + "\\plugins")) Directory.CreateDirectory(ExecutablePath + "\\plugins");
-                foreach (string plug in Directory.GetFiles(ExecutablePath + "\\plugins", "*.dll"))
+                if (!Directory.Exists(ExecutableDir + "\\plugins")) Directory.CreateDirectory(ExecutableDir + "\\plugins");
+                foreach (string plug in Directory.GetFiles(ExecutableDir + "\\plugins", "*.dll"))
                 {
                     try
                     {
@@ -37,6 +45,7 @@ namespace ZombieAPI
                             if (type.Name == "Plugin")
                             {
                                 jZmPlugin plugin = (jZmPlugin)Activator.CreateInstance(type);
+                                API.WriteLine(string.Format("- '{0}' by {1} loaded", plugin.Name, plugin.Author), false);
                                 jzmp.Add(plugin);
                             }
                         }

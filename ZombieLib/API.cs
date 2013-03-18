@@ -327,15 +327,29 @@ namespace ZombieAPI
 
             DateTime initTime = new DateTime(DateTime.Now.Ticks - start);
 
+            new TestingPlugin().Init(this);
+
             WriteLine("Initialized in " + initTime.Second + "." + initTime.Millisecond + " second(s)");
             ThreadPool.QueueUserWorkItem(new WaitCallback(zFrame), Game);
+        }
+
+
+        /// <summary>
+        /// The name of the executable that's running jZm.
+        /// </summary>
+        public string ExecutablePath
+        {
+            get
+            {
+                return pluginLoader.ExecutablePath;
+            }
         }
 
         void initPlugins()
         {
             WriteLine("Loading plugins....", true);
             pluginLoader = new PluginLoader();
-            plugin = pluginLoader.Load();
+            plugin = pluginLoader.Load(this);
 
             foreach (jZmPlugin plug in Plugins)
             {
@@ -420,11 +434,39 @@ namespace ZombieAPI
             }
         }
 
+        /// <summary>
+        /// Unloads resources, Removes hooks and exits the environment.
+        /// </summary>
+        /// <param name="KillEnvironment">Run <see cref="Environment.Exit"/> after unloading everything</param>
+        public void Shutdown(bool KillEnvironment)
+        {
+            //remove hooks from game
+            HookManager.Destroy();
+
+            /*
+            //indicate that zframe should stop running
+            run = false;
+            //wait for zframe to die...
+            while (!ded)
+            {
+                Thread.Sleep(50);
+            }*/
+
+            //kill environment
+            if (KillEnvironment)
+                Environment.Exit(1337);
+        }
+
+        //indicates wheter the thread should keep running
+        bool run = true;
+        //gets set to true when the thread has died
+        bool ded = false;
+
         void zFrame(object x)
         {
             LoopMem = new RemoteMemory((Process)x);
             int GameDataInterval = 0;
-            while (true)
+            while (run)
             {
                 #region GameData gathering / Map events
                 if (GameDataInterval++ == 10)
@@ -480,6 +522,7 @@ namespace ZombieAPI
 
                 Thread.Sleep(200);
             }
+            ded = true;
         }
     }
 }

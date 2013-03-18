@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("Console", 0);
-            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("Plugins", 1);
-            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("Players", 2);
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("Console", 0);
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("Plugins", 1);
+            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("Players", 2);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.listView1 = new System.Windows.Forms.ListView();
             this.menu = new System.Windows.Forms.ImageList(this.components);
@@ -45,8 +45,8 @@
             this.plug_name = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.box_players = new System.Windows.Forms.Panel();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.label2 = new System.Windows.Forms.Label();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.ClientNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Kills = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -65,9 +65,9 @@
             // 
             this.listView1.Dock = System.Windows.Forms.DockStyle.Left;
             this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem4,
-            listViewItem5,
-            listViewItem6});
+            listViewItem1,
+            listViewItem2,
+            listViewItem3});
             this.listView1.LargeImageList = this.menu;
             this.listView1.Location = new System.Drawing.Point(0, 0);
             this.listView1.Name = "listView1";
@@ -187,6 +187,16 @@
             this.box_players.Size = new System.Drawing.Size(537, 452);
             this.box_players.TabIndex = 2;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 12);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(380, 26);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "This is a small player manager allowing you to manage the players in your lobby.\r" +
+    "\nRight click a user to send several commands.";
+            // 
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -203,16 +213,6 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(537, 399);
             this.dataGridView1.TabIndex = 0;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 12);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(380, 26);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "This is a small player manager allowing you to manage the players in your lobby.\r" +
-    "\nRight click a user to send several commands.";
             // 
             // ClientNum
             // 
@@ -268,9 +268,9 @@
             this.Controls.Add(this.box_console);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            //this.Name = "Wut";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "jZm";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Main_FormClosed);
             this.box_console.ResumeLayout(false);
             this.box_console.PerformLayout();
             this.box_plugins.ResumeLayout(false);

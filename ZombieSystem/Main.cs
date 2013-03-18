@@ -112,5 +112,10 @@ namespace ZombieSystem
             plug_author.Text = "By " + plug.Author;
             plug_desc.Text = plug.Desc;
         }
+
+        private void Main_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Program.API.Shutdown(true);
+        }
     }
 }

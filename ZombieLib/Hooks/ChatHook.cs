@@ -48,9 +48,9 @@ namespace ZombieAPI.Hooks
 
             //Calculate the jumps//
 
-            FinalAddress = (chatHookAddress.ToInt32() - 0x004BF5D3) - 5;
+            FinalAddress = (chatHookAddress.ToInt32() - (Addresses.G_OnSay + 0x73)) - 5;
 
-            DwJump = ((0x004BF5DF - chatHookAddress.ToInt32()) - 0x20) + 1;
+            DwJump = (((Addresses.G_OnSay + 0x7F) - chatHookAddress.ToInt32()) - 0x20) + 1;
 
             //Correct the stubs//
 
@@ -66,7 +66,7 @@ namespace ZombieAPI.Hooks
 
             I.WriteProcessMemory(ProcessHandle, chatHookAddress, Stubs.G_Say_Stub, (uint)Stubs.G_Say_Stub.Length, out bytesWritten);
 
-            I.WriteProcessMemory(ProcessHandle, (IntPtr)0x004BF5D3, hkBytes, (uint)hkBytes.Length, out bytesWritten);
+            I.WriteProcessMemory(ProcessHandle, (IntPtr)(Addresses.G_OnSay + 0x73), hkBytes, (uint)hkBytes.Length, out bytesWritten);
         }
 
         public override void HookFrame(ZombieAPI API)

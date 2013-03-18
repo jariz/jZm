@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>ZombieAPI</name>
+        <name>jZm</name>
     </assembly>
     <members>
         <member name="T:ZombieAPI.RemoteMemory">
@@ -100,6 +100,11 @@
         <member name="F:ZombieAPI.RemoteMemory.ProcessAccess.AllAccess">
             <summary>
             All possible access rights for a process object.
+            </summary>
+        </member>
+        <member name="T:ZombieAPI.GameObjects.Level">
+            <summary>
+            Level provides information such as how much entities are loaded, how much 
             </summary>
         </member>
         <member name="T:ZombieAPI.RemoteObject">
@@ -882,6 +887,12 @@
             </remarks>
             <returns>Clients on the server</returns>
         </member>
+        <member name="M:ZombieAPI.ZombieAPI.Shutdown(System.Boolean)">
+            <summary>
+            Unloads resources, Removes hooks and exits the environment.
+            </summary>
+            <param name="KillEnvironment">Run <see cref="M:System.Environment.Exit(System.Int32)"/> after unloading everything</param>
+        </member>
         <member name="E:ZombieAPI.ZombieAPI.OnFrame">
             <summary>
             Called on every jZm tick. Gets called 5 times a second.
@@ -930,6 +941,11 @@
             First thing shown on startup on console, provides name, description, version and credits.
             </summary>
         </member>
+        <member name="P:ZombieAPI.ZombieAPI.Level">
+            <summary>
+            The current level information
+            </summary>
+        </member>
         <member name="P:ZombieAPI.ZombieAPI.Entities">
             <summary>
             All Entities in the game.
@@ -961,6 +977,11 @@
             <remarks>
             DVars are the game's "settings".
             </remarks>
+        </member>
+        <member name="P:ZombieAPI.ZombieAPI.ExecutablePath">
+            <summary>
+            The name of the executable that's running jZm.
+            </summary>
         </member>
         <member name="P:ZombieAPI.ZombieAPI.Portals">
             <summary>
