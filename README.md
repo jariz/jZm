@@ -23,6 +23,7 @@ Check out [itsmods.com](http://itsmods.com)!
   
 - JariZ http://jariz.pro - Lead developer
 - Barata - Developer
+- kokole - Developer
 - zxz0o0 - Help, Research
 - Nukem - Help, Research
 - Master131 - Help, Research
