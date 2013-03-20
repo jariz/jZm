@@ -67,7 +67,7 @@ namespace ZombieAPI
         {
             get
             {
-                return "---------------- jZm " + Version + " ----------------\r\nAdvanced Game Manipulation Framework for BO II Zombies\r\nThanks to: Barata, Nukem, Crayon, Surtek\r\n-------------------------------------------------\r\n";
+                return "---------------- jZm " + Version + " ----------------\r\nAdvanced Game Manipulation Framework for BO II Zombies\r\nThanks to: Barata, kokole, Nukem, Crayon, Surtek\r\n-------------------------------------------------\r\n";
             }
         }
         RemoteMemory Memory;
