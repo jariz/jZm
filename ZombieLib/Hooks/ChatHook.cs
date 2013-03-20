@@ -97,7 +97,7 @@ namespace ZombieAPI.Hooks
 
                     I.WriteProcessMemory(ProcessHandle, (IntPtr)BitConverter.ToInt32(ptrChat, 0), btnull, (uint)btnull.Length, out bytesWritten);
 
-                    API.TriggerChat(player, FinalChat);
+                    API.TriggerOnChat(player, FinalChat);
                 }
             }
         }

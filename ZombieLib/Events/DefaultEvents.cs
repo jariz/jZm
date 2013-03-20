@@ -249,6 +249,7 @@ namespace ZombieAPI
             "EV_IMMEDIATE_RAGDOLL",
             "EV_ENT_SPAWNED_SENTINEL"
         };
+
         private String[] entityTypeNames =
         {
             "General",
@@ -273,7 +274,8 @@ namespace ZombieAPI
             "Streamer Hint",
             "ZBarrier"
         };
-        public String BG_GetEntityTypeName(uint eventId)
+
+        public String GetEventName(uint eventId)
         {
             if (eventId >= 21)
                 return eventnames[eventId - 21];

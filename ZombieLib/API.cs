@@ -53,7 +53,7 @@ namespace ZombieAPI
         /// <summary>
         /// Called right before a game has fully processed a frame
         /// </summary>
-        public event GameFrameHandler OnGameFrame;
+        public event NativeEventHandler OnNativeEvent;
 
         /// <summary>
         /// jZm version, format: x.x.x.x-BUILD
@@ -71,6 +71,7 @@ namespace ZombieAPI
             }
         }
         RemoteMemory Memory;
+        IPC CurrentIPC;
         List<GEntity> _entities = new List<GEntity>();
         List<DVar> _dvars = new List<DVar>();
         public Process BaseProcess;
@@ -296,16 +297,20 @@ namespace ZombieAPI
         /// <param name="Game">The game process jZm reads/writes to (must be a valid CODBOII zombies process)</param>
         public void Bootstrap(Process Game)
         {
-            WriteLine("Initializing jZm..."); long start = DateTime.Now.Ticks;
+            WriteLine("Initializing jZm...");
+            long start = DateTime.Now.Ticks;
 
-            WriteLine("Connecting to game....", true);
+            WriteLine("Connecting to game...", true);
             this.BaseProcess = Game;
             Memory = new RemoteMemory(Game);
+            // this is to redirect the hooks to jZm (and optionally a buffer together)
+            //CurrentIPC = new IPC();
+            //CurrentIPC.InitJZMEventHookingManager(Memory.ProcessHandle);
 
             WriteLine("Recognizing patterns...", true);
             PatternRecognition.Run(Memory.ProcessHandle);
 
-            WriteLine("Reading entities....", true);
+            WriteLine("Reading entities...", true);
             _level = new GameObjects.Level(Game, Addresses.Level, this);
             int x = 0;
             while (x != 1024)
@@ -394,9 +399,15 @@ namespace ZombieAPI
         RemoteMemory LoopMem;
 
         //I'm so terribly sorry to do be doing this way, but there's no other way to invoke a event outside of it's class
-        internal void TriggerChat(Player player, string message)
+        internal void TriggerOnChat(Player player, string message)
         {
             PluginEvent(OnChat, player, message);
+        }
+
+        internal void TriggerOnGameFrame()
+        {
+            // make array of native events (EV_...) with clientnum
+            PluginEvent(OnNativeEvent);
         }
 
         internal void PluginEvent(Delegate Ev, params object[] Params)

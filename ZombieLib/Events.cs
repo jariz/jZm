@@ -49,7 +49,9 @@ namespace ZombieAPI
     public delegate void ChatHandler(GameObjects.Player Player, string Message);
 
     /// <summary>
-    /// Handles a game frame
+    /// Handles a native game event
     /// </summary>
-    public delegate void GameFrameHandler();
+    /// <param name="Entity">The entity that triggered the native event</param>
+    /// <param name="EventName">The name of the event that was triggered</param>
+    public delegate void NativeEventHandler(GameObjects.GEntity Entity, string EventName);
 }

@@ -168,10 +168,12 @@
             <param name="Player">The player that sent the chat message</param>
             <param name="Message">The message that the player sent</param>
         </member>
-        <member name="T:ZombieAPI.GameFrameHandler">
+        <member name="T:ZombieAPI.NativeEventHandler">
             <summary>
-            Handles a game frame
+            Handles a native game event
             </summary>
+            <param name="Entity">The entity that triggered the native event</param>
+            <param name="EventName">The name of the event that was triggered</param>
         </member>
         <member name="T:ZombieAPI.jZmPlugin">
             <summary>
@@ -468,7 +470,7 @@
             Calls when a player sends a chat message
             </summary>
         </member>
-        <member name="E:ZombieAPI.ZombieAPI.OnGameFrame">
+        <member name="E:ZombieAPI.ZombieAPI.OnNativeEvent">
             <summary>
             Called right before a game has fully processed a frame
             </summary>
