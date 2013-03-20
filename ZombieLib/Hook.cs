@@ -7,7 +7,7 @@ namespace ZombieAPI
 {
     public class Hook
     {
-        public virtual void SetHook(System.Diagnostics.Process BaseProcess)
+        public virtual void SetHook(IntPtr ProcessHandle)
         {
         }
 

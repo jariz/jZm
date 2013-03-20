@@ -21,7 +21,7 @@ namespace ZombieAPI
             PHandle = ProcessHandle;
 
             //CG_Init = FindPattern(ProcessHandle, 0x401000, 0x900000, "\x81\xEC\x00\x00\x00\x00\xA1\x00\x00\x00\x00\x53\x8B\x9C\x24", "xx????x????xxxx");
-            G_OnSay = FindPattern(ProcessHandle, 0x401000, 0x900000, "\x81\xEC\x00\x00\x00\x00\x53\x8B\x9C\x24\x00\x00\x00\x00\x55\x56\x57\x8B\xBC\x24\x00\x00\x00\x00\x83\xFB\x01", "xx????xxxx????xxxxxx????xxx");
+            G_Say = FindPattern(ProcessHandle, 0x401000, 0x900000, "\x81\xEC\x00\x00\x00\x00\x53\x8B\x9C\x24\x00\x00\x00\x00\x55\x56\x57\x8B\xBC\x24\x00\x00\x00\x00\x83\xFB\x01", "xx????xxxx????xxxxxx????xxx");
             //Entity = FindPattern(ProcessHandle, 0x401000, 0x900000, "\x03\x34\x9D\x00\x00\x00\x00\x83\xE8\x00\xF3\x0F\x10", "xxx????xxxxxx");
             //EntitySize = FindPattern(ProcessHandle, 0x401000, 0x900000, "\x69\xF6\x00\x00\x00\x00\x03\x34\x9D\x00\x00\x00\x00\x6A\x01\x6A\x00\x6A\x00", "xx????xxx????xxxxxx");
             GEntity = FindPattern(ProcessHandle, 0x401000, 0x900000, "\x81\xC6\x00\x00\x00\x00\x39\x8E\x00\x00\x00\x00\x75\x29\x50\x68", "xx????xx????xxxx");
@@ -61,21 +61,18 @@ namespace ZombieAPI
              * These get hooked/called by jZm
             */
 
-            Addresses.G_OnSay = G_OnSay;
+            Addresses.G_Say = G_Say;
             Addresses.cBuf_AddText = cBuf_AddText;
             Addresses.SV_GameSendServerCommand = SV_GameSendServerCommand;
         }
 
         private static IntPtr PHandle = IntPtr.Zero;
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, [Out] byte[] lpBuffer, IntPtr dwSize, out IntPtr lpNumberOfBytesRead);
-
         static int FindPattern(IntPtr pHandle, int startAddress, int endAddress, string pattern, string mask)
         {
             var buffer = new byte[endAddress - startAddress];
-            IntPtr bytesRead;
-            if (ReadProcessMemory(pHandle, (IntPtr)startAddress, buffer, (IntPtr)buffer.Length, out bytesRead))
+            uint bytesRead;
+            if (I.ReadProcessMemory(pHandle, (IntPtr)startAddress, buffer, (uint)buffer.Length, out bytesRead) != 0)
             {
                 for (int i = 0; i < buffer.Length; i++)
                 {
@@ -98,13 +95,13 @@ namespace ZombieAPI
         static int Fix(int address, int offset, int correct)
         {
             var buffer = new byte[4];
-            IntPtr bytesRead;
-            ReadProcessMemory(PHandle, (IntPtr)(address + offset), buffer, (IntPtr)4, out bytesRead);
+            uint bytesRead;
+            I.ReadProcessMemory(PHandle, (IntPtr)(address + offset), buffer, 4, out bytesRead);
             return BitConverter.ToInt32(buffer, 0) + correct;
         }
 
         static int CG_Init;
-        static int G_OnSay;
+        static int G_Say;
         static int Entity;
         static int EntitySize;
         static int GEntity;

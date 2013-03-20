@@ -15,15 +15,12 @@ namespace ZombieAPI.Hooks
         private byte[] chatBytes = new byte[128];
         private byte[] gentityBytes = new byte[4];
         private IntPtr ProcessHandle;
-        private System.Diagnostics.Process BaseP;
 
-        public override void SetHook(System.Diagnostics.Process BaseProcess)
+        public override void SetHook(IntPtr ProcessHandleLocal)
         {
-            BaseP = BaseProcess;
-            ProcessHandle = I.OpenProcess(0x001F0FFF /*all*/, false, BaseProcess.Id);
-            if (ProcessHandle == IntPtr.Zero) throw new Win32Exception(Marshal.GetLastWin32Error());
+            ProcessHandle = ProcessHandleLocal;
 
-            UIntPtr bytesWritten;
+            uint bytesWritten;
 
             Int32 FinalAddress, DwJump;
 
@@ -31,7 +28,7 @@ namespace ZombieAPI.Hooks
 
             byte[] hkBytes = new byte[]
             { 
-                0xE9, 0x00, 0x00, 0x00, 0x00, 0x90, 0x90,
+                0xE9, 0x00, 0x00, 0x00, 0x00, 0x90, 0x90
             };
 
             //Allocate memory for Stubs.G_Say_GetChatStub//
@@ -48,9 +45,9 @@ namespace ZombieAPI.Hooks
 
             //Calculate the jumps//
 
-            FinalAddress = (chatHookAddress.ToInt32() - (Addresses.G_OnSay + 0x73)) - 5;
+            FinalAddress = (chatHookAddress.ToInt32() - (Addresses.G_Say + 0x73)) - 5;
 
-            DwJump = (((Addresses.G_OnSay + 0x7F) - chatHookAddress.ToInt32()) - 0x20) + 1;
+            DwJump = (((Addresses.G_Say + 0x7F) - chatHookAddress.ToInt32()) - 0x20) + 1;
 
             //Correct the stubs//
 
@@ -66,20 +63,20 @@ namespace ZombieAPI.Hooks
 
             I.WriteProcessMemory(ProcessHandle, chatHookAddress, Stubs.G_Say_Stub, (uint)Stubs.G_Say_Stub.Length, out bytesWritten);
 
-            I.WriteProcessMemory(ProcessHandle, (IntPtr)(Addresses.G_OnSay + 0x73), hkBytes, (uint)hkBytes.Length, out bytesWritten);
+            I.WriteProcessMemory(ProcessHandle, (IntPtr)(Addresses.G_Say + 0x73), hkBytes, (uint)hkBytes.Length, out bytesWritten);
         }
 
         public override void HookFrame(ZombieAPI API)
         {
-            IntPtr bytesout;
+            uint bytesout;
 
-            UIntPtr bytesWritten;
+            uint bytesWritten;
 
             byte[] ptrChat = new byte[4];
 
             byte[] btnull = new byte[]
             {
-                0x00,
+                0x00
             };
 
             I.ReadProcessMemory(ProcessHandle, chatAddress, ptrChat, 4, out bytesout);
@@ -103,7 +100,7 @@ namespace ZombieAPI.Hooks
 
         private GameObjects.Player ReadG_SayClient(ZombieAPI api)
         {
-            IntPtr bytesout;
+            uint bytesout;
 
             byte[] ptrGNumber = new byte[4];
 
@@ -123,19 +120,20 @@ namespace ZombieAPI.Hooks
 
         public override void Unhook()
         {
-            int bytesWritten = 0;
+            uint bytesWritten = 0;
 
             byte[] hkBytes = new byte[]
             { 
-                0x8B, 0xB4, 0x24, 0xF4, 0x00, 0x00, 0x00,
-
+                0x8B, 0xB4, 0x24, 0xF4, 0x00, 0x00, 0x00
             };
 
-            I.WriteProcessMemory(ProcessHandle, (IntPtr)0x004BF5D3, hkBytes, (uint)hkBytes.Length, bytesWritten);
+            I.WriteProcessMemory(ProcessHandle, (IntPtr)Addresses.G_Say, hkBytes, (uint)hkBytes.Length, out bytesWritten);
 
-            I.VirtualFreeEx(ProcessHandle, chatHookAddress, (UIntPtr)Stubs.G_Say_Stub.Length, 0x8000);
+            I.VirtualFreeEx(ProcessHandle, chatHookAddress, (uint)Stubs.G_Say_Stub.Length, 0x8000);
             if (chatBytes != null)
-                I.VirtualFreeEx(ProcessHandle, chatAddress, (UIntPtr)chatBytes.Length, 0x8000);
+                I.VirtualFreeEx(ProcessHandle, chatAddress, (uint)chatBytes.Length, 0x8000);
+
+            I.CloseHandle(ProcessHandle);
         }
     }
 }

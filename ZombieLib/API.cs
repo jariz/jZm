@@ -321,7 +321,7 @@ namespace ZombieAPI
             }
 
             WriteLine("Injecting hooks...", true);
-            HookManager.Init(Game, this);
+            HookManager.Init(Memory.ProcessHandle, this);
 
             initPlugins();
 
