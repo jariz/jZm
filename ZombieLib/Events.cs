@@ -44,7 +44,12 @@ namespace ZombieAPI
     /// <summary>
     /// Handles chat events
     /// </summary>
-    /// <param name="Player">The player that send the chat message</param>
-    /// <param name="Message">The message that the player send</param>
+    /// <param name="Player">The player that sent the chat message</param>
+    /// <param name="Message">The message that the player sent</param>
     public delegate void ChatHandler(GameObjects.Player Player, string Message);
+
+    /// <summary>
+    /// Handles a game frame
+    /// </summary>
+    public delegate void GameFrameHandler();
 }

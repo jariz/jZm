@@ -50,6 +50,10 @@ namespace ZombieAPI
         /// Calls when a player sends a chat message
         /// </summary>
         public event ChatHandler OnChat;
+        /// <summary>
+        /// Called right before a game has fully processed a frame
+        /// </summary>
+        public event GameFrameHandler OnGameFrame;
 
         /// <summary>
         /// jZm version, format: x.x.x.x-BUILD

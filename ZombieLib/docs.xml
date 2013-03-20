@@ -165,8 +165,13 @@
             <summary>
             Handles chat events
             </summary>
-            <param name="Player">The player that send the chat message</param>
-            <param name="Message">The message that the player send</param>
+            <param name="Player">The player that sent the chat message</param>
+            <param name="Message">The message that the player sent</param>
+        </member>
+        <member name="T:ZombieAPI.GameFrameHandler">
+            <summary>
+            Handles a game frame
+            </summary>
         </member>
         <member name="T:ZombieAPI.jZmPlugin">
             <summary>
@@ -461,6 +466,11 @@
         <member name="E:ZombieAPI.ZombieAPI.OnChat">
             <summary>
             Calls when a player sends a chat message
+            </summary>
+        </member>
+        <member name="E:ZombieAPI.ZombieAPI.OnGameFrame">
+            <summary>
+            Called right before a game has fully processed a frame
             </summary>
         </member>
         <member name="P:ZombieAPI.ZombieAPI.Header">
