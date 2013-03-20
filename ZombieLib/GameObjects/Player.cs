@@ -978,9 +978,6 @@ namespace ZombieAPI.GameObjects
         private IntPtr commandAddress = IntPtr.Zero;
         private byte[] commandBytes;
         private byte[] callBytes;
-        private const uint MEM_COMMIT = 0x1000;
-        private const uint MEM_RESERVE = 0x2000;
-        private const uint PAGE_EXECUTE_READWRITE = 0x40;
 
         /// <summary>
         /// Send a client command to the designated client.
@@ -990,11 +987,11 @@ namespace ZombieAPI.GameObjects
 			if (_cBuf_addTextFuncAddress == IntPtr.Zero)
             {
                 // Allocate memory for the stub.
-                _cBuf_addTextFuncAddress = I.VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)Stubs.WrapperTocBuf_AddText.Length, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+                _cBuf_addTextFuncAddress = I.VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)Stubs.WrapperTocBuf_AddText.Length, I.MEM_COMMIT | I.MEM_RESERVE, I.PAGE_EXECUTE_READWRITE);
 
                 // Allocate memory for the command.
                 commandBytes = Encoding.ASCII.GetBytes(CMD+"\0");
-                commandAddress = I.VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)commandBytes.Length, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+                commandAddress = I.VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)commandBytes.Length, I.MEM_COMMIT | I.MEM_RESERVE, I.PAGE_EXECUTE_READWRITE);
 
                 // Write the command into the allocated memory.
                 uint bytesWritten = 0;
@@ -1033,11 +1030,11 @@ namespace ZombieAPI.GameObjects
             if (_SV_GameSendServerCommandAddress == IntPtr.Zero)
             {
                 // Allocate memory for the stub.
-                _SV_GameSendServerCommandAddress = I.VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)Stubs.WrapperToSV_GameSendServerCommand.Length, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+                _SV_GameSendServerCommandAddress = I.VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)Stubs.WrapperToSV_GameSendServerCommand.Length, I.MEM_COMMIT | I.MEM_RESERVE, I.PAGE_EXECUTE_READWRITE);
 
                 // Allocate memory for the command.
                 commandBytes = Encoding.ASCII.GetBytes(String.Format("{0} \"{1}\"", Convert.ToChar(CMDType), Parameter));
-                commandAddress = I.VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)commandBytes.Length, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+                commandAddress = I.VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)commandBytes.Length, I.MEM_COMMIT | I.MEM_RESERVE, I.PAGE_EXECUTE_READWRITE);
                 
                 // Write the command into the allocated memory.
                 uint bytesWritten = 0;

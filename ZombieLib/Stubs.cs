@@ -7,6 +7,16 @@ namespace ZombieAPI
 {
     internal class Stubs
     {
+        // Pipe stub used for all hooks (you need a new pipe stub for every hook)
+        // t6zm to jZm (client to server) is used to handle data recieving (events, etc...)
+        // An event handler in jZm will wait forever for the pipe to be aviable (this means that
+        // an event has been executed in t6zm)
+        // This stub is synchronous, meaning that t6zm wont resume execution until jZm has completed the processing
+        public static byte[] SyncPipeStubForHooks = new byte[]
+        {
+
+        };
+
         public static byte[] WrapperTocBuf_AddText = new byte[]
         {
 	        0x55, // push ebp
@@ -45,7 +55,7 @@ namespace ZombieAPI
            0x8B, 0xB4, 0x24, 0xF4, 0x00, 0x00, 0x00,//MOV ESI,DWORD PTR SS:[ESP+F4]
            0x89, 0x34, 0x25, 0x00, 0x00, 0x00, 0x00, // MOV [00000000],ESI
            0x89, 0x3C, 0x25, 0x00, 0x00, 0x00, 0x00, // MOV [00000000],EDI
-           0xE9, 0x00, 0x00, 0x00, 0x00, //jmp back
+           0xE9, 0x00, 0x00, 0x00, 0x00 //jmp back
         };
     }
 }

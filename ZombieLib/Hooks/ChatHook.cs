@@ -5,6 +5,10 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 
+/*
+ * PENDING SAFETY EDIT
+*/
+
 namespace ZombieAPI.Hooks
 {
     class ChatHook : Hook

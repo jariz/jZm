@@ -98,7 +98,7 @@ namespace ZombieAPI
             _encoding = Encoding.Default;
             if (_phandle == IntPtr.Zero) // fixed memory leak (open process only if it wasnt oppened)
                 _phandle = I.OpenProcess(I.PROCESS_VM_OPERATION | I.PROCESS_VM_READ | I.PROCESS_VM_WRITE, false, _pid);
-            if(_phandle == IntPtr.Zero) throw new Win32Exception(Marshal.GetLastWin32Error());
+            if (_phandle == IntPtr.Zero) throw new Win32Exception(Marshal.GetLastWin32Error());
         }
 
         // call this when exiting jZm

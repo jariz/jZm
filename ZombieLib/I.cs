@@ -39,6 +39,18 @@ namespace ZombieAPI
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern IntPtr CreateRemoteThread(IntPtr hProcess, IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, out uint lpThreadId);
+        
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern IntPtr CreateNamedPipe(
+            string lpName,
+            uint dwOpenMode,
+            uint dwPipeMode,
+            uint nMaxInstances,
+            uint nOutBufferSize,
+            uint nInBufferSize,
+            uint nDefaultTimeOut,
+            IntPtr lpSecurityAttributes
+            );
 
         public const uint MEM_COMMIT = 0x1000;
         public const uint MEM_RESERVE = 0x2000;
@@ -47,5 +59,6 @@ namespace ZombieAPI
         public const uint PROCESS_VM_OPERATION = 0x0008;
         public const uint PROCESS_VM_READ = 0x0010;
         public const uint PROCESS_VM_WRITE = 0x0020;
+        public const uint INVALID_HANDLE_VALUE = 0xFFFFFFFF;
     }
 }

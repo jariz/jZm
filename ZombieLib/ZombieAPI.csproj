@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Addresses.cs" />
+    <Compile Include="Events\DefaultEvents.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="GameDataReader.cs" />
@@ -53,7 +54,9 @@
     <Compile Include="Hook.cs" />
     <Compile Include="HookManager.cs" />
     <Compile Include="Hooks\ChatHook.cs" />
+    <Compile Include="Hooks\DefaultEventsHook.cs" />
     <Compile Include="I.cs" />
+    <Compile Include="IPC\InterProcessCommunication.cs" />
     <Compile Include="jZmPlugin.cs" />
     <Compile Include="ModWarning.cs" />
     <Compile Include="PatternRecognition.cs" />
