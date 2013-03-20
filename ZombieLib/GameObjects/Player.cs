@@ -1015,8 +1015,8 @@ namespace ZombieAPI.GameObjects
 
                 if (_cBuf_addTextFuncAddress != IntPtr.Zero && commandAddress != IntPtr.Zero)
                 {
-                    I.VirtualFreeEx(Mem.ProcessHandle, _cBuf_addTextFuncAddress, (uint)Stubs.WrapperTocBuf_AddText.Length, 0x8000);
-                    I.VirtualFreeEx(Mem.ProcessHandle, commandAddress, (uint)commandBytes.Length, 0x8000);
+                    I.VirtualFreeEx(Mem.ProcessHandle, _cBuf_addTextFuncAddress, (uint)Stubs.WrapperTocBuf_AddText.Length, I.MEM_RELEASE);
+                    I.VirtualFreeEx(Mem.ProcessHandle, commandAddress, (uint)commandBytes.Length, I.MEM_RELEASE);
                 }
 
                 _cBuf_addTextFuncAddress = IntPtr.Zero;
@@ -1061,8 +1061,8 @@ namespace ZombieAPI.GameObjects
 
                 if (_SV_GameSendServerCommandAddress != IntPtr.Zero && commandAddress != IntPtr.Zero)
                 {
-                    I.VirtualFreeEx(Mem.ProcessHandle, _SV_GameSendServerCommandAddress, (uint)Stubs.WrapperToSV_GameSendServerCommand.Length, 0x8000);
-                    I.VirtualFreeEx(Mem.ProcessHandle, commandAddress, (uint)commandBytes.Length, 0x8000);
+                    I.VirtualFreeEx(Mem.ProcessHandle, _SV_GameSendServerCommandAddress, (uint)Stubs.WrapperToSV_GameSendServerCommand.Length, I.MEM_RELEASE);
+                    I.VirtualFreeEx(Mem.ProcessHandle, commandAddress, (uint)commandBytes.Length, I.MEM_RELEASE);
                 }
 
                 _SV_GameSendServerCommandAddress = IntPtr.Zero;

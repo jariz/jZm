@@ -129,11 +129,9 @@ namespace ZombieAPI.Hooks
 
             I.WriteProcessMemory(ProcessHandle, (IntPtr)Addresses.G_Say, hkBytes, (uint)hkBytes.Length, out bytesWritten);
 
-            I.VirtualFreeEx(ProcessHandle, chatHookAddress, (uint)Stubs.G_Say_Stub.Length, 0x8000);
+            I.VirtualFreeEx(ProcessHandle, chatHookAddress, (uint)Stubs.G_Say_Stub.Length, I.MEM_RELEASE);
             if (chatBytes != null)
-                I.VirtualFreeEx(ProcessHandle, chatAddress, (uint)chatBytes.Length, 0x8000);
-
-            I.CloseHandle(ProcessHandle);
+                I.VirtualFreeEx(ProcessHandle, chatAddress, (uint)chatBytes.Length, I.MEM_RELEASE);
         }
     }
 }

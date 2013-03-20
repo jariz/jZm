@@ -379,7 +379,7 @@ namespace ZombieAPI
                 PrintBytes(bytes);
                 Console.WriteLine(bytes.Length + "/" + bytesW);
             }
-            I.VirtualFreeEx(_phandle, (IntPtr)_position, (uint)bytes.Length, 0x8000);
+            I.VirtualFreeEx(_phandle, (IntPtr)_position, (uint)bytes.Length, I.MEM_RELEASE);
             _position = _position + bytes.Length;
         }
         #endregion
