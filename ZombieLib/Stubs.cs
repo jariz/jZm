@@ -7,14 +7,47 @@ namespace ZombieAPI
 {
     internal class Stubs
     {
-        // Pipe stub used for all hooks (you need a new pipe stub for every hook)
-        // t6zm to jZm (client to server) is used to handle data recieving (events, etc...)
-        // An event handler in jZm will wait forever for the pipe to be aviable (this means that
-        // an event has been executed in t6zm)
-        // This stub is synchronous, meaning that t6zm wont resume execution until jZm has completed the processing
-        public static byte[] SyncPipeStubForHooks = new byte[]
+        public static byte[] OpenSyncEventStub = new byte[]
         {
+            // "jZm_eventWaiter"
+            0x6A, 0x5A, 0x6D, 0x5F, 0x65, 0x76, 0x65, 0x6E,
+            0x74, 0x57, 0x61, 0x69, 0x74, 0x65, 0x72, 0x00,
+            0x00, 0x00, 0x00, 0x00, // eventHandleInT6ZM
+            0x50, // push eax
+            0xE8, 0x00, 0x00, 0x00, 0x00, // call $+5
+            0x58, // pop eax
+            0x83, 0xE8, 0x1A, // sub eax, 1Ah
+            0x50, // push eax
+            0x6A, 0x00, // push 0
+            0x68, 0x02, 0x00, 0x10, 0x00, // push 0x100002
+            0xE8, 0x00, 0x00, 0x00, 0x00, // call OpenEvent
+            0x57, // push edi
+            0xE8, 0x00, 0x00, 0x00, 0x00, // call $+5
+            0x5F, // pop edi
+            0x83, 0xEF, 0x21, // sub edi, 21h
+            0x89, 0x07, // mov [edi], eax
+            0x5F, // pop edi
+            0x58, // pop eax
+            0xC3 // retn
+        };
 
+        // Synchronization stub for event hooks (you need a stub for every event hook)
+        // An event handler in jZm will wait forever for the handle to be signaled
+        // This stub is synchronous, meaning that t6zm wont resume execution until jZm has completed the processing
+        public static byte[] SyncEventStub = new byte[]
+        {
+            0x50, // push eax
+            0xB8, 0x00, 0x00, 0x00, 0x00, // mov eax, eventID
+            0xA3, 0x00, 0x00, 0x00, 0x00, // mov CurrentEventID, eax
+            0x68, 0x00, 0x00, 0x00, 0x00, // push hEvent
+            0xE8, 0x00, 0x00, 0x00, 0x00, // call SetEvent
+            0x68, 0x00, 0x00, 0x00, 0x00, // push hEvent
+            0xE8, 0x00, 0x00, 0x00, 0x00, // call ResetEvent
+            0x68, 0x00, 0x00, 0x00, 0x00, // push hEvent
+            0x68, 0xFF, 0xFF, 0xFF, 0xFF, // push INFINITE
+            0xE8, 0x00, 0x00, 0x00, 0x00, // call WaitForSingleObject
+            0x58, // pop eax
+            0xC3 // retn
         };
 
         public static byte[] WrapperTocBuf_AddText = new byte[]
@@ -52,10 +85,10 @@ namespace ZombieAPI
 
         public static byte[] G_Say_Stub = new byte[]
         {
-           0x8B, 0xB4, 0x24, 0xF4, 0x00, 0x00, 0x00,//MOV ESI,DWORD PTR SS:[ESP+F4]
+           0x8B, 0xB4, 0x24, 0xF4, 0x00, 0x00, 0x00, // MOV ESI,DWORD PTR SS:[ESP+F4]
            0x89, 0x34, 0x25, 0x00, 0x00, 0x00, 0x00, // MOV [00000000],ESI
            0x89, 0x3C, 0x25, 0x00, 0x00, 0x00, 0x00, // MOV [00000000],EDI
-           0xE9, 0x00, 0x00, 0x00, 0x00 //jmp back
+           0xE9, 0x00, 0x00, 0x00, 0x00 // jmp back
         };
     }
 }

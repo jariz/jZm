@@ -339,6 +339,7 @@ namespace ZombieAPI
             new TestingPlugin().Init(this);
 
             WriteLine("Initialized in " + initTime.Second + "." + initTime.Millisecond + " second(s)");
+            // add infinite event waiter
             ThreadPool.QueueUserWorkItem(new WaitCallback(zFrame), Game);
         }
 
