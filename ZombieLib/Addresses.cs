@@ -23,7 +23,7 @@ namespace ZombieAPI
         public static int WeaponDef = 0x02C0DA4C;
         public static int SV_GameSendServerCommand;
         public static int cBuf_AddText;
-        public static int G_Say;
+        public static int G_Say = 0x00493df0;
         public static int GameData = 0x0118B5AD;
         public static int DvarPointers = 0x298B330;
         public static int Level = 0x22B6580;

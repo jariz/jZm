@@ -21,7 +21,15 @@ namespace ZombieAPI
             PHandle = ProcessHandle;
 
             //CG_Init = FindPattern(ProcessHandle, 0x401000, 0x900000, "\x81\xEC\x00\x00\x00\x00\xA1\x00\x00\x00\x00\x53\x8B\x9C\x24", "xx????x????xxxx");
-            G_Say = FindPattern(ProcessHandle, 0x401000, 0x900000, "\x81\xEC\x00\x00\x00\x00\x53\x8B\x9C\x24\x00\x00\x00\x00\x55\x56\x57\x8B\xBC\x24\x00\x00\x00\x00\x83\xFB\x01", "xx????xxxx????xxxxxx????xxx");
+            try
+            {
+                G_Say = FindPattern(ProcessHandle, 0x401000, 0x900000, "\x81\xEC\x00\x00\x00\x00\x53\x8B\x9C\x24\x00\x00\x00\x00\x55\x56\x57\x8B\xBC\x24\x00\x00\x00\x00\x83\xFB\x01", "xx????xxxx????xxxxxx????xxx");
+            }
+            catch (Exception z)
+            {
+                ZombieAPI.GetInstance().WriteLine("Unable to determine offset of chathook, using default.", true);
+                G_Say = Addresses.G_Say;
+            }
             //Entity = FindPattern(ProcessHandle, 0x401000, 0x900000, "\x03\x34\x9D\x00\x00\x00\x00\x83\xE8\x00\xF3\x0F\x10", "xxx????xxxxxx");
             //EntitySize = FindPattern(ProcessHandle, 0x401000, 0x900000, "\x69\xF6\x00\x00\x00\x00\x03\x34\x9D\x00\x00\x00\x00\x6A\x01\x6A\x00\x6A\x00", "xx????xxx????xxxxxx");
             GEntity = FindPattern(ProcessHandle, 0x401000, 0x900000, "\x81\xC6\x00\x00\x00\x00\x39\x8E\x00\x00\x00\x00\x75\x29\x50\x68", "xx????xx????xxxx");
@@ -89,8 +97,7 @@ namespace ZombieAPI
                 }
             }
 
-            ZombieAPI.GetInstance().WriteLine("[PatternRecognition] WARNING: A pattern could not be found!");
-            return -1;
+            throw new Exception("Unable to determine address offsets trough pattern detection.");
         }
 
         static int Fix(int address, int offset, int correct)

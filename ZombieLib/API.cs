@@ -349,11 +349,6 @@ namespace ZombieAPI
 
             new TestingPlugin().Init(this);
 
-            foreach (Player player in GetPlayers())
-            {
-                player.SetClientDVar("cg_fov \"80\"");
-            }
-
             WriteLine("Initialized in " + initTime.Second + "." + initTime.Millisecond + " second(s)");
             // add infinite event waiter
             ThreadPool.QueueUserWorkItem(new WaitCallback(zFrame), Game);
