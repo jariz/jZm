@@ -97,7 +97,7 @@ namespace ZombieAPI
             _pid = proc.Id;
             _encoding = Encoding.Default;
             if (_phandle == IntPtr.Zero) // fixed memory leak (open process only if it wasnt oppened)
-                _phandle = I.OpenProcess(I.PROCESS_VM_OPERATION | I.PROCESS_VM_READ | I.PROCESS_VM_WRITE, false, _pid);
+                _phandle = I.OpenProcess(0x0080 | 0x0002 | 0x0040 | 0x0400 | 0x1000 | 0x0200 | 0x0100 | 0x0800 | 0x0001 | 0x0008 | 0x0010 | 0x0020 | 0x00100000, false, _pid);
             if (_phandle == IntPtr.Zero) throw new Win32Exception(Marshal.GetLastWin32Error());
         }
 

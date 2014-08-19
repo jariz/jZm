@@ -89,6 +89,7 @@ namespace ZombieAPI
                 }
             }
 
+            ZombieAPI.GetInstance().WriteLine("[PatternRecognition] WARNING: A pattern could not be found!");
             return -1;
         }
 

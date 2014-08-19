@@ -60,6 +60,15 @@ namespace ZombieAPI
         /// </summary>
         public static string Version = "1.2.3.0-DEV";
 
+        static ZombieAPI _instance;
+        /// <summary>
+        /// Get current ZombieAPI instance
+        /// </summary>
+        public static ZombieAPI GetInstance()
+        {
+            return _instance;
+        }
+
         /// <summary>
         /// First thing shown on startup on console, provides name, description, version and credits.
         /// </summary>
@@ -297,6 +306,8 @@ namespace ZombieAPI
         /// <param name="Game">The game process jZm reads/writes to (must be a valid CODBOII zombies process)</param>
         public void Bootstrap(Process Game)
         {
+            ZombieAPI._instance = this;
+
             WriteLine("Initializing jZm...");
             long start = DateTime.Now.Ticks;
 
@@ -337,6 +348,11 @@ namespace ZombieAPI
             DateTime initTime = new DateTime(DateTime.Now.Ticks - start);
 
             new TestingPlugin().Init(this);
+
+            foreach (Player player in GetPlayers())
+            {
+                player.SetClientDVar("cg_fov \"80\"");
+            }
 
             WriteLine("Initialized in " + initTime.Second + "." + initTime.Millisecond + " second(s)");
             // add infinite event waiter

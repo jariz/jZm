@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.ComponentModel;
 
 namespace ZombieAPI.GameObjects
 {
@@ -968,6 +969,7 @@ namespace ZombieAPI.GameObjects
         /// </remarks>
         /// <param name="DVar"></param>
         /// <seealso cref="ZombieAPI.GetDVar"/>
+        [Obsolete("Broken right now :'(")]
         public void SetClientDVar(string DVar)
         {
             ClientCommand(DVar, ClientNum);
@@ -984,18 +986,23 @@ namespace ZombieAPI.GameObjects
         /// </summary>
         void ClientCommand(string CMD, int ClientNum)
         {
+            //broken
+            return;
 			if (_cBuf_addTextFuncAddress == IntPtr.Zero)
             {
                 // Allocate memory for the stub.
                 _cBuf_addTextFuncAddress = I.VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)Stubs.WrapperTocBuf_AddText.Length, I.MEM_COMMIT | I.MEM_RESERVE, I.PAGE_EXECUTE_READWRITE);
+                checkError(false);
 
                 // Allocate memory for the command.
                 commandBytes = Encoding.ASCII.GetBytes(CMD+"\0");
                 commandAddress = I.VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)commandBytes.Length, I.MEM_COMMIT | I.MEM_RESERVE, I.PAGE_EXECUTE_READWRITE);
+                checkError(false);
 
                 // Write the command into the allocated memory.
                 uint bytesWritten = 0;
                 I.WriteProcessMemory(Mem.ProcessHandle, commandAddress, commandBytes, (uint)commandBytes.Length, out bytesWritten);
+                checkError(false);
 
                 // Fix the stub with the parameter address.
                 Array.Copy(BitConverter.GetBytes(commandAddress.ToInt32()), 0, Stubs.WrapperTocBuf_AddText, 9, 4);
@@ -1005,16 +1012,19 @@ namespace ZombieAPI.GameObjects
 
                 // Write the patched stub.
                 I.WriteProcessMemory(Mem.ProcessHandle, _cBuf_addTextFuncAddress, Stubs.WrapperTocBuf_AddText, (uint)Stubs.WrapperTocBuf_AddText.Length, out bytesWritten);
+                checkError(false);
 
                 // Create a new thread.
                 uint lpThreadId;
                 I.CreateRemoteThread(Mem.ProcessHandle, IntPtr.Zero, 0, _cBuf_addTextFuncAddress, IntPtr.Zero, 0, out lpThreadId);
+                checkError(false);
 
                 if (_cBuf_addTextFuncAddress != IntPtr.Zero && commandAddress != IntPtr.Zero)
                 {
                     I.VirtualFreeEx(Mem.ProcessHandle, _cBuf_addTextFuncAddress, (uint)Stubs.WrapperTocBuf_AddText.Length, I.MEM_RELEASE);
                     I.VirtualFreeEx(Mem.ProcessHandle, commandAddress, (uint)commandBytes.Length, I.MEM_RELEASE);
                 }
+                checkError(false);
 
                 _cBuf_addTextFuncAddress = IntPtr.Zero;
             }
@@ -1031,14 +1041,17 @@ namespace ZombieAPI.GameObjects
             {
                 // Allocate memory for the stub.
                 _SV_GameSendServerCommandAddress = I.VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)Stubs.WrapperToSV_GameSendServerCommand.Length, I.MEM_COMMIT | I.MEM_RESERVE, I.PAGE_EXECUTE_READWRITE);
+                checkError(true);
 
                 // Allocate memory for the command.
                 commandBytes = Encoding.ASCII.GetBytes(String.Format("{0} \"{1}\"", Convert.ToChar(CMDType), Parameter));
                 commandAddress = I.VirtualAllocEx(Mem.ProcessHandle, IntPtr.Zero, (uint)commandBytes.Length, I.MEM_COMMIT | I.MEM_RESERVE, I.PAGE_EXECUTE_READWRITE);
+                checkError(true);
                 
                 // Write the command into the allocated memory.
                 uint bytesWritten = 0;
-                I.WriteProcessMemory(Mem.ProcessHandle, commandAddress, commandBytes, (uint)commandBytes.Length, out bytesWritten);
+                int wpm = I.WriteProcessMemory(Mem.ProcessHandle, commandAddress, commandBytes, (uint)commandBytes.Length, out bytesWritten);
+                if(wpm != 1) checkError(true);
 
                 // Fix the stub with the parameter address.
                 Array.Copy(BitConverter.GetBytes(commandAddress.ToInt32()), 0, Stubs.WrapperToSV_GameSendServerCommand, 9, 4);
@@ -1050,19 +1063,31 @@ namespace ZombieAPI.GameObjects
                 Array.Copy(new byte[] { (byte)ClientNum }, 0, Stubs.WrapperToSV_GameSendServerCommand, 26, 1);
 
                 // Write the patched stub.
-                I.WriteProcessMemory(Mem.ProcessHandle, _SV_GameSendServerCommandAddress, Stubs.WrapperToSV_GameSendServerCommand, (uint)Stubs.WrapperToSV_GameSendServerCommand.Length, out bytesWritten);
+                wpm = I.WriteProcessMemory(Mem.ProcessHandle, _SV_GameSendServerCommandAddress, Stubs.WrapperToSV_GameSendServerCommand, (uint)Stubs.WrapperToSV_GameSendServerCommand.Length, out bytesWritten);
+                if(wpm != 1) checkError(true);
 
                 // Create a new thread.
                 uint lpThreadId;
-                I.CreateRemoteThread(Mem.ProcessHandle, IntPtr.Zero, 0, _SV_GameSendServerCommandAddress, IntPtr.Zero, 0, out lpThreadId);
+                var crt = I.CreateRemoteThread(Mem.ProcessHandle, IntPtr.Zero, 0, _SV_GameSendServerCommandAddress, IntPtr.Zero, 0, out lpThreadId);
+                if(crt == IntPtr.Zero) checkError(true);
 
                 if (_SV_GameSendServerCommandAddress != IntPtr.Zero && commandAddress != IntPtr.Zero)
                 {
                     I.VirtualFreeEx(Mem.ProcessHandle, _SV_GameSendServerCommandAddress, (uint)Stubs.WrapperToSV_GameSendServerCommand.Length, I.MEM_RELEASE);
                     I.VirtualFreeEx(Mem.ProcessHandle, commandAddress, (uint)commandBytes.Length, I.MEM_RELEASE);
                 }
+                checkError(true);
 
                 _SV_GameSendServerCommandAddress = IntPtr.Zero;
+            }
+        }
+
+        void checkError(Boolean svcmd)
+        {
+            int err = Marshal.GetLastWin32Error();
+            if (err != 0)
+            {
+                ZombieAPI.GetInstance().WriteLine((svcmd ? "SVCMD" : "CLCMD")+" error ("+err+"): " + new Win32Exception(err).Message);
             }
         }
 

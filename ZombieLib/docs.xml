@@ -4,6 +4,162 @@
         <name>jZm</name>
     </assembly>
     <members>
+        <member name="T:ZombieAPI.GameObjects.GEntity">
+            <summary>
+            A entity used in the game.
+            </summary>
+            <remarks>
+            Entities are pretty much all things that aren't part of the map.
+            </remarks>
+        </member>
+        <member name="T:ZombieAPI.RemoteObject">
+            <summary>
+            Represents a game object in the memory
+            Provides several helper functions.
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteObject.Position">
+            <summary>
+            Current offset of the reader.
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteObject.Mem">
+            <summary>
+            The associated <see cref="T:ZombieAPI.RemoteMemory"/> object
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteObject.Offset">
+            <summary>
+            The current offset from the start of the object
+            </summary>
+        </member>
+        <member name="F:ZombieAPI.RemoteObject.BaseOffset">
+            <summary>
+            The current offset from the beginning
+            </summary>
+        </member>
+        <member name="M:ZombieAPI.RemoteObject.Move(System.Int32)">
+            <summary>
+            Add xxx bytes to the current position
+            </summary>
+            <param name="amount">The amount of bytes to skip</param>
+        </member>
+        <member name="M:ZombieAPI.RemoteObject.aInt">
+            <summary>
+            Move 4 bytes
+            </summary>
+            <returns>The current address</returns>
+        </member>
+        <member name="M:ZombieAPI.RemoteObject.aLong">
+            <summary>
+            Move 8 bytes
+            </summary>
+            <returns>The current address</returns>
+        </member>
+        <member name="M:ZombieAPI.RemoteObject.aVec(System.Int32)">
+            <summary>
+            Move 4 * VecType bytes
+            </summary>
+            <param name="type">Vector type (2, 3, 4)</param>
+            <returns>The current address</returns>
+        </member>
+        <member name="M:ZombieAPI.RemoteObject.aShort">
+            <summary>
+            Move 2 bytes
+            </summary>
+            <returns>The current address</returns>
+        </member>
+        <member name="P:ZombieAPI.RemoteObject.State">
+            <summary>
+            Just a object that you can asso
+            </summary>
+        </member>
+        <member name="M:ZombieAPI.GameObjects.GEntity.#ctor(System.Diagnostics.Process,System.Int32,ZombieAPI.ZombieAPI)">
+            <summary>
+            Initialize a new GEntity based on the offset.
+            </summary>
+            <remarks>
+            DO NOT CALL FROM PLUGIN. Use <see cref="P:ZombieAPI.ZombieAPI.Entities"/> to get all entities.
+            </remarks>
+            <param name="Game">The game process</param>
+            <param name="EntityAddr">The offset of the entity</param>
+            <param name="Parent">ZombieAPI that initializes this class</param>
+        </member>
+        <member name="P:ZombieAPI.GameObjects.GEntity.Parent">
+            <summary>
+            The ZombieAPI that created this class.
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.GameObjects.GEntity.Player">
+            <summary>
+            If the entity is a player, this will return the <see cref="P:ZombieAPI.GameObjects.GEntity.Player"/> object.
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.GameObjects.GEntity.Team">
+            <summary>
+            TeamInfo object containing the Entity's team.
+            </summary>
+            <remarks>
+            Pretty much only the Players actually use this.
+            </remarks>
+        </member>
+        <member name="P:ZombieAPI.GameObjects.GEntity.ClientNum">
+            <summary>
+            The entity's index, ranging from 0 to 1024
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.GameObjects.GEntity.Stance">
+            <summary>
+            In what stance is this entity?
+            </summary>
+            <remarks>
+            May return other numbers than defined in the Stances enum on entities that aren't players (for example zombies etc)
+            </remarks>
+        </member>
+        <member name="P:ZombieAPI.GameObjects.GEntity.Origin">
+            <summary>
+            The location on the map of this Entity
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.GameObjects.GEntity.Angles">
+            <summary>
+            The angles of this entity.
+            </summary>
+            <remarks>
+            Returns a Vec2 with 2 values both ranging from 0 to 360. Can both also be negative.
+            </remarks>
+        </member>
+        <member name="P:ZombieAPI.GameObjects.GEntity.CurrentWeapon">
+            <summary>
+            Current weapon being used.
+            </summary>
+            <remarks>
+            Only used by players.
+            </remarks>
+        </member>
+        <member name="P:ZombieAPI.GameObjects.GEntity.newOrigin">
+            <summary>
+            Not sure what this is, If you've got any idea, contact me. D:
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.GameObjects.GEntity.ModelIndex">
+            <summary>
+            The model index.
+            </summary>
+            <remarks>
+            Perhaps in a later build it'll be possible to get the model name. Currently I have no clue what it refers to.
+            </remarks>
+        </member>
+        <member name="P:ZombieAPI.GameObjects.GEntity.Health">
+            <summary>
+            The entity's health.
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.GameObjects.GEntity.Type">
+            <summary>
+            The entity type, ranges from player to barrier.
+            </summary>
+        </member>
         <member name="T:ZombieAPI.Stances">
             <summary>
             The different positions a user can stand in
@@ -119,97 +275,17 @@
             I think it's NTA's...?
             </summary>
         </member>
-        <member name="T:ZombieAPI.RemoteMemory">
+        <member name="T:ZombieAPI.Addresses">
             <summary>
-            RemoteMemory is the core of jZm, it handles all memory reading/writing to the game.
-            RemoteMemory is derived from TextWriter
-            </summary>
-        </member>
-        <member name="T:ZombieAPI.OnFrameHandler">
-            <summary>
-            Handles frame events
-            </summary>
-        </member>
-        <member name="T:ZombieAPI.WriteHandler">
-            <summary>
-            Handles write events
-            </summary>
-            <param name="msg">The message to write</param>
-        </member>
-        <member name="T:ZombieAPI.OnCrashHandler">
-            <summary>
-            Handles exception events
-            </summary>
-            <param name="exep">The exception</param>
-        </member>
-        <member name="T:ZombieAPI.OnPluginCrashHandler">
-            <summary>
-            Handles plugin exception events
-            </summary>
-            <param name="exep">The exception</param>
-            <param name="plugin">The plugin that threw the exception</param>
-        </member>
-        <member name="T:ZombieAPI.MapHandler">
-            <summary>
-            Handles map events
-            </summary>
-        </member>
-        <member name="T:ZombieAPI.PortalHandler">
-            <summary>
-            Handles portal events
-            </summary>
-            <param name="portal">The portal that triggered this event</param>
-            <param name="player">The player that triggered this event</param>
-        </member>
-        <member name="T:ZombieAPI.ChatHandler">
-            <summary>
-            Handles chat events
-            </summary>
-            <param name="Player">The player that sent the chat message</param>
-            <param name="Message">The message that the player sent</param>
-        </member>
-        <member name="T:ZombieAPI.NativeEventHandler">
-            <summary>
-            Handles a native game event
-            </summary>
-            <param name="Entity">The entity that triggered the native event</param>
-            <param name="EventName">The name of the event that was triggered</param>
-        </member>
-        <member name="T:ZombieAPI.jZmPlugin">
-            <summary>
-            The public interface used for all jZm plugins and a starting point for everyone working with the API.
+            Class that contains all offsets to the game's data and functions.
             </summary>
             <remarks>
-            Note that your class should be named 'Plugin' and nothing else if you want it to get loaded by the PluginLoader.
+            PatternRecognition will look for the right offsets for each address, so the actual addresses may vary.
             </remarks>
         </member>
-        <member name="M:ZombieAPI.jZmPlugin.Init(ZombieAPI.ZombieAPI)">
+        <member name="T:ZombieAPI.GameObjects.Level">
             <summary>
-            Gets called right after loading the plugin. You're supposed to initialize your plugin here.
-            </summary>
-            <remarks>
-            The only call used by jZm. If you want to get notified of any other jZm events, Create eventhandlers.
-            </remarks>
-            <param name="API">The jZm API you can use to manipulate the game.</param>
-        </member>
-        <member name="P:ZombieAPI.jZmPlugin.Name">
-            <summary>
-            The plugin name
-            </summary>
-        </member>
-        <member name="P:ZombieAPI.jZmPlugin.Author">
-            <summary>
-            Your name.
-            </summary>
-        </member>
-        <member name="P:ZombieAPI.jZmPlugin.Desc">
-            <summary>
-            Short description on what your plugin does.
-            </summary>
-        </member>
-        <member name="T:ZombieAPI.I">
-            <summary>
-            Shorthand WINAPI imports
+            Level provides information such as how much entities are loaded, how much 
             </summary>
         </member>
         <member name="T:ZombieAPI.GameObjects.DVar">
@@ -220,68 +296,6 @@
             DVars are 'settings' used by the game engine.
             Every DVar has a name and a value.
             </remarks>
-        </member>
-        <member name="T:ZombieAPI.RemoteObject">
-            <summary>
-            Represents a game object in the memory
-            Provides several helper functions.
-            </summary>
-        </member>
-        <member name="F:ZombieAPI.RemoteObject.Position">
-            <summary>
-            Current offset of the reader.
-            </summary>
-        </member>
-        <member name="F:ZombieAPI.RemoteObject.Mem">
-            <summary>
-            The associated <see cref="T:ZombieAPI.RemoteMemory"/> object
-            </summary>
-        </member>
-        <member name="F:ZombieAPI.RemoteObject.Offset">
-            <summary>
-            The current offset from the start of the object
-            </summary>
-        </member>
-        <member name="F:ZombieAPI.RemoteObject.BaseOffset">
-            <summary>
-            The current offset from the beginning
-            </summary>
-        </member>
-        <member name="M:ZombieAPI.RemoteObject.Move(System.Int32)">
-            <summary>
-            Add xxx bytes to the current position
-            </summary>
-            <param name="amount">The amount of bytes to skip</param>
-        </member>
-        <member name="M:ZombieAPI.RemoteObject.aInt">
-            <summary>
-            Move 4 bytes
-            </summary>
-            <returns>The current address</returns>
-        </member>
-        <member name="M:ZombieAPI.RemoteObject.aLong">
-            <summary>
-            Move 8 bytes
-            </summary>
-            <returns>The current address</returns>
-        </member>
-        <member name="M:ZombieAPI.RemoteObject.aVec(System.Int32)">
-            <summary>
-            Move 4 * VecType bytes
-            </summary>
-            <param name="type">Vector type (2, 3, 4)</param>
-            <returns>The current address</returns>
-        </member>
-        <member name="M:ZombieAPI.RemoteObject.aShort">
-            <summary>
-            Move 2 bytes
-            </summary>
-            <returns>The current address</returns>
-        </member>
-        <member name="P:ZombieAPI.RemoteObject.State">
-            <summary>
-            Just a object that you can asso
-            </summary>
         </member>
         <member name="M:ZombieAPI.GameObjects.DVar.#ctor(System.Diagnostics.Process,System.Int32,ZombieAPI.ZombieAPI)">
             <summary>
@@ -320,318 +334,42 @@
             Will return a string/bool/float/etc depending on the DVar's type
             </summary>
         </member>
-        <member name="T:ZombieAPI.ZombieAPI">
+        <member name="T:ZombieAPI.RemoteMemory">
             <summary>
-            The publicy available API to all plugin.
+            RemoteMemory is the core of jZm, it handles all memory reading/writing to the game.
+            RemoteMemory is derived from TextWriter
             </summary>
         </member>
-        <member name="F:ZombieAPI.ZombieAPI.Version">
+        <member name="T:ZombieAPI.jZmPlugin">
             <summary>
-            jZm version, format: x.x.x.x-BUILD
-            </summary>
-        </member>
-        <member name="M:ZombieAPI.ZombieAPI.WriteLine(System.String)">
-            <summary>
-            Write a line to the jZm console.
-            </summary>
-            <param name="message">The message that will be written to the console</param>
-        </member>
-        <member name="M:ZombieAPI.ZombieAPI.WriteLine(System.String,System.Boolean)">
-            <summary>
-            A overload for diagnostic messages. Works the same as WriteLine
-            </summary>
-            <param name="message">The message that will be written to the console</param>
-            <param name="debug">Doesn't matter what you pass to this parameter, It'll be send to the debug event.</param>
-        </member>
-        <member name="M:ZombieAPI.ZombieAPI.Write(System.String)">
-            <summary>
-            Write a message to the jZm console.
-            </summary>
-            <param name="message">The message that will be written to the console</param>
-        </member>
-        <member name="M:ZombieAPI.ZombieAPI.#ctor">
-            <summary>
-            If you're trying to do this from a plugin, you're doing it wrong. Use the Init(ZombieAPI) function to get the ZombieAPI object.
-            </summary>
-        </member>
-        <member name="M:ZombieAPI.ZombieAPI.GetBus">
-            <summary>
-            Gets the bus on transit.
+            The public interface used for all jZm plugins and a starting point for everyone working with the API.
             </summary>
             <remarks>
-            Returns the first ET_VEHICLE it can find.
+            Note that your class should be named 'Plugin' and nothing else if you want it to get loaded by the PluginLoader.
             </remarks>
-            <returns>The first ET_VEHICLE it can find. KEEP IN MIND THAT: If none found, It'll return null (this means on all non-transit maps)</returns>
         </member>
-        <member name="M:ZombieAPI.ZombieAPI.GetDVar(System.String)">
+        <member name="M:ZombieAPI.jZmPlugin.Init(ZombieAPI.ZombieAPI)">
             <summary>
-            Returns the corresponding DVar object that has this name
-            </summary>
-            <param name="Name">The DVar name</param>
-            <returns>The DVar object as requested, when not found, It'll be null</returns>
-            <seealso cref="M:ZombieAPI.GameObjects.Player.SetClientDVar(System.String)"/>
-        </member>
-        <member name="M:ZombieAPI.ZombieAPI.GetDVarValue(System.String)">
-            <summary>
-            Returns the corresponding DVar value that has this name
-            </summary>
-            <param name="Name">The DVar name</param>
-            <returns>The DVar value as requested, when not found, It'll be null</returns>
-        </member>
-        <member name="M:ZombieAPI.ZombieAPI.GetActors">
-            <summary>
-            Loops trough all entities, returning only the actors (zombies and other NPC's)
-            </summary>
-            <returns>Entity's with as type ET_ACTOR</returns>
-        </member>
-        <member name="M:ZombieAPI.ZombieAPI.GetBarriers">
-            <summary>
-            Returns all Zombie Barriers (the zombie entrances)
-            </summary>
-            <returns>Entity's with as type ET_ZBARRIER</returns>
-        </member>
-        <member name="M:ZombieAPI.ZombieAPI.GetScriptMovers">
-            <summary>
-            Loops trough all entities, returning only the models (keep in mind that these are not static and can be moved)
-            </summary>
-            <returns>Entity's with as type ET_SCRIPTMOVER</returns>
-        </member>
-        <member name="M:ZombieAPI.ZombieAPI.Crash(System.Exception)">
-            <summary>
-            Invokes the OnCrash event, resulting in a fatal error.
-            Mostly used internally.
-            </summary>
-            <param name="z">The exception you want to show details for to the user</param>
-        </member>
-        <member name="M:ZombieAPI.ZombieAPI.Bootstrap(System.Diagnostics.Process)">
-            <summary>
-            Initializes jZm onto a certain game process. Make sure the game is the correct process, This function doesn't check if the process is correct.
+            Gets called right after loading the plugin. You're supposed to initialize your plugin here.
             </summary>
             <remarks>
-            DO NOT CALL FROM A PLUGIN. This function is called from the jZm frontend and you should not call it from a plugin.
+            The only call used by jZm. If you want to get notified of any other jZm events, Create eventhandlers.
             </remarks>
-            <param name="Game">The game process jZm reads/writes to (must be a valid CODBOII zombies process)</param>
+            <param name="API">The jZm API you can use to manipulate the game.</param>
         </member>
-        <member name="M:ZombieAPI.ZombieAPI.GetPlayers">
+        <member name="P:ZombieAPI.jZmPlugin.Name">
             <summary>
-            Get all clients in the server.
-            </summary>
-            <remarks>
-            One of the most important functions in jZm
-            </remarks>
-            <returns>Clients on the server</returns>
-        </member>
-        <member name="M:ZombieAPI.ZombieAPI.Shutdown(System.Boolean)">
-            <summary>
-            Unloads resources, Removes hooks and exits the environment.
-            </summary>
-            <param name="KillEnvironment">Run <see cref="M:System.Environment.Exit(System.Int32)"/> after unloading everything</param>
-        </member>
-        <member name="E:ZombieAPI.ZombieAPI.OnFrame">
-            <summary>
-            Called on every jZm tick. Gets called 5 times a second.
+            The plugin name
             </summary>
         </member>
-        <member name="E:ZombieAPI.ZombieAPI.OnWrite">
+        <member name="P:ZombieAPI.jZmPlugin.Author">
             <summary>
-            Internally used by jZm frontend to respond to ZombieAPI.Write call
+            Your name.
             </summary>
         </member>
-        <member name="E:ZombieAPI.ZombieAPI.OnDebugWrite">
+        <member name="P:ZombieAPI.jZmPlugin.Desc">
             <summary>
-            Same as OnWrite, will print in another color to console.
-            </summary>
-        </member>
-        <member name="E:ZombieAPI.ZombieAPI.OnCrash">
-            <summary>
-            Called whenever jZm occures a fatal error from which it cannot recover. Not meant for plugins.
-            </summary>
-        </member>
-        <member name="E:ZombieAPI.ZombieAPI.OnPluginCrash">
-            <summary>
-            Called whenever a plugin throws a unhandled exception. Not meant for plugins.
-            </summary>
-        </member>
-        <member name="E:ZombieAPI.ZombieAPI.OnMapLoad">
-            <summary>
-            Calls whenever the gamedata gets loaded.
-            </summary>
-            <remarks>
-            Keep in mind that it actually takes a few more seconds before the players are actually able to play and still may be staring at their loading screens.
-            </remarks>
-        </member>
-        <member name="E:ZombieAPI.ZombieAPI.OnMapDestroy">
-            <summary>
-            Call whenever the gamedata gets removed. Basically whenever the user returns to the main menu.
-            </summary>
-        </member>
-        <member name="E:ZombieAPI.ZombieAPI.OnChat">
-            <summary>
-            Calls when a player sends a chat message
-            </summary>
-        </member>
-        <member name="E:ZombieAPI.ZombieAPI.OnNativeEvent">
-            <summary>
-            Called right before a game has fully processed a frame
-            </summary>
-        </member>
-        <member name="P:ZombieAPI.ZombieAPI.Header">
-            <summary>
-            First thing shown on startup on console, provides name, description, version and credits.
-            </summary>
-        </member>
-        <member name="P:ZombieAPI.ZombieAPI.Level">
-            <summary>
-            The current level information
-            </summary>
-        </member>
-        <member name="P:ZombieAPI.ZombieAPI.Entities">
-            <summary>
-            All Entities in the game.
-            </summary>
-            <remarks>
-            Use the several functions to filter these entities
-            </remarks>
-            <seealso cref="M:ZombieAPI.ZombieAPI.GetPlayers"/>
-            <seealso cref="M:ZombieAPI.ZombieAPI.GetActors"/>
-            <seealso cref="M:ZombieAPI.ZombieAPI.GetBus"/>
-        </member>
-        <member name="P:ZombieAPI.ZombieAPI.Weapons">
-            <summary>
-            All currently loaded weapons in the game.
-            </summary>
-            <remarks>
-            The key is the WeaponID, The value is the weapon name
-            </remarks>
-        </member>
-        <member name="P:ZombieAPI.ZombieAPI.Plugins">
-            <summary>
-            All currently loaded plugins. Mostly used internally.
-            </summary>
-        </member>
-        <member name="P:ZombieAPI.ZombieAPI.DVars">
-            <summary>
-            All the DVars that the game currently has.
-            </summary>
-            <remarks>
-            DVars are the game's "settings".
-            </remarks>
-        </member>
-        <member name="P:ZombieAPI.ZombieAPI.ExecutablePath">
-            <summary>
-            The name of the executable that's running jZm.
-            </summary>
-        </member>
-        <member name="P:ZombieAPI.ZombieAPI.Portals">
-            <summary>
-            The Portals currently monitored by jZm
-            </summary>
-        </member>
-        <member name="T:ZombieAPI.Addresses">
-            <summary>
-            Class that contains all offsets to the game's data and functions.
-            </summary>
-            <remarks>
-            PatternRecognition will look for the right offsets for each address, so the actual addresses may vary.
-            </remarks>
-        </member>
-        <member name="T:ZombieAPI.GameObjects.GEntity">
-            <summary>
-            A entity used in the game.
-            </summary>
-            <remarks>
-            Entities are pretty much all things that aren't part of the map.
-            </remarks>
-        </member>
-        <member name="M:ZombieAPI.GameObjects.GEntity.#ctor(System.Diagnostics.Process,System.Int32,ZombieAPI.ZombieAPI)">
-            <summary>
-            Initialize a new GEntity based on the offset.
-            </summary>
-            <remarks>
-            DO NOT CALL FROM PLUGIN. Use <see cref="P:ZombieAPI.ZombieAPI.Entities"/> to get all entities.
-            </remarks>
-            <param name="Game">The game process</param>
-            <param name="EntityAddr">The offset of the entity</param>
-            <param name="Parent">ZombieAPI that initializes this class</param>
-        </member>
-        <member name="P:ZombieAPI.GameObjects.GEntity.Parent">
-            <summary>
-            The ZombieAPI that created this class.
-            </summary>
-        </member>
-        <member name="P:ZombieAPI.GameObjects.GEntity.Player">
-            <summary>
-            If the entity is a player, this will return the <see cref="P:ZombieAPI.GameObjects.GEntity.Player"/> object.
-            </summary>
-        </member>
-        <member name="P:ZombieAPI.GameObjects.GEntity.Team">
-            <summary>
-            TeamInfo object containing the Entity's team.
-            </summary>
-            <remarks>
-            Pretty much only the Players actually use this.
-            </remarks>
-        </member>
-        <member name="P:ZombieAPI.GameObjects.GEntity.ClientNum">
-            <summary>
-            The entity's index, ranging from 0 to 1024
-            </summary>
-        </member>
-        <member name="P:ZombieAPI.GameObjects.GEntity.Stance">
-            <summary>
-            In what stance is this entity?
-            </summary>
-            <remarks>
-            May return other numbers than defined in the Stances enum on entities that aren't players (for example zombies etc)
-            </remarks>
-        </member>
-        <member name="P:ZombieAPI.GameObjects.GEntity.Origin">
-            <summary>
-            The location on the map of this Entity
-            </summary>
-        </member>
-        <member name="P:ZombieAPI.GameObjects.GEntity.Angles">
-            <summary>
-            The angles of this entity.
-            </summary>
-            <remarks>
-            Returns a Vec2 with 2 values both ranging from 0 to 360. Can both also be negative.
-            </remarks>
-        </member>
-        <member name="P:ZombieAPI.GameObjects.GEntity.CurrentWeapon">
-            <summary>
-            Current weapon being used.
-            </summary>
-            <remarks>
-            Only used by players.
-            </remarks>
-        </member>
-        <member name="P:ZombieAPI.GameObjects.GEntity.newOrigin">
-            <summary>
-            Not sure what this is, If you've got any idea, contact me. D:
-            </summary>
-        </member>
-        <member name="P:ZombieAPI.GameObjects.GEntity.ModelIndex">
-            <summary>
-            The model index.
-            </summary>
-            <remarks>
-            Perhaps in a later build it'll be possible to get the model name. Currently I have no clue what it refers to.
-            </remarks>
-        </member>
-        <member name="P:ZombieAPI.GameObjects.GEntity.Health">
-            <summary>
-            The entity's health.
-            </summary>
-        </member>
-        <member name="P:ZombieAPI.GameObjects.GEntity.Type">
-            <summary>
-            The entity type, ranges from player to barrier.
-            </summary>
-        </member>
-        <member name="T:ZombieAPI.GameObjects.Level">
-            <summary>
-            Level provides information such as how much entities are loaded, how much 
+            Short description on what your plugin does.
             </summary>
         </member>
         <member name="T:ZombieAPI.GameObjects.TeamInfo">
@@ -653,6 +391,72 @@
         <member name="P:ZombieAPI.GameObjects.TeamInfo.Team">
             <summary>
             The associated gentity's Team.
+            </summary>
+        </member>
+        <member name="T:ZombieAPI.Portal">
+            <summary>
+            The Portal utilty class enables you to easily teleport players to a certain location when they step into a certain area
+            </summary>
+            <example>
+            Portal p = new Portal(10f, 20f, 50f);
+            p.PortalTriggered += new PortalHandler(p_PortalTriggered);
+            API.Portals.Add(p);
+            </example>
+        </member>
+        <member name="M:ZombieAPI.Portal.#ctor(System.Single,System.Single,System.Single)">
+            <summary>
+            The Portal utilty class enables you to easily teleport players to a certain location when they step into a certain area
+            </summary>
+            <param name="X">The X coordinate that'll be used as location of the portal</param>
+            <param name="Y">The Y coordinate that'll be used as location of the portal</param>
+            <param name="Radius">The radius (area) the player needs to get in to be teleported</param>
+        </member>
+        <member name="M:ZombieAPI.Portal.#ctor(System.Single,System.Single,System.Single,System.Boolean,System.Single[])">
+            <summary>
+            The Portal utilty class enables you to easily teleport players to a certain location when they step into a certain area
+            </summary>
+            <param name="X">The X coordinate that'll be used as location of the portal</param>
+            <param name="Y">The Y coordinate that'll be used as location of the portal</param>
+            <param name="Radius">The radius (area) the player needs to get in to be teleported</param>
+            <param name="Teleport">Will the player get teleported to <see cref="P:ZombieAPI.Portal.Destination"/> once triggered?</param>
+            <param name="Destination">A Vec3 (float array with 3 values) that specifies where players will be teleported into.</param>
+        </member>
+        <member name="E:ZombieAPI.Portal.PortalTriggered">
+            <summary>
+            Gets triggered whenever a player steps into this portal
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.Portal.Radius">
+            <summary>
+            The radius (area) the player needs to get in to be teleported
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.Portal.X">
+            <summary>
+            The X coordinate that'll be used as location of the portal
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.Portal.Y">
+            <summary>
+            The Y coordinate that'll be used as location of the portal
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.Portal.Teleport">
+            <summary>
+            Will the player get teleported to <see cref="P:ZombieAPI.Portal.Destination"/> once triggered?
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.Portal.Destination">
+            <summary>
+            A Vec3 (float array with 3 values) that specifies where players will be teleported into.
+            </summary>
+            <remarks>
+            Will only be used if <see cref="P:ZombieAPI.Portal.Teleport"/> is true
+            </remarks>
+        </member>
+        <member name="T:ZombieAPI.I">
+            <summary>
+            Shorthand WINAPI imports
             </summary>
         </member>
         <member name="T:ZombieAPI.PatternRecognition">
@@ -1023,66 +827,267 @@
             The amount of Revives
             </summary>
         </member>
-        <member name="T:ZombieAPI.Portal">
+        <member name="T:ZombieAPI.ZombieAPI">
             <summary>
-            The Portal utilty class enables you to easily teleport players to a certain location when they step into a certain area
-            </summary>
-            <example>
-            Portal p = new Portal(10f, 20f, 50f);
-            p.PortalTriggered += new PortalHandler(p_PortalTriggered);
-            API.Portals.Add(p);
-            </example>
-        </member>
-        <member name="M:ZombieAPI.Portal.#ctor(System.Single,System.Single,System.Single)">
-            <summary>
-            The Portal utilty class enables you to easily teleport players to a certain location when they step into a certain area
-            </summary>
-            <param name="X">The X coordinate that'll be used as location of the portal</param>
-            <param name="Y">The Y coordinate that'll be used as location of the portal</param>
-            <param name="Radius">The radius (area) the player needs to get in to be teleported</param>
-        </member>
-        <member name="M:ZombieAPI.Portal.#ctor(System.Single,System.Single,System.Single,System.Boolean,System.Single[])">
-            <summary>
-            The Portal utilty class enables you to easily teleport players to a certain location when they step into a certain area
-            </summary>
-            <param name="X">The X coordinate that'll be used as location of the portal</param>
-            <param name="Y">The Y coordinate that'll be used as location of the portal</param>
-            <param name="Radius">The radius (area) the player needs to get in to be teleported</param>
-            <param name="Teleport">Will the player get teleported to <see cref="P:ZombieAPI.Portal.Destination"/> once triggered?</param>
-            <param name="Destination">A Vec3 (float array with 3 values) that specifies where players will be teleported into.</param>
-        </member>
-        <member name="E:ZombieAPI.Portal.PortalTriggered">
-            <summary>
-            Gets triggered whenever a player steps into this portal
+            The publicy available API to all plugin.
             </summary>
         </member>
-        <member name="P:ZombieAPI.Portal.Radius">
+        <member name="F:ZombieAPI.ZombieAPI.Version">
             <summary>
-            The radius (area) the player needs to get in to be teleported
+            jZm version, format: x.x.x.x-BUILD
             </summary>
         </member>
-        <member name="P:ZombieAPI.Portal.X">
+        <member name="M:ZombieAPI.ZombieAPI.GetInstance">
             <summary>
-            The X coordinate that'll be used as location of the portal
+            Get current ZombieAPI instance
             </summary>
         </member>
-        <member name="P:ZombieAPI.Portal.Y">
+        <member name="M:ZombieAPI.ZombieAPI.WriteLine(System.String)">
             <summary>
-            The Y coordinate that'll be used as location of the portal
+            Write a line to the jZm console.
+            </summary>
+            <param name="message">The message that will be written to the console</param>
+        </member>
+        <member name="M:ZombieAPI.ZombieAPI.WriteLine(System.String,System.Boolean)">
+            <summary>
+            A overload for diagnostic messages. Works the same as WriteLine
+            </summary>
+            <param name="message">The message that will be written to the console</param>
+            <param name="debug">Doesn't matter what you pass to this parameter, It'll be send to the debug event.</param>
+        </member>
+        <member name="M:ZombieAPI.ZombieAPI.Write(System.String)">
+            <summary>
+            Write a message to the jZm console.
+            </summary>
+            <param name="message">The message that will be written to the console</param>
+        </member>
+        <member name="M:ZombieAPI.ZombieAPI.#ctor">
+            <summary>
+            If you're trying to do this from a plugin, you're doing it wrong. Use the Init(ZombieAPI) function to get the ZombieAPI object.
             </summary>
         </member>
-        <member name="P:ZombieAPI.Portal.Teleport">
+        <member name="M:ZombieAPI.ZombieAPI.GetBus">
             <summary>
-            Will the player get teleported to <see cref="P:ZombieAPI.Portal.Destination"/> once triggered?
-            </summary>
-        </member>
-        <member name="P:ZombieAPI.Portal.Destination">
-            <summary>
-            A Vec3 (float array with 3 values) that specifies where players will be teleported into.
+            Gets the bus on transit.
             </summary>
             <remarks>
-            Will only be used if <see cref="P:ZombieAPI.Portal.Teleport"/> is true
+            Returns the first ET_VEHICLE it can find.
             </remarks>
+            <returns>The first ET_VEHICLE it can find. KEEP IN MIND THAT: If none found, It'll return null (this means on all non-transit maps)</returns>
+        </member>
+        <member name="M:ZombieAPI.ZombieAPI.GetDVar(System.String)">
+            <summary>
+            Returns the corresponding DVar object that has this name
+            </summary>
+            <param name="Name">The DVar name</param>
+            <returns>The DVar object as requested, when not found, It'll be null</returns>
+            <seealso cref="M:ZombieAPI.GameObjects.Player.SetClientDVar(System.String)"/>
+        </member>
+        <member name="M:ZombieAPI.ZombieAPI.GetDVarValue(System.String)">
+            <summary>
+            Returns the corresponding DVar value that has this name
+            </summary>
+            <param name="Name">The DVar name</param>
+            <returns>The DVar value as requested, when not found, It'll be null</returns>
+        </member>
+        <member name="M:ZombieAPI.ZombieAPI.GetActors">
+            <summary>
+            Loops trough all entities, returning only the actors (zombies and other NPC's)
+            </summary>
+            <returns>Entity's with as type ET_ACTOR</returns>
+        </member>
+        <member name="M:ZombieAPI.ZombieAPI.GetBarriers">
+            <summary>
+            Returns all Zombie Barriers (the zombie entrances)
+            </summary>
+            <returns>Entity's with as type ET_ZBARRIER</returns>
+        </member>
+        <member name="M:ZombieAPI.ZombieAPI.GetScriptMovers">
+            <summary>
+            Loops trough all entities, returning only the models (keep in mind that these are not static and can be moved)
+            </summary>
+            <returns>Entity's with as type ET_SCRIPTMOVER</returns>
+        </member>
+        <member name="M:ZombieAPI.ZombieAPI.Crash(System.Exception)">
+            <summary>
+            Invokes the OnCrash event, resulting in a fatal error.
+            Mostly used internally.
+            </summary>
+            <param name="z">The exception you want to show details for to the user</param>
+        </member>
+        <member name="M:ZombieAPI.ZombieAPI.Bootstrap(System.Diagnostics.Process)">
+            <summary>
+            Initializes jZm onto a certain game process. Make sure the game is the correct process, This function doesn't check if the process is correct.
+            </summary>
+            <remarks>
+            DO NOT CALL FROM A PLUGIN. This function is called from the jZm frontend and you should not call it from a plugin.
+            </remarks>
+            <param name="Game">The game process jZm reads/writes to (must be a valid CODBOII zombies process)</param>
+        </member>
+        <member name="M:ZombieAPI.ZombieAPI.GetPlayers">
+            <summary>
+            Get all clients in the server.
+            </summary>
+            <remarks>
+            One of the most important functions in jZm
+            </remarks>
+            <returns>Clients on the server</returns>
+        </member>
+        <member name="M:ZombieAPI.ZombieAPI.Shutdown(System.Boolean)">
+            <summary>
+            Unloads resources, Removes hooks and exits the environment.
+            </summary>
+            <param name="KillEnvironment">Run <see cref="M:System.Environment.Exit(System.Int32)"/> after unloading everything</param>
+        </member>
+        <member name="E:ZombieAPI.ZombieAPI.OnFrame">
+            <summary>
+            Called on every jZm tick. Gets called 5 times a second.
+            </summary>
+        </member>
+        <member name="E:ZombieAPI.ZombieAPI.OnWrite">
+            <summary>
+            Internally used by jZm frontend to respond to ZombieAPI.Write call
+            </summary>
+        </member>
+        <member name="E:ZombieAPI.ZombieAPI.OnDebugWrite">
+            <summary>
+            Same as OnWrite, will print in another color to console.
+            </summary>
+        </member>
+        <member name="E:ZombieAPI.ZombieAPI.OnCrash">
+            <summary>
+            Called whenever jZm occures a fatal error from which it cannot recover. Not meant for plugins.
+            </summary>
+        </member>
+        <member name="E:ZombieAPI.ZombieAPI.OnPluginCrash">
+            <summary>
+            Called whenever a plugin throws a unhandled exception. Not meant for plugins.
+            </summary>
+        </member>
+        <member name="E:ZombieAPI.ZombieAPI.OnMapLoad">
+            <summary>
+            Calls whenever the gamedata gets loaded.
+            </summary>
+            <remarks>
+            Keep in mind that it actually takes a few more seconds before the players are actually able to play and still may be staring at their loading screens.
+            </remarks>
+        </member>
+        <member name="E:ZombieAPI.ZombieAPI.OnMapDestroy">
+            <summary>
+            Call whenever the gamedata gets removed. Basically whenever the user returns to the main menu.
+            </summary>
+        </member>
+        <member name="E:ZombieAPI.ZombieAPI.OnChat">
+            <summary>
+            Calls when a player sends a chat message
+            </summary>
+        </member>
+        <member name="E:ZombieAPI.ZombieAPI.OnNativeEvent">
+            <summary>
+            Called right before a game has fully processed a frame
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.ZombieAPI.Header">
+            <summary>
+            First thing shown on startup on console, provides name, description, version and credits.
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.ZombieAPI.Level">
+            <summary>
+            The current level information
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.ZombieAPI.Entities">
+            <summary>
+            All Entities in the game.
+            </summary>
+            <remarks>
+            Use the several functions to filter these entities
+            </remarks>
+            <seealso cref="M:ZombieAPI.ZombieAPI.GetPlayers"/>
+            <seealso cref="M:ZombieAPI.ZombieAPI.GetActors"/>
+            <seealso cref="M:ZombieAPI.ZombieAPI.GetBus"/>
+        </member>
+        <member name="P:ZombieAPI.ZombieAPI.Weapons">
+            <summary>
+            All currently loaded weapons in the game.
+            </summary>
+            <remarks>
+            The key is the WeaponID, The value is the weapon name
+            </remarks>
+        </member>
+        <member name="P:ZombieAPI.ZombieAPI.Plugins">
+            <summary>
+            All currently loaded plugins. Mostly used internally.
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.ZombieAPI.DVars">
+            <summary>
+            All the DVars that the game currently has.
+            </summary>
+            <remarks>
+            DVars are the game's "settings".
+            </remarks>
+        </member>
+        <member name="P:ZombieAPI.ZombieAPI.ExecutablePath">
+            <summary>
+            The name of the executable that's running jZm.
+            </summary>
+        </member>
+        <member name="P:ZombieAPI.ZombieAPI.Portals">
+            <summary>
+            The Portals currently monitored by jZm
+            </summary>
+        </member>
+        <member name="T:ZombieAPI.OnFrameHandler">
+            <summary>
+            Handles frame events
+            </summary>
+        </member>
+        <member name="T:ZombieAPI.WriteHandler">
+            <summary>
+            Handles write events
+            </summary>
+            <param name="msg">The message to write</param>
+        </member>
+        <member name="T:ZombieAPI.OnCrashHandler">
+            <summary>
+            Handles exception events
+            </summary>
+            <param name="exep">The exception</param>
+        </member>
+        <member name="T:ZombieAPI.OnPluginCrashHandler">
+            <summary>
+            Handles plugin exception events
+            </summary>
+            <param name="exep">The exception</param>
+            <param name="plugin">The plugin that threw the exception</param>
+        </member>
+        <member name="T:ZombieAPI.MapHandler">
+            <summary>
+            Handles map events
+            </summary>
+        </member>
+        <member name="T:ZombieAPI.PortalHandler">
+            <summary>
+            Handles portal events
+            </summary>
+            <param name="portal">The portal that triggered this event</param>
+            <param name="player">The player that triggered this event</param>
+        </member>
+        <member name="T:ZombieAPI.ChatHandler">
+            <summary>
+            Handles chat events
+            </summary>
+            <param name="Player">The player that sent the chat message</param>
+            <param name="Message">The message that the player sent</param>
+        </member>
+        <member name="T:ZombieAPI.NativeEventHandler">
+            <summary>
+            Handles a native game event
+            </summary>
+            <param name="Entity">The entity that triggered the native event</param>
+            <param name="EventName">The name of the event that was triggered</param>
         </member>
     </members>
 </doc>

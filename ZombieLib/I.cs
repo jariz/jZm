@@ -50,6 +50,7 @@ namespace ZombieAPI
         public const uint PROCESS_VM_OPERATION = 0x0008;
         public const uint PROCESS_VM_READ = 0x0010;
         public const uint PROCESS_VM_WRITE = 0x0020;
+        public const uint PROCESS_CREATE_THREAD = 0x0002;
         public const uint INVALID_HANDLE_VALUE = 0xFFFFFFFF;
     }
 }
