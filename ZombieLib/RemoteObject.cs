@@ -96,7 +96,7 @@ namespace ZombieAPI
 
         object _state = null;
         /// <summary>
-        /// Just a object that you can asso
+        /// Just a object that you can associate
         /// </summary>
         public object State
         {

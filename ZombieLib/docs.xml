@@ -71,7 +71,7 @@
         </member>
         <member name="P:ZombieAPI.RemoteObject.State">
             <summary>
-            Just a object that you can asso
+            Just a object that you can associate
             </summary>
         </member>
         <member name="M:ZombieAPI.GameObjects.GEntity.#ctor(System.Diagnostics.Process,System.Int32,ZombieAPI.ZombieAPI)">

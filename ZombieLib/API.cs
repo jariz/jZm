@@ -413,7 +413,8 @@ namespace ZombieAPI
         //I'm so terribly sorry to do be doing this way, but there's no other way to invoke a event outside of it's class
         internal void TriggerOnChat(Player player, string message)
         {
-            PluginEvent(OnChat, player, message);
+            if(OnChat != null) OnChat(player, message);
+            //PluginEvent(OnChat, player, message);
         }
 
         internal void TriggerOnGameFrame()

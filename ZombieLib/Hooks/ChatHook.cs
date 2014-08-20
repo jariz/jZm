@@ -70,9 +70,8 @@ namespace ZombieAPI.Hooks
             I.WriteProcessMemory(ProcessHandle, (IntPtr)(Addresses.G_Say + 0x73), hkBytes, (uint)hkBytes.Length, out bytesWritten);
         }
 
-
-
         byte[] btnull = new byte[128];
+        int calls = 0;
 
         public override void HookFrame(ZombieAPI API)
         {
@@ -90,6 +89,11 @@ namespace ZombieAPI.Hooks
 
                 if (chatBytes[0] != 0x00)
                 {
+                    calls++;
+                    if (calls == 2)
+                    {
+                        string d = "";
+                    }
                     string FinalChat = System.Text.Encoding.ASCII.GetString(chatBytes);
 
                     GameObjects.Player player = ReadG_SayClient(API);
